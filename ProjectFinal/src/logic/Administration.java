@@ -86,23 +86,136 @@ public class Administration {
 	}
 	
 	public Client searchClientById(String id) {
+		
+		ArrayList<Client> clients = getTheClients();
+		for(Client aux: clients)
+		{
+			if(aux.getId().equalsIgnoreCase(id))
+			{
+				return aux;
+			}
+		}
 		return null;
 	}
 	
-	public Supplier searchSupplierById(String id) {
-		return null;
+	public int searchClientByIndex(String id)
+	{
+		int client = -1;
+		boolean found = false;
+		int i = 0;
+		ArrayList<Client> clients = getTheClients();
+		while(!found && 1 < clients.size())
+		{
+			client = i;
+			found = true;
+		}
+		return client;
 	}
 	
 	public Component searchComponentById(String id) {
+		
+		for(Component aux: theComponents)
+		{
+			if(aux.getId().equalsIgnoreCase(id))
+			{
+				return aux;
+			}
+		}
 		return null;
+	}
+	
+	public int searchComponentByIndex(String id)
+	{
+		int component = -1;
+		boolean found = false;
+		int i = 0;
+		
+		while(!found && 1 < theComponents.size())
+		{
+			component = i;
+			found = true;
+		}
+		return component;
 	}
 	
 	public Bill searchBillById(String id) {
+		
+		for(Bill aux: theBills)
+		{
+			if(aux.getId().equalsIgnoreCase(id))
+			{
+				return aux;
+			}
+		}
 		return null;
 	}
 	
-	public Combo searchComboById(String codComb) {
+	public int searchBillByIndex(String id)
+	{
+		int bill = -1;
+		boolean found = false;
+		int i = 0;
+		
+		while(!found && 1 < theBills.size())
+		{
+			bill = i;
+			found = true;
+		}
+		return bill;
+	}	
+	
+	public Supplier searchSupplierById(String id) {
+		
+		ArrayList<Supplier> theSuppliers = getTheSuppliers();
+		for(Supplier s : theSuppliers)
+		{
+			if(s.getId().equalsIgnoreCase(id))
+			{
+				return s;
+			}
+		}
 		return null;
+	}
+	
+	public int searchSupplierByIndex(String id)
+	{
+		ArrayList<Supplier> theSuppliers = getTheSuppliers();
+		int supplier = -1;
+		boolean found = false;
+		int i = 0;
+		
+		while(!found && 1 < theSuppliers.size())
+		{
+			supplier = i;
+			found = true;
+		}
+		return supplier;
+	}
+	
+	public Combo searchComboById(String codComb) {
+		
+		for(Combo c : theCombos)
+		{
+			if(c.getId().equalsIgnoreCase(codComb))
+			{
+				return c;
+			}
+		}
+		return null;
+	}
+	
+	public int searchComboByIndex(String codComb)
+	{
+		int combo = -1;
+		boolean found = false;
+		int i = 0;
+		
+		while(!found && 1 < theCombos.size())
+		{
+			combo = i;
+			found = true;
+		}
+		return combo;
 	}
 	
 	public void deleteClient(String codCli) {
