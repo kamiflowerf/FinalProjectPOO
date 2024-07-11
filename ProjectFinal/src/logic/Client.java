@@ -1,55 +1,21 @@
 package logic;
 
-public class Client {
-	private String id;
-	private String cedula;
-	private String name;
-	private String address;
-	private String phone;
-	private String email;
-	
-	public Client(String id, String cedula, String name, String address, String phone, String email) {
-		super();
-		this.id = id;
-		this.cedula = cedula;
-		this.name = name;
-		this.address = address;
-		this.phone = phone;
-		this.email = email;
+import java.util.ArrayList;
+
+public class Client extends Person {
+	private ArrayList<Bill> myBills;
+
+	public Client(String id, String ni, String name, String phone, String address, String email,
+			ArrayList<Bill> myBills) {
+		super(id, ni, name, phone, address, email);
+		this.myBills = new ArrayList<Bill>();
 	}
-	
-	public String getCedula() {
-		return cedula;
+
+	public ArrayList<Bill> getMyBills() {
+		return myBills;
 	}
-	public void setCedula(String cedula) {
-		this.cedula = cedula;
+
+	public void addMyBills(Bill theBill) {
+		this.myBills.add(theBill);
 	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getAddress() {
-		return address;
-	}
-	public void setAddress(String address) {
-		this.address = address;
-	}
-	public String getPhone() {
-		return phone;
-	}
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	public String getId() {
-		return id;
-	}
-	
 }
