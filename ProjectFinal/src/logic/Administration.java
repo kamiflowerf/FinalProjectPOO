@@ -1,6 +1,7 @@
 package logic;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Administration {
 	private ArrayList<Component> theComponents;
@@ -8,11 +9,6 @@ public class Administration {
 	private ArrayList<Bill> theBills;
 	private ArrayList<Combo> theCombos;
 	private static Administration myAdmin = null;
-	public static int idClient = 1;
-	public static int idSupplier = 1;
-	public static int idCombo = 1;
-	public static int idBill = 1;
-	public static int idComp = 1;
 	
 	public Administration() {
 		super();
@@ -64,156 +60,114 @@ public class Administration {
 	
 	public void addComponent(Component comp) {
 		theComponents.add(comp);
-		idComp++;
 	}
 	
 	public void addPerson(Person p) {
 		thePeople.add(p);
-		if(p instanceof Client)
-			idClient++;
-		else
-			idSupplier++;
 	}
 	
 	public void addBill(Bill bill) {
 		theBills.add(bill);
-		idBill++;
 	}
 	
 	public void addCombo(Combo comb) {
 		theCombos.add(comb);
-		idCombo++;
 	}
 	
 	public Client searchClientById(String id) {
 		
 		ArrayList<Client> clients = getTheClients();
-		for(Client aux: clients)
-		{
-			if(aux.getId().equalsIgnoreCase(id))
-			{
+		for(Client aux: clients){
+			if(aux.getId().equalsIgnoreCase(id)){
 				return aux;
 			}
 		}
 		return null;
-	}
-	
-	public int searchClientByIndex(String id)
-	{
-		int client = -1;
-		boolean found = false;
-		int i = 0;
-		ArrayList<Client> clients = getTheClients();
-		while(!found && 1 < clients.size())
-		{
-			client = i;
-			found = true;
-		}
-		return client;
 	}
 	
 	public Component searchComponentById(String id) {
 		
 		for(Component aux: theComponents)
 		{
-			if(aux.getId().equalsIgnoreCase(id))
-			{
+			if(aux.getId().equalsIgnoreCase(id)){
 				return aux;
 			}
 		}
 		return null;
 	}
 	
-	public int searchComponentByIndex(String id)
-	{
+	public int searchComponentGetIndex(String id){
 		int component = -1;
 		boolean found = false;
 		int i = 0;
 		
-		while(!found && 1 < theComponents.size())
-		{
-			component = i;
-			found = true;
+		while(!found && i < theComponents.size()){
+			if(theComponents.get(i).getId().equalsIgnoreCase(id)) {
+				component = i;
+				found = true;
+			}
+			i++;
 		}
 		return component;
 	}
 	
 	public Bill searchBillById(String id) {
 		
-		for(Bill aux: theBills)
-		{
-			if(aux.getId().equalsIgnoreCase(id))
-			{
+		for(Bill aux: theBills)	{
+			if(aux.getId().equalsIgnoreCase(id)){
 				return aux;
 			}
 		}
 		return null;
 	}
 	
-	public int searchBillByIndex(String id)
-	{
-		int bill = -1;
-		boolean found = false;
-		int i = 0;
-		
-		while(!found && 1 < theBills.size())
-		{
-			bill = i;
-			found = true;
-		}
-		return bill;
-	}	
-	
 	public Supplier searchSupplierById(String id) {
 		
 		ArrayList<Supplier> theSuppliers = getTheSuppliers();
-		for(Supplier s : theSuppliers)
-		{
-			if(s.getId().equalsIgnoreCase(id))
-			{
+		for(Supplier s : theSuppliers){
+			if(s.getId().equalsIgnoreCase(id))	{
 				return s;
 			}
 		}
 		return null;
 	}
 	
-	public int searchSupplierByIndex(String id)
-	{
-		ArrayList<Supplier> theSuppliers = getTheSuppliers();
-		int supplier = -1;
+	public int searchPeopleGetIndex(String id){
+		int person = -1;
 		boolean found = false;
 		int i = 0;
 		
-		while(!found && 1 < theSuppliers.size())
-		{
-			supplier = i;
-			found = true;
+		while(!found && i < thePeople.size()){
+			if(thePeople.get(i).getId().equalsIgnoreCase(id)) {
+				person = i;
+				found = true;
+			}
+			i++;
 		}
-		return supplier;
+		return person;
 	}
 	
 	public Combo searchComboById(String codComb) {
 		
-		for(Combo c : theCombos)
-		{
-			if(c.getId().equalsIgnoreCase(codComb))
-			{
+		for(Combo c : theCombos){
+			if(c.getId().equalsIgnoreCase(codComb)){
 				return c;
 			}
 		}
 		return null;
 	}
 	
-	public int searchComboByIndex(String codComb)
-	{
+	public int searchComboGetIndex(String codComb){
 		int combo = -1;
 		boolean found = false;
 		int i = 0;
 		
-		while(!found && 1 < theCombos.size())
-		{
-			combo = i;
-			found = true;
+		while(!found && i < theCombos.size()){
+			if(theCombos.get(i).getId().equalsIgnoreCase(codComb)) {
+				combo = i;
+				found = true;
+			}
+			i++;
 		}
 		return combo;
 	}
@@ -248,4 +202,50 @@ public class Administration {
 			theCombos.add(aux);
 	}
 	
+	public void updateComponent(Component comp) {
+		int index = searchComponentGetIndex(comp.getId());
+		if(index != -1)
+			theComponents.set(index, comp);
+	}
+	
+	public void updatePerson(Person per) {
+		int index = searchPeopleGetIndex(per.getId());
+		if(index != -1) 
+			thePeople.set(index, per);
+	}
+	
+	public void updateCombo(Combo com) {
+		int index = searchComboGetIndex(com.getId());
+		if(index != -1) 
+			theCombos.set(index, com);
+	}
+	
+	public boolean makeSale(String idClient, Date saleDate, ArrayList<Component> componetsSale) {
+		Client cliente = searchClientById(idClient);
+		boolean allValid = false;
+		for (Component component : componetsSale) {
+			if(component.getUnits() > 0) {
+				allValid = true;
+			}
+		}
+		
+		if(cliente != null && allValid) {
+			return true;
+		}else 
+			return false;
+	}
+
+	public boolean inventoryRefill() {
+		int threshold = 3;
+		int countComponentRefill = 0;
+
+		for (Component component : theComponents) {
+			if (component.getUnits() < threshold) {
+				countComponentRefill++;
+				if (countComponentRefill >= threshold) 
+					return true;	
+			}
+		}
+		return false;
+	}
 }

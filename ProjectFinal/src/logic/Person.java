@@ -8,9 +8,9 @@ public class Person {
 	protected String address;
 	protected String email;
 	
-	public Person(String id, String ni, String name, String phone, String address, String email) {
+	public Person(String ni, String name, String phone, String address, String email) {
 		super();
-		this.id = id;
+		this.id = IdGenerator.generateId();
 		this.ni = ni;
 		this.name = name;
 		this.phone = phone;

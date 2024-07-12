@@ -6,8 +6,8 @@ public class MicroProcessor extends Component {
 	private String socket;
 	private float processingSpeed;
 	
-	public MicroProcessor(String id, String brand, double price, int units, int serie, String model, String socket, float processingSpeed) {
-		super(id, brand, price, units, serie);
+	public MicroProcessor(String brand, double price, int units, int serie, String model, String socket, float processingSpeed) {
+		super(brand, price, units, serie);
 		this.model = model;
 		this.socket = socket;
 		this.processingSpeed = processingSpeed;

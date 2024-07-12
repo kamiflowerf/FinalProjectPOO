@@ -10,9 +10,9 @@ public class Bill {
 	private double total;
 	private Date sold;
 	
-	public Bill(String id, ArrayList<Component> components, Client cliente, double total, Date sold) {
+	public Bill(ArrayList<Component> components, Client cliente, double total, Date sold) {
 		super();
-		this.id = id;
+		this.id = IdGenerator.generateId();
 		this.components = components;
 		this.cliente = cliente;
 		this.total = total;

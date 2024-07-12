@@ -7,9 +7,9 @@ public abstract class Component {
 	protected int units;
 	protected int serie;
 	
-	public Component(String id, String brand, double price, int units, int serie) {
+	public Component(String brand, double price, int units, int serie) {
 		super();
-		this.id = id;
+		this.id = IdGenerator.generateId();
 		this.brand = brand;
 		this.price = price;
 		this.units = units;

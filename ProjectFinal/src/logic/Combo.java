@@ -7,9 +7,9 @@ public class Combo {
 	private int discount;
 	private ArrayList<Component> comboComp;
 	
-	public Combo(String id, int discount, ArrayList<Component> comboComp) {
+	public Combo(int discount, ArrayList<Component> comboComp) {
 		super();
-		this.id = id;
+		this.id = IdGenerator.generateId();
 		this.discount = discount;
 		this.comboComp = comboComp;
 	}

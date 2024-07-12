@@ -5,8 +5,8 @@ public class RAM extends Component {
 	private int capacity;
 	private String type;
 	
-	public RAM(String id, String brand, double price, int units, int serie, int capacity, String type) {
-		super(id, brand, price, units, serie);
+	public RAM(String brand, double price, int units, int serie, int capacity, String type) {
+		super(brand, price, units, serie);
 		this.capacity = capacity;
 		this.type = type;
 	}

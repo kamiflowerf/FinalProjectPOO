@@ -5,8 +5,8 @@ public class HardDisk extends Component {
 	private String model;
 	private int capacity;
 	private String conectionType;
-	public HardDisk(String id, String brand, double price, int units, int serie, String model, int capacity, String conectionType) {
-		super(id, brand, price, units, serie);
+	public HardDisk(String brand, double price, int units, int serie, String model, int capacity, String conectionType) {
+		super(brand, price, units, serie);
 		this.model = model;
 		this.capacity = capacity;
 		this.conectionType = conectionType;

@@ -5,9 +5,9 @@ import java.util.ArrayList;
 public class Client extends Person {
 	private ArrayList<Bill> myBills;
 
-	public Client(String id, String ni, String name, String phone, String address, String email,
+	public Client(String ni, String name, String phone, String address, String email,
 			ArrayList<Bill> myBills) {
-		super(id, ni, name, phone, address, email);
+		super(ni, name, phone, address, email);
 		this.myBills = new ArrayList<Bill>();
 	}
 
