@@ -1,4 +1,4 @@
-package visual;
+package Visual;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -12,6 +12,7 @@ import javax.swing.border.EmptyBorder;
 
 public class ClientReg extends JDialog {
 
+	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	private JTextField txt_clientId;
 	private JTextField txt_clientName;

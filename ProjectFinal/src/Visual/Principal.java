@@ -207,6 +207,13 @@ public class Principal extends JFrame {
 			public void mouseExited(MouseEvent e) {
 				lblRegComp.setForeground(Color.WHITE);
 			}
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				RegComps regComp = new RegComps();
+				regComp.setModal(true);
+				regComp.setVisible(true);
+				regComp.setResizable(false);
+			}
 		});
 		lblRegComp.setForeground(new Color(255, 255, 255));
 		lblRegComp.setFont(new Font("Verdana", Font.PLAIN, 16));
