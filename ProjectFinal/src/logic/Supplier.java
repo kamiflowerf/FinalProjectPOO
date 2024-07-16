@@ -6,9 +6,9 @@ public class Supplier extends Person {
 	private int deliveryTime;
 	private ArrayList<Component> myComponents;
 	
-	public Supplier(String ni, String name, String phone, String address, String email, int deliveryTime,
+	public Supplier(String ni, String name, String phone, String address, String email, String id,int deliveryTime,
 			ArrayList<Component> myComponents) {
-		super(ni, name, phone, address, email);
+		super(ni, name, phone, address, email, id);
 		this.deliveryTime = deliveryTime;
 		this.myComponents = myComponents;
 	}
