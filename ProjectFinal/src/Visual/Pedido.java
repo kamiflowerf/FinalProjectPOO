@@ -1,7 +1,6 @@
 package Visual;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -11,17 +10,17 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JSpinner;
-import javax.swing.JTable;
 import javax.swing.JScrollPane;
+import java.awt.Font;
+import javax.swing.border.TitledBorder;
 
 public class Pedido extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
+	private JTextField txtIdSup;
+	private JTextField txtPedido;
 	private JTextField textField;
-	private JTextField textField_1;
-	private JTable table;
 
 	/**
 	 * Launch the application.
@@ -41,7 +40,8 @@ public class Pedido extends JDialog {
 	 */
 	public Pedido() {
 		setTitle("Pedido");
-		setBounds(100, 100, 750, 458);
+		setBounds(100, 100, 701, 445);
+		setLocationRelativeTo(null);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -51,73 +51,86 @@ public class Pedido extends JDialog {
 			contentPanel.add(panel, BorderLayout.CENTER);
 			panel.setLayout(null);
 			{
-				JLabel lblNewLabel = new JLabel("ID: ");
-				lblNewLabel.setBounds(15, 87, 28, 20);
+				JLabel lblNewLabel = new JLabel("ID Suplidor");
+				lblNewLabel.setFont(new Font("Verdana", Font.BOLD, 14));
+				lblNewLabel.setBounds(33, 51, 99, 20);
 				panel.add(lblNewLabel);
 			}
 			
-			textField = new JTextField();
-			textField.setBounds(58, 84, 115, 26);
-			panel.add(textField);
-			textField.setColumns(10);
+			txtIdSup = new JTextField();
+			txtIdSup.setFont(new Font("Verdana", Font.PLAIN, 14));
+			txtIdSup.setEditable(false);
+			txtIdSup.setBounds(33, 84, 164, 26);
+			panel.add(txtIdSup);
+			txtIdSup.setColumns(10);
 			
-			JButton searchBtn = new JButton("Buscar");
-			searchBtn.addActionListener(new ActionListener() {
+			JButton btnSearchSup = new JButton("Buscar");
+			btnSearchSup.setFont(new Font("Verdana", Font.PLAIN, 14));
+			btnSearchSup.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 				}
 			});
-			searchBtn.setBounds(188, 83, 99, 29);
-			panel.add(searchBtn);
+			btnSearchSup.setBounds(264, 47, 99, 29);
+			panel.add(btnSearchSup);
 			
-			JLabel lblNewLabel_1 = new JLabel("Cantidad:");
-			lblNewLabel_1.setBounds(15, 152, 69, 20);
-			panel.add(lblNewLabel_1);
+			JPanel pnlRefillInfo = new JPanel();
+			pnlRefillInfo.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			pnlRefillInfo.setBounds(388, 23, 264, 210);
+			panel.add(pnlRefillInfo);
+			pnlRefillInfo.setLayout(null);
 			
-			JSpinner cantSnp = new JSpinner();
-			cantSnp.setBounds(104, 149, 108, 26);
-			panel.add(cantSnp);
+			JLabel lblIdPedido = new JLabel("ID Pedido");
+			lblIdPedido.setFont(new Font("Verdana", Font.BOLD, 14));
+			lblIdPedido.setBounds(26, 25, 99, 20);
+			pnlRefillInfo.add(lblIdPedido);
 			
-			JPanel panel_1 = new JPanel();
-			panel_1.setBounds(318, 97, 385, 165);
-			panel.add(panel_1);
-			panel_1.setLayout(null);
+			txtPedido = new JTextField();
+			txtPedido.setFont(new Font("Verdana", Font.PLAIN, 14));
+			txtPedido.setEditable(false);
+			txtPedido.setColumns(10);
+			txtPedido.setBounds(26, 58, 164, 26);
+			pnlRefillInfo.add(txtPedido);
+			
+			JLabel lblFechaRealizado = new JLabel("Fecha Realizado");
+			lblFechaRealizado.setFont(new Font("Verdana", Font.BOLD, 14));
+			lblFechaRealizado.setBounds(26, 109, 131, 20);
+			pnlRefillInfo.add(lblFechaRealizado);
+			
+			textField = new JTextField();
+			textField.setFont(new Font("Verdana", Font.PLAIN, 14));
+			textField.setEditable(false);
+			textField.setColumns(10);
+			textField.setBounds(26, 145, 164, 26);
+			pnlRefillInfo.add(textField);
+			
+			JLabel lblComponentes = new JLabel("Componentes");
+			lblComponentes.setFont(new Font("Verdana", Font.BOLD, 14));
+			lblComponentes.setBounds(33, 170, 115, 20);
+			panel.add(lblComponentes);
+			
+			JButton btnSearchComp = new JButton("Buscar");
+			btnSearchComp.setFont(new Font("Verdana", Font.PLAIN, 14));
+			btnSearchComp.setBounds(264, 166, 99, 29);
+			panel.add(btnSearchComp);
+			
+			JPanel pnlComponents = new JPanel();
+			pnlComponents.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			pnlComponents.setBounds(33, 203, 330, 165);
+			panel.add(pnlComponents);
+			pnlComponents.setLayout(new BorderLayout(0, 0));
 			
 			JScrollPane scrollPane = new JScrollPane();
-			scrollPane.setBounds(0, 0, 385, 165);
-			panel_1.add(scrollPane);
+			pnlComponents.add(scrollPane, BorderLayout.CENTER);
 			
-			table = new JTable();
-			scrollPane.setViewportView(table);
+			JButton btnCancelar = new JButton("Cancelar");
+			btnCancelar.setFont(new Font("Verdana", Font.PLAIN, 14));
+			btnCancelar.setBounds(515, 339, 99, 29);
+			panel.add(btnCancelar);
 			
-			JLabel lblNewLabel_2 = new JLabel("Total:");
-			lblNewLabel_2.setBounds(318, 291, 53, 20);
-			panel.add(lblNewLabel_2);
-			
-			textField_1 = new JTextField();
-			textField_1.setEditable(false);
-			textField_1.setBounds(386, 288, 146, 26);
-			panel.add(textField_1);
-			textField_1.setColumns(10);
-			
-			JLabel lblNewLabel_3 = new JLabel("Carrito");
-			lblNewLabel_3.setBounds(318, 71, 69, 20);
-			panel.add(lblNewLabel_3);
-		}
-		{
-			JPanel buttonPane = new JPanel();
-			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-			getContentPane().add(buttonPane, BorderLayout.SOUTH);
-			{
-				JButton okButton = new JButton("Realizar pedido");
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
-			}
-			{
-				JButton cancelButton = new JButton("Cancelar");
-				cancelButton.setActionCommand("Cancel");
-				buttonPane.add(cancelButton);
-			}
+			JButton btnRealizarPedido = new JButton("Pedir");
+			btnRealizarPedido.setFont(new Font("Verdana", Font.PLAIN, 14));
+			btnRealizarPedido.setBounds(388, 339, 115, 29);
+			panel.add(btnRealizarPedido);
 		}
 	}
 }

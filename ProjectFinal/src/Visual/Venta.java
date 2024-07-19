@@ -1,17 +1,24 @@
 package Visual;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
+import javax.swing.JLabel;
+import java.awt.Font;
+import javax.swing.JTextField;
+import javax.swing.JScrollPane;
 
 public class Venta extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
+	private JTextField txtIdClient;
+	private JTextField txtBillId;
+	private JTextField txtBillDate;
+	private JTextField txtTotal;
 
 	/**
 	 * Launch the application.
@@ -31,26 +38,115 @@ public class Venta extends JDialog {
 	 */
 	public Venta() {
 		setTitle("Venta");
-		setBounds(100, 100, 1290, 822);
+		setBounds(100, 100, 668, 369);
+		setLocationRelativeTo(null);
 		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPanel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		contentPanel.setLayout(new BorderLayout(0, 0));
+		contentPanel.setLayout(null);
 		{
-			JPanel buttonPane = new JPanel();
-			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-			getContentPane().add(buttonPane, BorderLayout.SOUTH);
+			JLabel lblNewLabel = new JLabel("ID Cliente");
+			lblNewLabel.setFont(new Font("Verdana", Font.BOLD, 14));
+			lblNewLabel.setBounds(25, 33, 83, 16);
+			contentPanel.add(lblNewLabel);
+		}
+		{
+			txtIdClient = new JTextField();
+			txtIdClient.setFont(new Font("Verdana", Font.PLAIN, 14));
+			txtIdClient.setEditable(false);
+			txtIdClient.setBounds(25, 62, 147, 22);
+			contentPanel.add(txtIdClient);
+			txtIdClient.setColumns(10);
+		}
+		{
+			JLabel lblComponentes = new JLabel("Componentes");
+			lblComponentes.setFont(new Font("Verdana", Font.BOLD, 14));
+			lblComponentes.setBounds(25, 135, 119, 16);
+			contentPanel.add(lblComponentes);
+		}
+		{
+			JPanel pnlComponents = new JPanel();
+			pnlComponents.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			pnlComponents.setBounds(25, 158, 320, 140);
+			contentPanel.add(pnlComponents);
+			pnlComponents.setLayout(new BorderLayout(0, 0));
 			{
-				JButton okButton = new JButton("OK");
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
+				JScrollPane scrollPane = new JScrollPane();
+				pnlComponents.add(scrollPane, BorderLayout.CENTER);
+			}
+		}
+		{
+			JButton btnSearchComp = new JButton("Buscar");
+			btnSearchComp.setFont(new Font("Verdana", Font.PLAIN, 14));
+			btnSearchComp.setBounds(248, 126, 97, 25);
+			contentPanel.add(btnSearchComp);
+		}
+		{
+			JButton btnSearchClient = new JButton("Buscar");
+			btnSearchClient.setFont(new Font("Verdana", Font.PLAIN, 14));
+			btnSearchClient.setBounds(248, 30, 97, 25);
+			contentPanel.add(btnSearchClient);
+		}
+		{
+			JPanel panel = new JPanel();
+			panel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			panel.setBounds(357, 13, 281, 233);
+			contentPanel.add(panel);
+			panel.setLayout(null);
+			{
+				JLabel lblIdFactura = new JLabel("ID Factura");
+				lblIdFactura.setFont(new Font("Verdana", Font.BOLD, 14));
+				lblIdFactura.setBounds(12, 17, 90, 16);
+				panel.add(lblIdFactura);
 			}
 			{
-				JButton cancelButton = new JButton("Cancel");
-				cancelButton.setActionCommand("Cancel");
-				buttonPane.add(cancelButton);
+				txtBillId = new JTextField();
+				txtBillId.setFont(new Font("Verdana", Font.PLAIN, 14));
+				txtBillId.setEditable(false);
+				txtBillId.setColumns(10);
+				txtBillId.setBounds(12, 50, 147, 22);
+				panel.add(txtBillId);
 			}
+			{
+				JLabel lblFechaFacturacin = new JLabel("Fecha Facturaci\u00F3n");
+				lblFechaFacturacin.setFont(new Font("Verdana", Font.BOLD, 14));
+				lblFechaFacturacin.setBounds(12, 89, 147, 16);
+				panel.add(lblFechaFacturacin);
+			}
+			{
+				txtBillDate = new JTextField();
+				txtBillDate.setFont(new Font("Verdana", Font.PLAIN, 14));
+				txtBillDate.setEditable(false);
+				txtBillDate.setColumns(10);
+				txtBillDate.setBounds(12, 122, 147, 22);
+				panel.add(txtBillDate);
+			}
+			{
+				JLabel lblTotal = new JLabel("Total");
+				lblTotal.setFont(new Font("Verdana", Font.BOLD, 14));
+				lblTotal.setBounds(12, 161, 147, 16);
+				panel.add(lblTotal);
+			}
+			{
+				txtTotal = new JTextField();
+				txtTotal.setFont(new Font("Verdana", Font.PLAIN, 14));
+				txtTotal.setEditable(false);
+				txtTotal.setColumns(10);
+				txtTotal.setBounds(12, 194, 147, 22);
+				panel.add(txtTotal);
+			}
+		}
+		{
+			JButton btnVender = new JButton("Vender");
+			btnVender.setFont(new Font("Verdana", Font.PLAIN, 14));
+			btnVender.setBounds(357, 273, 97, 25);
+			contentPanel.add(btnVender);
+		}
+		{
+			JButton btnCancelar = new JButton("Cancelar");
+			btnCancelar.setFont(new Font("Verdana", Font.PLAIN, 14));
+			btnCancelar.setBounds(466, 273, 97, 25);
+			contentPanel.add(btnCancelar);
 		}
 	}
 

@@ -7,6 +7,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
+import javax.swing.JTabbedPane;
 
 public class RegComps extends JDialog {
 
@@ -30,12 +31,17 @@ public class RegComps extends JDialog {
 	 * Create the dialog.
 	 */
 	public RegComps() {
+		setTitle("Registrar Componentes");
 		setBounds(100, 100, 723, 482);
 		setLocationRelativeTo(null);
 		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setLayout(new FlowLayout());
 		contentPanel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
+		contentPanel.setLayout(new BorderLayout(0, 0));
+		{
+			JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+			contentPanel.add(tabbedPane, BorderLayout.CENTER);
+		}
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
