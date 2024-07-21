@@ -1,6 +1,7 @@
 package Visual;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -10,6 +11,8 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Venta extends JDialog {
 
@@ -79,12 +82,14 @@ public class Venta extends JDialog {
 			JButton btnSearchComp = new JButton("Buscar");
 			btnSearchComp.setFont(new Font("Verdana", Font.PLAIN, 14));
 			btnSearchComp.setBounds(248, 126, 97, 25);
+			btnSearchComp.setBorder(new RoundedBorder(Color.BLACK,1,20));
 			contentPanel.add(btnSearchComp);
 		}
 		{
 			JButton btnSearchClient = new JButton("Buscar");
 			btnSearchClient.setFont(new Font("Verdana", Font.PLAIN, 14));
-			btnSearchClient.setBounds(248, 30, 97, 25);
+			btnSearchClient.setBounds(248, 61, 97, 25);
+			btnSearchClient.setBorder(new RoundedBorder(Color.BLACK,1,20));
 			contentPanel.add(btnSearchClient);
 		}
 		{
@@ -140,12 +145,19 @@ public class Venta extends JDialog {
 			JButton btnVender = new JButton("Vender");
 			btnVender.setFont(new Font("Verdana", Font.PLAIN, 14));
 			btnVender.setBounds(357, 273, 97, 25);
+			btnVender.setBorder(new RoundedBorder(Color.BLACK,1,20));
 			contentPanel.add(btnVender);
 		}
 		{
 			JButton btnCancelar = new JButton("Cancelar");
+			btnCancelar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					dispose();
+				}
+			});
 			btnCancelar.setFont(new Font("Verdana", Font.PLAIN, 14));
 			btnCancelar.setBounds(466, 273, 97, 25);
+			btnCancelar.setBorder(new RoundedBorder(Color.BLACK,1,20));
 			contentPanel.add(btnCancelar);
 		}
 	}

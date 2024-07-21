@@ -1,6 +1,7 @@
 package Visual;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -66,11 +67,12 @@ public class Pedido extends JDialog {
 			
 			JButton btnSearchSup = new JButton("Buscar");
 			btnSearchSup.setFont(new Font("Verdana", Font.PLAIN, 14));
+			btnSearchSup.setBorder(new RoundedBorder(Color.BLACK,1,20));
 			btnSearchSup.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 				}
 			});
-			btnSearchSup.setBounds(264, 47, 99, 29);
+			btnSearchSup.setBounds(264, 83, 99, 29);
 			panel.add(btnSearchSup);
 			
 			JPanel pnlRefillInfo = new JPanel();
@@ -111,6 +113,7 @@ public class Pedido extends JDialog {
 			JButton btnSearchComp = new JButton("Buscar");
 			btnSearchComp.setFont(new Font("Verdana", Font.PLAIN, 14));
 			btnSearchComp.setBounds(264, 166, 99, 29);
+			btnSearchComp.setBorder(new RoundedBorder(Color.BLACK,1,20));
 			panel.add(btnSearchComp);
 			
 			JPanel pnlComponents = new JPanel();
@@ -125,11 +128,13 @@ public class Pedido extends JDialog {
 			JButton btnCancelar = new JButton("Cancelar");
 			btnCancelar.setFont(new Font("Verdana", Font.PLAIN, 14));
 			btnCancelar.setBounds(515, 339, 99, 29);
+			btnCancelar.setBorder(new RoundedBorder(Color.BLACK,1,20));
 			panel.add(btnCancelar);
 			
 			JButton btnRealizarPedido = new JButton("Pedir");
 			btnRealizarPedido.setFont(new Font("Verdana", Font.PLAIN, 14));
 			btnRealizarPedido.setBounds(388, 339, 115, 29);
+			btnRealizarPedido.setBorder(new RoundedBorder(Color.BLACK,1,20));
 			panel.add(btnRealizarPedido);
 		}
 	}
