@@ -67,7 +67,14 @@ public class SupplierRegistry extends JDialog {
 	 */
 	public SupplierRegistry(Supplier suppli) {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		setTitle("Registro Suplidor");
+		if(suppli != null)
+		{
+			setTitle("Actualizar Suplidor");
+		}
+		else
+		{
+			setTitle("Registro Suplidor");
+		}
 		setBounds(100, 100, 614, 561);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -254,6 +261,10 @@ public class SupplierRegistry extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton btn_reg = new JButton("Registrar");
+				if(suppli != null)
+				{
+					btn_reg.setText("Actualizar");
+				}
 				btn_reg.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
 						
@@ -342,6 +353,7 @@ public class SupplierRegistry extends JDialog {
 								suppli.setDeliveryTime(deliTime);
 								suppli.setMyComponents(myComponents);
 								Administration.getInstance().updatePerson(suppli);
+								SupplierList.updateTable();
 								dispose();
 							}
 							

@@ -326,6 +326,11 @@ public class Principal extends JFrame {
 			public void mouseExited(MouseEvent e) {
 				lblListSup.setForeground(Color.WHITE);
 			}
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				SupplierList suppliList = new SupplierList();
+				suppliList.setVisible(true);
+			}
 		});
 		lblListSup.setForeground(Color.WHITE);
 		lblListSup.setFont(new Font("Verdana", Font.PLAIN, 16));
