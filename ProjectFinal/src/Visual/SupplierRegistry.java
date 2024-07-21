@@ -187,10 +187,15 @@ public class SupplierRegistry extends JDialog {
 			
 			model = new DefaultListModel<>();
 			ArrayList<Component> componentsForSale = Administration.getInstance().getTheComponents();
-			for(Component c : componentsForSale) {
+			if(componentsForSale != null) {
 				
-				model.addElement(c.getId());
+				for(Component c : componentsForSale) {
+					
+					model.addElement(c.getId());
+				}
 			}
+				
+			
 			
 			providedProducts = new JList<>();
 			providedProducts.addMouseListener(new MouseAdapter() {
@@ -241,6 +246,7 @@ public class SupplierRegistry extends JDialog {
 			lbl_warningComponentsProv.setFont(new Font("Tahoma", Font.BOLD, 13));
 			lbl_warningComponentsProv.setBounds(186, 53, 56, 16);
 			panel.add(lbl_warningComponentsProv);
+			lbl_warningComponentsProv.setVisible(false);
 		}
 		{
 			JPanel buttonPane = new JPanel();
@@ -251,6 +257,8 @@ public class SupplierRegistry extends JDialog {
 				btn_reg.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
 						
+						try {
+						Supplier sup;
 						String id = txt_suppliId.getText();
 						String name = txt_suppliName.getText();
 						String personalDoc = txt_suppliNi.getText();
@@ -295,39 +303,57 @@ public class SupplierRegistry extends JDialog {
 							lbl_warningPhone.setVisible(false);
 						}
 						
-						if(providedProducts.getSelectedIndex() == -1){
+						/*if(providedProducts.getSelectedIndex() == -1){
 							lbl_warningComponentsProv.setVisible(true);
 							ready = false;
 						}
 						else
-							lbl_warningComponentsProv.setVisible(false);
+							lbl_warningComponentsProv.setVisible(false); */
 						
 						
-						if(ready) {
-							if(suppli == null) {
+						if(ready) 
+						{
+							if(suppli == null) 
+							{
 								
-								Supplier sup = new Supplier(personalDoc, name, phone, address, email, id, deliTime, myComponents);
+								if(myComponents.isEmpty())
+								{
+									sup = new Supplier(personalDoc, name, phone, address, email, id, deliTime, null);
+								}
+								
+								else 
+								{
+									sup = new Supplier(personalDoc, name, phone, address, email, id, deliTime, myComponents);
+								}
+									
 								Administration.getInstance().addPerson(sup);
 								clean();
 							}
-						}
 						
-						else {
+						
+							else 
+							{
 							
-							suppli.setName(name);
-							suppli.setNi(personalDoc);
-							suppli.setEmail(email);
-							suppli.setAddress(address);
-							suppli.setPhone(phone);
-							suppli.setDeliveryTime(deliTime);
-							suppli.setMyComponents(myComponents);
-							Administration.getInstance().updatePerson(suppli);
-							dispose();
+								suppli.setName(name);
+								suppli.setNi(personalDoc);
+								suppli.setEmail(email);
+								suppli.setAddress(address);
+								suppli.setPhone(phone);
+								suppli.setDeliveryTime(deliTime);
+								suppli.setMyComponents(myComponents);
+								Administration.getInstance().updatePerson(suppli);
+								dispose();
+							}
+							
 						}
-							
 
-
+						} 
+						catch (Exception e)
+						{
+							e.printStackTrace();
+						}
 					}
+					
 				});
 				btn_reg.setActionCommand("OK");
 				buttonPane.add(btn_reg);
@@ -349,53 +375,70 @@ public class SupplierRegistry extends JDialog {
 	}
 
 	private void loadSupplier(Supplier suppli) {
-	    if (suppli != null) {
-	        txt_suppliId.setText(suppli.getId());
-	        txt_suppliName.setText(suppli.getName());
-	        txt_suppliNi.setText(suppli.getNi());
-	        txt_suppliEmail.setText(suppli.getEmail());
-	        txt_suppliAddress.setText(suppli.getAddress());
-	        txt_suppliPhone.setText(suppli.getPhone());
-	        spn_deliveryTime.setValue(suppli.getDeliveryTime());
+	    if (suppli != null) 
+	    {
+	    	try 
+	    	{
+	    		txt_suppliId.setText(suppli.getId());
+		        txt_suppliName.setText(suppli.getName());
+		        txt_suppliNi.setText(suppli.getNi());
+		        txt_suppliEmail.setText(suppli.getEmail());
+		        txt_suppliAddress.setText(suppli.getAddress());
+		        txt_suppliPhone.setText(suppli.getPhone());
+		        spn_deliveryTime.setValue(suppli.getDeliveryTime());
 
-	        // Verificar que myComponents no sea null
-	        if (suppli.getMyComponents() != null) {
-	            myComponents = new ArrayList<>(suppli.getMyComponents());
-	        } else {
-	            myComponents = new ArrayList<>();
-	        }
+		        // Verificar que myComponents no sea null
+		        if (suppli.getMyComponents() != null) {
+		            myComponents = new ArrayList<>(suppli.getMyComponents()); // si es distinto de null se inicializa con los componentes asociados
+		        } else {
+		            myComponents = new ArrayList<>();// si es null pues se inicializa la lista de los componentes vacia.
+		        }
 
-	        // Crear un array de los IDs de los componentes del suplidor
-	        ArrayList<String> selectedIds = new ArrayList<>();
-	        for (Component c : myComponents) {
-	            selectedIds.add(c.getId());
-	        }
+		        // Crear un array de los IDs de los componentes del suplidor
+		        ArrayList<String> selectedIds = new ArrayList<>();
+		        for (Component c : myComponents) {
+		            selectedIds.add(c.getId());
+		        }
 
-	        // Verificar que model no sea null
-	        if (model != null) {
-	            providedProducts.clearSelection();
-	            for (int i = 0; i < model.getSize(); i++) {
-	                if (selectedIds.contains(model.getElementAt(i))) {
-	                    providedProducts.addSelectionInterval(i, i);
-	                }
-	            }
-	        }
+		        // Verificar que model no sea null
+		        if (model != null) {
+		            providedProducts.clearSelection();
+		            for (int i = 0; i < model.getSize(); i++) {
+		                if (selectedIds.contains(model.getElementAt(i))) {
+		                    providedProducts.addSelectionInterval(i, i);
+		                }
+		            }
+		        }
+	    	} 
+	    	catch(Exception e)
+	    	{
+	    		e.printStackTrace();
+	    	}
+	        
 	    }
 	}
+	
+	
 
 
 
 	private void clean() {
 	
-		txt_suppliId.setText(IdGenerator.generateId());
-		txt_suppliName.setText("");
-		txt_suppliNi.setText("");
-		txt_suppliEmail.setText("");
-		txt_suppliAddress.setText("");
-		txt_suppliPhone.setText("");
-		providedProducts.clearSelection();
-        spn_deliveryTime.setValue(1);
-        myComponents.clear();
-		
+		try 
+		{
+			txt_suppliId.setText(IdGenerator.generateId());
+			txt_suppliName.setText("");
+			txt_suppliNi.setText("");
+			txt_suppliEmail.setText("");
+			txt_suppliAddress.setText("");
+			txt_suppliPhone.setText("");
+			providedProducts.clearSelection();
+	        spn_deliveryTime.setValue(1);
+	        myComponents.clear();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 }

@@ -1,17 +1,17 @@
 package Visual;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.TitledBorder;
 import java.awt.Font;
-import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.JTextField;
+
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.border.TitledBorder;
 
 public class Principal extends JFrame {
 
@@ -253,6 +253,12 @@ public class Principal extends JFrame {
 			public void mouseExited(MouseEvent e) {
 				lblRegClient.setForeground(Color.WHITE);
 			}
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				ClientRegistry regCli = new ClientRegistry(null);
+				regCli.setModal(true);
+				regCli.setVisible(true);
+			}
 		});
 		lblRegClient.setForeground(Color.WHITE);
 		lblRegClient.setFont(new Font("Verdana", Font.PLAIN, 16));
@@ -268,6 +274,11 @@ public class Principal extends JFrame {
 			@Override
 			public void mouseExited(MouseEvent e) {
 				lblListClient.setForeground(Color.WHITE);
+			}
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				ClientList cliList = new ClientList();
+				cliList.setVisible(true);
 			}
 		});
 		lblListClient.setForeground(Color.WHITE);
@@ -291,6 +302,13 @@ public class Principal extends JFrame {
 			@Override
 			public void mouseExited(MouseEvent e) {
 				lblRegSup.setForeground(Color.WHITE);
+			}
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				SupplierRegistry regSuppli = new SupplierRegistry(null);
+				regSuppli.setModal(true);
+				regSuppli.setVisible(true);
+				
 			}
 		});
 		lblRegSup.setForeground(Color.WHITE);

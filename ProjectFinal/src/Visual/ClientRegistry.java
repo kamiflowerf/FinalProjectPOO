@@ -52,7 +52,14 @@ public class ClientRegistry extends JDialog {
 	 */
 	public ClientRegistry(Client client) {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		setTitle("Registro Cliente");
+		if(client != null)
+		{
+			setTitle("Actualizar Cliente");
+		}
+		else
+		{
+			setTitle("Registro Cliente");
+		}
 		setResizable(false);
 		setBounds(100, 100, 691, 566);
 		getContentPane().setLayout(new BorderLayout());
@@ -179,8 +186,12 @@ public class ClientRegistry extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton okButton = new JButton("Registrar");
-				okButton.addActionListener(new ActionListener() {
+				JButton reg_btn = new JButton("Registrar");
+				if(client != null)
+				{
+					reg_btn.setText("Actualizar");
+				}
+				reg_btn.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
 						
 						String id = txt_clientId.getText();
@@ -238,14 +249,15 @@ public class ClientRegistry extends JDialog {
 								client.setAddress(address);
 								client.setPhone(phoneNum);
 								Administration.getInstance().updatePerson(client);
+								ClientList.updateTable();
 								dispose();
 							}
 						}
 					}
 				});
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
+				reg_btn.setActionCommand("OK");
+				buttonPane.add(reg_btn);
+				getRootPane().setDefaultButton(reg_btn);
 			}
 			{
 				JButton cancelButton = new JButton("Cancelar");
