@@ -230,6 +230,7 @@ public class Principal extends JFrame {
 			public void mouseExited(MouseEvent e) {
 				lblListComp.setForeground(Color.WHITE);
 			}
+			
 		});
 		lblListComp.setForeground(Color.WHITE);
 		lblListComp.setFont(new Font("Verdana", Font.PLAIN, 16));
@@ -354,6 +355,13 @@ public class Principal extends JFrame {
 			public void mouseExited(MouseEvent e) {
 				lblMakeSale.setForeground(Color.WHITE);
 			}
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				Venta venta = new Venta(); 
+				venta.setModal(true);
+				venta.setVisible(true); 
+				venta.setResizable(false);
+			}
 		});
 		lblMakeSale.setForeground(Color.WHITE);
 		lblMakeSale.setFont(new Font("Verdana", Font.PLAIN, 16));
@@ -369,6 +377,13 @@ public class Principal extends JFrame {
 			@Override
 			public void mouseExited(MouseEvent e) {
 				lblMakeDelivery.setForeground(Color.WHITE);
+			}
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				Pedido pedido = new Pedido();  
+				pedido.setModal(true);
+				pedido.setVisible(true); 
+				pedido.setResizable(false);
 			}
 		});
 		lblMakeDelivery.setForeground(Color.WHITE);
