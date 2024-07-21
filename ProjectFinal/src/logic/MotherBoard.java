@@ -9,8 +9,8 @@ public class MotherBoard extends Component {
 	private String typeRAM;
 	private ArrayList<String> hardDiskCon;
 	
-	public MotherBoard(String brand, double price, int units, int serie, String model, String socket, String typeRAM, ArrayList<String> hardDiskCon) {
-		super(brand, price, units, serie);
+	public MotherBoard(String id, String brand, double price, int units, int serie, String model, String socket, String typeRAM, ArrayList<String> hardDiskCon) {
+		super(id, brand, price, units, serie);
 		this.model = model;
 		this.socket = socket;
 		this.typeRAM = typeRAM;
