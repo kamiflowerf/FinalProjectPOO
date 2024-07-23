@@ -1,7 +1,13 @@
 package logic;
 
-public class MicroProcessor extends Component {
+import java.io.Serializable;
 
+public class MicroProcessor extends Component implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String model;
 	private String socket;
 	private float processingSpeed;

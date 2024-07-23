@@ -1,6 +1,12 @@
 package logic;
 
-public class Person {
+import java.io.Serializable;
+
+public class Person implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	protected String id;
 	protected String ni;
 	protected String name;

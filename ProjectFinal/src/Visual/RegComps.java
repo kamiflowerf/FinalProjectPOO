@@ -63,6 +63,9 @@ public class RegComps extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
+	/**
+	 * 
+	 */
 	public RegComps() {
 		setTitle("Registrar Componentes");
 		setBounds(100, 100, 772, 523);
@@ -73,6 +76,7 @@ public class RegComps extends JDialog {
 		contentPanel.setLayout(new BorderLayout(0, 0));
 		{
 			JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+			tabbedPane.setFont(new Font("Verdana", Font.PLAIN,15));
 			
 			contentPanel.add(tabbedPane, BorderLayout.CENTER);
 			{

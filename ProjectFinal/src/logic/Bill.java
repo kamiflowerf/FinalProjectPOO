@@ -1,9 +1,14 @@
 package logic;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.ArrayList;
 
-public class Bill {
+public class Bill implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String id;
 	private ArrayList<Component> components;
 	private Client cliente;

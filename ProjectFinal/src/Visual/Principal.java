@@ -6,12 +6,20 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
+
+import logic.Administration;
 
 public class Principal extends JFrame {
 
@@ -37,6 +45,9 @@ public class Principal extends JFrame {
 	private JLabel lblMakeSale;
 	private JLabel lblMakeDelivery;
 	private JLabel lblSaleManage;
+	private JTextField txtUsuario;
+	private JPanel pnlUser;
+	private JLabel lblRegUser;
 
 	/**
 	 * Launch the application.
@@ -58,6 +69,25 @@ public class Principal extends JFrame {
 	 * Create the frame.
 	 */
 	public Principal() {
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				FileOutputStream empresa;
+				ObjectOutputStream empresaWrite;
+				try {
+					empresa = new  FileOutputStream("adkEnterprise.dat");
+					empresaWrite = new ObjectOutputStream(empresa);
+					empresaWrite.writeObject(Administration.getInstance());
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			}
+		});
 		setTitle("Principal");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -79,7 +109,7 @@ public class Principal extends JFrame {
 		JPanel panel_1 = new JPanel();
 		panel_1.setLayout(null);
 		panel_1.setBackground(background);
-		panel_1.setBounds(12, 273, 292, 343);
+		panel_1.setBounds(12, 303, 292, 427);
 		panel.add(panel_1);
 		
 		txtComponents = new JTextField();
@@ -98,6 +128,7 @@ public class Principal extends JFrame {
 				pnlCliMenu.setVisible(false);
 				pnlSup.setVisible(false);
 				pnlAdmin.setVisible(false);
+				pnlUser.setVisible(false);
 			}
 		});
 		txtComponents.setForeground(new Color(255, 255, 255));
@@ -105,7 +136,7 @@ public class Principal extends JFrame {
 		txtComponents.setBackground(background);
 		txtComponents.setEditable(false);
 		txtComponents.setFont(new Font("Verdana", Font.PLAIN, 20));
-		txtComponents.setBounds(-12, 0, 304, 88);
+		txtComponents.setBounds(-12, 83, 304, 88);
 		panel_1.add(txtComponents);
 		txtComponents.setColumns(10);
 		
@@ -125,6 +156,7 @@ public class Principal extends JFrame {
 				pnlCliMenu.setVisible(true);
 				pnlSup.setVisible(false);
 				pnlAdmin.setVisible(false);
+				pnlUser.setVisible(false);
 			}
 		});
 		txtClients.setText("               Clientes");
@@ -133,7 +165,7 @@ public class Principal extends JFrame {
 		txtClients.setEditable(false);
 		txtClients.setColumns(10);
 		txtClients.setBackground(new Color(51, 51, 51));
-		txtClients.setBounds(-12, 86, 304, 88);
+		txtClients.setBounds(-12, 169, 304, 88);
 		panel_1.add(txtClients);
 		
 		txtSupplier = new JTextField();
@@ -152,6 +184,7 @@ public class Principal extends JFrame {
 				pnlCliMenu.setVisible(false);
 				pnlSup.setVisible(true);
 				pnlAdmin.setVisible(false);
+				pnlUser.setVisible(false);
 			}
 		});
 		txtSupplier.setText("            Proveedores");
@@ -160,7 +193,7 @@ public class Principal extends JFrame {
 		txtSupplier.setEditable(false);
 		txtSupplier.setColumns(10);
 		txtSupplier.setBackground(background);
-		txtSupplier.setBounds(-12, 171, 304, 88);
+		txtSupplier.setBounds(-12, 256, 304, 88);
 		panel_1.add(txtSupplier);
 		
 		txtAdmin = new JTextField();
@@ -179,19 +212,49 @@ public class Principal extends JFrame {
 				pnlCliMenu.setVisible(false);
 				pnlSup.setVisible(false);
 				pnlAdmin.setVisible(true);
+				pnlUser.setVisible(false);
 			}
 		});
-		txtAdmin.setText("           Administraci\u00F3n");
+		txtAdmin.setText("                 Ventas");
 		txtAdmin.setForeground(Color.WHITE);
 		txtAdmin.setFont(new Font("Verdana", Font.PLAIN, 20));
 		txtAdmin.setEditable(false);
 		txtAdmin.setColumns(10);
 		txtAdmin.setBackground(new Color(51, 51, 51));
-		txtAdmin.setBounds(-12, 254, 304, 88);
+		txtAdmin.setBounds(-12, 339, 304, 88);
 		panel_1.add(txtAdmin);
 		
+		txtUsuario = new JTextField();
+		txtUsuario.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				txtUsuario.setBackground(selected);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				txtUsuario.setBackground(background);
+			}
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				pnlCompMenu.setVisible(false);
+				pnlCliMenu.setVisible(false);
+				pnlSup.setVisible(false);
+				pnlAdmin.setVisible(false);
+				pnlUser.setVisible(true);
+			}
+		});
+		txtUsuario.setText("                Usuario");
+		txtUsuario.setForeground(Color.WHITE);
+		txtUsuario.setFont(new Font("Verdana", Font.PLAIN, 20));
+		txtUsuario.setEditable(false);
+		txtUsuario.setColumns(10);
+		txtUsuario.setBackground(new Color(51, 51, 51));
+		txtUsuario.setBounds(-12, 0, 304, 88);
+		panel_1.add(txtUsuario);
+		
 		pnlCompMenu = new JPanel();
-		pnlCompMenu.setBounds(292, 256, 335, 117);
+		pnlCompMenu.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		pnlCompMenu.setBounds(292, 370, 335, 117);
 		contentPane.add(pnlCompMenu);
 		pnlCompMenu.setBackground(background);
 		pnlCompMenu.setVisible(false);
@@ -238,9 +301,10 @@ public class Principal extends JFrame {
 		pnlCompMenu.add(lblListComp);
 		
 		pnlCliMenu = new JPanel();
+		pnlCliMenu.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		pnlCliMenu.setLayout(null);
 		pnlCliMenu.setBackground(new Color(51, 51, 51));
-		pnlCliMenu.setBounds(292, 344, 335, 117);
+		pnlCliMenu.setBounds(292, 457, 335, 117);
 		pnlCliMenu.setVisible(false);
 		contentPane.add(pnlCliMenu);
 		
@@ -288,9 +352,10 @@ public class Principal extends JFrame {
 		pnlCliMenu.add(lblListClient);
 		
 		pnlSup = new JPanel();
+		pnlSup.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		pnlSup.setLayout(null);
 		pnlSup.setBackground(new Color(51, 51, 51));
-		pnlSup.setBounds(292, 430, 335, 117);
+		pnlSup.setBounds(292, 543, 335, 117);
 		pnlSup.setVisible(false);
 		contentPane.add(pnlSup);
 		
@@ -339,9 +404,10 @@ public class Principal extends JFrame {
 		pnlSup.add(lblListSup);
 		
 		pnlAdmin = new JPanel();
+		pnlAdmin.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		pnlAdmin.setLayout(null);
 		pnlAdmin.setBackground(new Color(51, 51, 51));
-		pnlAdmin.setBounds(292, 515, 335, 179);
+		pnlAdmin.setBounds(292, 630, 335, 179);
 		pnlAdmin.setVisible(false);
 		contentPane.add(pnlAdmin);
 		
@@ -406,5 +472,36 @@ public class Principal extends JFrame {
 		lblSaleManage.setFont(new Font("Verdana", Font.PLAIN, 16));
 		lblSaleManage.setBounds(0, 111, 335, 55);
 		pnlAdmin.add(lblSaleManage);
+		
+		pnlUser = new JPanel();
+		pnlUser.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		pnlUser.setBackground(new Color(51,51,51));
+		pnlUser.setVisible(false);
+		pnlUser.setBounds(292, 286, 335, 85);
+		contentPane.add(pnlUser);
+		pnlUser.setLayout(null);
+		
+		lblRegUser = new JLabel("      Registrar Usuario");
+		lblRegUser.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				lblRegUser.setForeground(selected);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				lblRegUser.setForeground(Color.WHITE);
+			}
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				RegUser user = new RegUser();
+				user.setModal(true);
+				user.setVisible(true);
+				user.setResizable(false);
+			}
+		});
+		lblRegUser.setForeground(Color.WHITE);
+		lblRegUser.setFont(new Font("Verdana", Font.PLAIN, 16));
+		lblRegUser.setBounds(0, 15, 335, 55);
+		pnlUser.add(lblRegUser);
 	}
 }

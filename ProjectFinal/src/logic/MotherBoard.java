@@ -1,9 +1,14 @@
 package logic;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class MotherBoard extends Component {
+public class MotherBoard extends Component implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String model;
 	private String socket;
 	private String typeRAM;

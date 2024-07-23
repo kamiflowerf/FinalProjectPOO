@@ -1,7 +1,13 @@
 	package logic;
 
-public class HardDisk extends Component {
+import java.io.Serializable;
 
+public class HardDisk extends Component implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String model;
 	private int capacity;
 	private String conectionType;

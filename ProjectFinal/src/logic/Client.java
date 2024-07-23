@@ -1,8 +1,13 @@
 package logic;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Client extends Person {
+public class Client extends Person implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private ArrayList<Bill> myBills;
 
 	

@@ -1,7 +1,13 @@
 package logic;
 
-public class RAM extends Component {
+import java.io.Serializable;
 
+public class RAM extends Component implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int capacity;
 	private String type;
 	

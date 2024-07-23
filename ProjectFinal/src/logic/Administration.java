@@ -1,14 +1,21 @@
 package logic;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Administration {
+public class Administration implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private ArrayList<Component> theComponents;
 	private ArrayList<Person> thePeople;
 	private ArrayList<Bill> theBills;
 	private ArrayList<Combo> theCombos;
+	private ArrayList<User> myUsers;
 	private static Administration myAdmin = null;
+	private static User loginUser;
 	
 	public Administration() {
 		super();
@@ -16,6 +23,7 @@ public class Administration {
 		thePeople = new ArrayList<Person>();
 		theBills = new ArrayList<Bill>();
 		theCombos = new ArrayList<Combo>();
+		myUsers = new ArrayList<User>();
 	}
 	
 	public static Administration getInstance() {
@@ -24,6 +32,36 @@ public class Administration {
 		} return myAdmin;
 	}
 
+	public ArrayList<User> getMyUsers() {
+		return myUsers;
+	}
+
+	public void setMyUsers(ArrayList<User> myUsers) {
+		this.myUsers = myUsers;
+	}
+	
+	
+	public static Administration getAdministration() {
+		return myAdmin;
+	}
+
+	public static void setAdministration(Administration admin) {
+		Administration.myAdmin = admin;
+	}
+
+	public static User getLoginUser() {
+		return loginUser;
+	}
+
+	public static void setLoginUser(User loginUser) {
+		Administration.loginUser = loginUser;
+	}
+
+	public void regUser(User user) {
+		myUsers.add(user);
+		
+	}
+	
 	public ArrayList<Component> getTheComponents() {
 		return theComponents;
 	}
@@ -247,6 +285,19 @@ public class Administration {
 			}
 		}
 		return false;
+	}
+
+	public boolean confirmLogin(String username, String pass) {
+		boolean login = false;
+		
+		for(User user : myUsers) {
+			
+			if(user.getUsername().equals(username) && user.getPassword().equals(pass)) {
+				loginUser = user;
+				login = true;
+			}
+		}
+		return login;
 	}
 	
 }

@@ -1,8 +1,13 @@
 package logic;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Supplier extends Person {
+public class Supplier extends Person implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int deliveryTime;
 	private ArrayList<Component> myComponents;
 	
