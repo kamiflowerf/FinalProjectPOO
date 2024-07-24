@@ -1,9 +1,12 @@
 package Visual;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.util.List;
+import java.util.ArrayList;
 import javax.swing.AbstractCellEditor;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -20,6 +23,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.JComboBox;
 
 public class Catalogo extends JDialog {
 
@@ -36,63 +40,90 @@ public class Catalogo extends JDialog {
     }
 
     public Catalogo() {
-        setBounds(100, 100, 800, 600); // Adjusted for better visibility with more columns
+        setBounds(100, 100, 800, 600);
         getContentPane().setLayout(new BorderLayout());
         contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
         getContentPane().add(contentPanel, BorderLayout.CENTER);
         contentPanel.setLayout(new BorderLayout(0, 0));
-        {
-            JTable table = new JTable(new CustomTableModel());
-            table.setRowHeight(200);
+        
+        CustomTableModel tableModel = new CustomTableModel();
+        loadData(tableModel); // Cargar datos en el modelo de la tabla
 
-            // Set custom renderers and editors for each column
-            TableColumnModel columnModel = table.getColumnModel();
-            TableColumn column1 = columnModel.getColumn(0);
-            column1.setCellRenderer(new CustomTableCellRenderer());
-            column1.setCellEditor(new CustomTableCellEditor());
+        JTable table = new JTable(tableModel);
+        table.setRowHeight(200);
 
-            TableColumn column2 = columnModel.getColumn(1);
-            column2.setCellRenderer(new CustomTableCellRenderer());
-            column2.setCellEditor(new CustomTableCellEditor());
-
-            TableColumn column3 = columnModel.getColumn(2);
-            column3.setCellRenderer(new CustomTableCellRenderer());
-            column3.setCellEditor(new CustomTableCellEditor());
-
-            JScrollPane scrollPane = new JScrollPane(table);
-            scrollPane.setPreferredSize(new Dimension(700, 400));
-            contentPanel.add(scrollPane, BorderLayout.CENTER);
+        // Set custom renderers and editors for each column
+        TableColumnModel columnModel = table.getColumnModel();
+        for (int i = 0; i < tableModel.getColumnCount(); i++) {
+            TableColumn column = columnModel.getColumn(i);
+            column.setCellRenderer(new CustomTableCellRenderer());
+            column.setCellEditor(new CustomTableCellEditor());
         }
-        {
-            JPanel buttonPane = new JPanel();
-            buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-            getContentPane().add(buttonPane, BorderLayout.SOUTH);
-            {
-                JButton okButton = new JButton("OK");
-                okButton.setActionCommand("OK");
-                buttonPane.add(okButton);
-                getRootPane().setDefaultButton(okButton);
-            }
-            {
-                JButton cancelButton = new JButton("Cancel");
-                cancelButton.setActionCommand("Cancel");
-                buttonPane.add(cancelButton);
-            }
-        }
+
+        JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.setPreferredSize(new Dimension(700, 400));
+        contentPanel.add(scrollPane, BorderLayout.CENTER);
+
+        JPanel buttonPane = new JPanel(new BorderLayout());
+        getContentPane().add(buttonPane, BorderLayout.SOUTH);
+
+        JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        buttonPane.add(buttonsPanel, BorderLayout.CENTER);
+
+        JComboBox comboBox = new JComboBox();
+        buttonsPanel.add(comboBox);
+
+        JButton btnSeleccionar = new JButton("Seleccionar");
+        btnSeleccionar.setPreferredSize(new Dimension(75, 30));
+        btnSeleccionar.setBorder(new RoundedBorder(Color.BLACK, 1, 25));
+        btnSeleccionar.setActionCommand("OK");
+        buttonsPanel.add(btnSeleccionar);
+
+        JButton btnEliminar = new JButton("Eliminar");
+        btnEliminar.setPreferredSize(new Dimension(75, 30));
+        btnEliminar.setBorder(new RoundedBorder(Color.BLACK, 1, 25));
+        btnEliminar.setActionCommand("OK");
+        buttonsPanel.add(btnEliminar);
+
+        JButton okButton = new JButton("Editar");
+        okButton.setBorder(new RoundedBorder(Color.BLACK, 1, 25));
+        okButton.setPreferredSize(new Dimension(75, 30)); // Set the preferred size of the OK button
+        okButton.setActionCommand("OK");
+        buttonsPanel.add(okButton);
+        getRootPane().setDefaultButton(okButton);
+
+        JButton cancelButton = new JButton("Cancel");
+        cancelButton.setBorder(new RoundedBorder(Color.BLACK, 1, 25));
+        cancelButton.setPreferredSize(new Dimension(75, 30)); // Set the preferred size of the Cancel button
+        cancelButton.setActionCommand("Cancel");
+        buttonsPanel.add(cancelButton);
     }
 
-    // Custom TableModel to hold the data
+    private void loadData(CustomTableModel tableModel) {
+        List<DataWrapper> data = new ArrayList<>();
+        data.add(new DataWrapper("Element 1", "Text 1", 5, false));
+        data.add(new DataWrapper("Element 2", "Text 2", 10, false));
+        data.add(new DataWrapper("Element 3", "Text 3", 15, false));
+
+        tableModel.setData(data);
+    }
+
     private static class CustomTableModel extends AbstractTableModel {
         private final String[] columnNames = {"Column 1", "Column 2", "Column 3"};
-        private final DataWrapper[][] data = {
-                {new DataWrapper("Element 1", "", 0, false), new DataWrapper("Element A", "", 0, false), new DataWrapper("Element X", "", 0, false)},
-                {new DataWrapper("Element 2", "", 0, false), new DataWrapper("Element B", "", 0, false), new DataWrapper("Element Y", "", 0, false)},
-                {new DataWrapper("Element 3", "", 0, false), new DataWrapper("Element C", "", 0, false), new DataWrapper("Element Z", "", 0, false)}
-        };
+        private List<DataWrapper> data;
+
+        public CustomTableModel() {
+            data = new ArrayList<>();
+        }
+
+        public void setData(List<DataWrapper> data) {
+            this.data = data;
+            fireTableDataChanged();
+        }
 
         @Override
         public int getRowCount() {
-            return data.length;
+            return data.size();
         }
 
         @Override
@@ -102,7 +133,7 @@ public class Catalogo extends JDialog {
 
         @Override
         public Object getValueAt(int rowIndex, int columnIndex) {
-            return data[rowIndex][columnIndex];
+            return data.get(rowIndex);
         }
 
         @Override
@@ -117,12 +148,11 @@ public class Catalogo extends JDialog {
 
         @Override
         public void setValueAt(Object value, int rowIndex, int columnIndex) {
-            data[rowIndex][columnIndex] = (DataWrapper) value;
+            data.set(rowIndex, (DataWrapper) value);
             fireTableCellUpdated(rowIndex, columnIndex);
         }
     }
 
-    // DataWrapper class to encapsulate the editable data
     private static class DataWrapper {
         private String label;
         private String textField;
@@ -169,9 +199,7 @@ public class Catalogo extends JDialog {
         }
     }
 
-    // Custom TableCellRenderer to render JTable cells with specific components
     private static class CustomTableCellRenderer extends JPanel implements TableCellRenderer {
-
         private final JLabel lblNewLabel;
         private final JTextField textField;
         private final JRadioButton rdbtnNewRadioButton;
@@ -185,7 +213,7 @@ public class Catalogo extends JDialog {
 
             lblNewLabel = new JLabel();
             lblNewLabel.setBounds(70, 16, 79, 63);
-            lblNewLabel.setOpaque(true); // Ensure background is visible
+            lblNewLabel.setOpaque(true); 
             innerPanel.add(lblNewLabel);
 
             textField = new JTextField();
@@ -230,7 +258,6 @@ public class Catalogo extends JDialog {
     }
 
     private static class CustomTableCellEditor extends AbstractCellEditor implements TableCellEditor {
-
         private final JPanel panel;
         private final JTextField textField;
         private final JRadioButton rdbtnNewRadioButton;
@@ -281,6 +308,3 @@ public class Catalogo extends JDialog {
         }
     }
 }
-
-
-

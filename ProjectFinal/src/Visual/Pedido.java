@@ -117,13 +117,14 @@ public class Pedido extends JDialog {
 			panel.add(btnSearchComp);
 			
 			JPanel pnlComponents = new JPanel();
-			pnlComponents.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			pnlComponents.setBorder(new RoundedBorder(Color.BLACK,1,15));
 			pnlComponents.setBounds(33, 203, 330, 165);
 			panel.add(pnlComponents);
 			pnlComponents.setLayout(new BorderLayout(0, 0));
 			
 			JScrollPane scrollPane = new JScrollPane();
 			pnlComponents.add(scrollPane, BorderLayout.CENTER);
+			
 			
 			JButton btnCancelar = new JButton("Cancelar");
 			btnCancelar.setFont(new Font("Verdana", Font.PLAIN, 14));
