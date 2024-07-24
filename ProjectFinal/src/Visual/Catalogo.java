@@ -27,7 +27,11 @@ import javax.swing.JComboBox;
 
 public class Catalogo extends JDialog {
 
-    private final JPanel contentPanel = new JPanel();
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private final JPanel contentPanel = new JPanel();
 
     public static void main(String[] args) {
         try {
@@ -70,7 +74,7 @@ public class Catalogo extends JDialog {
         JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         buttonPane.add(buttonsPanel, BorderLayout.CENTER);
 
-        JComboBox comboBox = new JComboBox();
+        JComboBox<String> comboBox = new JComboBox<String>();
         buttonsPanel.add(comboBox);
 
         JButton btnSeleccionar = new JButton("Seleccionar");
@@ -109,7 +113,11 @@ public class Catalogo extends JDialog {
     }
 
     private static class CustomTableModel extends AbstractTableModel {
-        private final String[] columnNames = {"Column 1", "Column 2", "Column 3"};
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		private final String[] columnNames = {"Column 1", "Column 2", "Column 3"};
         private List<DataWrapper> data;
 
         public CustomTableModel() {
@@ -200,7 +208,11 @@ public class Catalogo extends JDialog {
     }
 
     private static class CustomTableCellRenderer extends JPanel implements TableCellRenderer {
-        private final JLabel lblNewLabel;
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		private final JLabel lblNewLabel;
         private final JTextField textField;
         private final JRadioButton rdbtnNewRadioButton;
         private final JSpinner spinner;
@@ -258,7 +270,11 @@ public class Catalogo extends JDialog {
     }
 
     private static class CustomTableCellEditor extends AbstractCellEditor implements TableCellEditor {
-        private final JPanel panel;
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		private final JPanel panel;
         private final JTextField textField;
         private final JRadioButton rdbtnNewRadioButton;
         private final JSpinner spinner;
