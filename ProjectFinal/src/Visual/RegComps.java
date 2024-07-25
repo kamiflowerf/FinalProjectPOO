@@ -6,15 +6,25 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
+import logic.Administration;
+import logic.HardDisk;
 import logic.IdGenerator;
+import logic.MicroProcessor;
+import logic.MotherBoard;
+import logic.RAM;
 
 import java.awt.Color;
 
 import javax.swing.JTabbedPane;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
+import java.awt.Image;
+
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
@@ -23,6 +33,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 
 public class RegComps extends JDialog {
 
@@ -32,7 +43,7 @@ public class RegComps extends JDialog {
 	private JRadioButton rdbtnMicro;
 	private JRadioButton rdbtnRAM;
 	private JRadioButton rdbtnHardDisk;
-	private JTextField txtIdMB;
+	private JTextField txtId;
 	private JTextField txtBrand;
 	private JPanel pnlMB;
 	private JTextField txtModelMB;
@@ -41,11 +52,24 @@ public class RegComps extends JDialog {
 	private JTextField txtTypeRAM;
 	private JTextField txtModelMicro;
 	private JTextField txtSocketMicro;
-	private JTextField txtSpeedMicro;
 	private JTextField txtModelHD;
 	private JPanel pnlRAM;
 	private JPanel pnlMicroP;
 	private JPanel pnlHardDisk;
+	private JLabel lblIcon;
+	private Image img;
+	private JLabel lblWarning;
+	private JSpinner spnPrice;
+	private JSpinner spnUnits;
+	private JCheckBox chckbxIdeMB;
+	private JCheckBox chckbxSataMB;
+	private JCheckBox chckbxSata2MB;
+	private JCheckBox chckbxSata3MB;
+	private JSpinner spnSerie;
+	private JSpinner spnCapacityRAM;
+	private JSpinner spnSpeedMicro;
+	private JSpinner spnCapacityHD;
+	private JComboBox<String> cbxConType;
 
 	/**
 	 * Launch the application.
@@ -68,7 +92,7 @@ public class RegComps extends JDialog {
 	 */
 	public RegComps() {
 		setTitle("Registrar Componentes");
-		setBounds(100, 100, 772, 523);
+		setBounds(100, 100, 772, 552);
 		setLocationRelativeTo(null);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -107,6 +131,7 @@ public class RegComps extends JDialog {
 						pnlRAM.setVisible(false);
 						pnlMicroP.setVisible(false);
 						pnlHardDisk.setVisible(false);
+						setIcon();
 					}
 				});
 				rdbtnMotherBoard.setSelected(true);
@@ -125,6 +150,7 @@ public class RegComps extends JDialog {
 						pnlRAM.setVisible(false);
 						pnlMicroP.setVisible(true);
 						pnlHardDisk.setVisible(false);
+						setIcon();
 					}
 				});
 				rdbtnMicro.setFont(new Font("Verdana", Font.PLAIN, 14));
@@ -142,6 +168,7 @@ public class RegComps extends JDialog {
 						pnlRAM.setVisible(true);
 						pnlMicroP.setVisible(false);
 						pnlHardDisk.setVisible(false);
+						setIcon();
 					}
 				});
 				rdbtnRAM.setFont(new Font("Verdana", Font.PLAIN, 14));
@@ -159,6 +186,7 @@ public class RegComps extends JDialog {
 						pnlRAM.setVisible(false);
 						pnlMicroP.setVisible(false);
 						pnlHardDisk.setVisible(true);
+						setIcon();
 					}
 				});
 				rdbtnHardDisk.setFont(new Font("Verdana", Font.PLAIN, 14));
@@ -172,54 +200,54 @@ public class RegComps extends JDialog {
 				
 				JPanel infoPnl = new JPanel();
 				infoPnl.setBorder(new RoundedBorder(Color.BLACK,1,20));
-				infoPnl.setBounds(12, 200, 719, 194);
+				infoPnl.setBounds(12, 200, 719, 215);
 				pnlComponents.add(infoPnl);
 				infoPnl.setLayout(null);
 				
 				JLabel lblNewLabel_2 = new JLabel("ID: ");
 				lblNewLabel_2.setFont(new Font("Verdana", Font.PLAIN, 15));
-				lblNewLabel_2.setBounds(64, 26, 28, 16);
+				lblNewLabel_2.setBounds(64, 22, 28, 16);
 				infoPnl.add(lblNewLabel_2);
 				
-				txtIdMB = new JTextField();
-				txtIdMB.setFont(new Font("Verdana", Font.PLAIN, 15));
-				txtIdMB.setEditable(false);
-				txtIdMB.setText(IdGenerator.generateId());
-				txtIdMB.setBounds(98, 21, 122, 22);
-				infoPnl.add(txtIdMB);
-				txtIdMB.setColumns(10);
+				txtId = new JTextField();
+				txtId.setFont(new Font("Verdana", Font.PLAIN, 15));
+				txtId.setEditable(false);
+				txtId.setText(IdGenerator.generateId());
+				txtId.setBounds(98, 17, 122, 22);
+				infoPnl.add(txtId);
+				txtId.setColumns(10);
 				
 				JLabel lblMarca = new JLabel("Marca:");
 				lblMarca.setFont(new Font("Verdana", Font.PLAIN, 15));
-				lblMarca.setBounds(34, 68, 58, 16);
+				lblMarca.setBounds(34, 60, 58, 16);
 				infoPnl.add(lblMarca);
 				
 				JLabel lblPrecio = new JLabel("Precio:");
 				lblPrecio.setFont(new Font("Verdana", Font.PLAIN, 15));
-				lblPrecio.setBounds(34, 110, 58, 16);
+				lblPrecio.setBounds(34, 98, 58, 16);
 				infoPnl.add(lblPrecio);
 				
 				txtBrand = new JTextField();
 				txtBrand.setFont(new Font("Verdana", Font.PLAIN, 15));
-				txtBrand.setBounds(98, 64, 145, 22);
+				txtBrand.setBounds(98, 56, 145, 22);
 				infoPnl.add(txtBrand);
 				txtBrand.setColumns(10);
 				
-				JSpinner spnPrice = new JSpinner();
+				spnPrice = new JSpinner();
 				spnPrice.setModel(new SpinnerNumberModel(new Double(0), new Double(0), null, new Double(1)));
 				spnPrice.setFont(new Font("Verdana", Font.PLAIN, 15));
-				spnPrice.setBounds(98, 107, 145, 22);
+				spnPrice.setBounds(98, 95, 145, 22);
 				infoPnl.add(spnPrice);
 				
 				JLabel lblUnidades = new JLabel("Unidades:");
 				lblUnidades.setFont(new Font("Verdana", Font.PLAIN, 15));
-				lblUnidades.setBounds(12, 152, 80, 16);
+				lblUnidades.setBounds(12, 136, 80, 16);
 				infoPnl.add(lblUnidades);
 				
-				JSpinner spnUnits = new JSpinner();
+				spnUnits = new JSpinner();
 				spnUnits.setModel(new SpinnerNumberModel(new Integer(1), new Integer(1), null, new Integer(1)));
 				spnUnits.setFont(new Font("Verdana", Font.PLAIN, 15));
-				spnUnits.setBounds(98, 150, 104, 22);
+				spnUnits.setBounds(98, 134, 104, 22);
 				infoPnl.add(spnUnits);
 				
 				pnlMB = new JPanel();
@@ -243,16 +271,19 @@ public class RegComps extends JDialog {
 				pnlMB.add(lblRamCompatible);
 				
 				txtModelMB = new JTextField();
+				txtModelMB.setFont(new Font("Verdana", Font.PLAIN, 15));
 				txtModelMB.setBounds(90, 25, 116, 22);
 				pnlMB.add(txtModelMB);
 				txtModelMB.setColumns(10);
 				
 				txtSocketMB = new JTextField();
+				txtSocketMB.setFont(new Font("Verdana", Font.PLAIN, 15));
 				txtSocketMB.setColumns(10);
 				txtSocketMB.setBounds(90, 72, 116, 22);
 				pnlMB.add(txtSocketMB);
 				
 				txtRamTypeMB = new JTextField();
+				txtRamTypeMB.setFont(new Font("Verdana", Font.PLAIN, 15));
 				txtRamTypeMB.setColumns(10);
 				txtRamTypeMB.setBounds(90, 119, 116, 22);
 				pnlMB.add(txtRamTypeMB);
@@ -267,22 +298,22 @@ public class RegComps extends JDialog {
 				pnlMB.add(panel_1);
 				panel_1.setLayout(null);
 				
-				JCheckBox chckbxIdeMB = new JCheckBox("IDE");
+				chckbxIdeMB = new JCheckBox("IDE");
 				chckbxIdeMB.setFont(new Font("Verdana", Font.PLAIN, 15));
 				chckbxIdeMB.setBounds(8, 11, 74, 25);
 				panel_1.add(chckbxIdeMB);
 				
-				JCheckBox chckbxSataMB = new JCheckBox("SATA");
+				chckbxSataMB = new JCheckBox("SATA");
 				chckbxSataMB.setFont(new Font("Verdana", Font.PLAIN, 15));
 				chckbxSataMB.setBounds(8, 47, 74, 25);
 				panel_1.add(chckbxSataMB);
 				
-				JCheckBox chckbxSata2MB = new JCheckBox("SATA-2");
+				chckbxSata2MB = new JCheckBox("SATA-2");
 				chckbxSata2MB.setFont(new Font("Verdana", Font.PLAIN, 15));
 				chckbxSata2MB.setBounds(101, 11, 101, 25);
 				panel_1.add(chckbxSata2MB);
 				
-				JCheckBox chckbxSata3MB = new JCheckBox("SATA-3");
+				chckbxSata3MB = new JCheckBox("SATA-3");
 				chckbxSata3MB.setFont(new Font("Verdana", Font.PLAIN, 15));
 				chckbxSata3MB.setBounds(101, 47, 101, 25);
 				panel_1.add(chckbxSata3MB);
@@ -298,7 +329,7 @@ public class RegComps extends JDialog {
 				lblCapacidad.setBounds(20, 45, 83, 16);
 				pnlRAM.add(lblCapacidad);
 				
-				JSpinner spnCapacityRAM = new JSpinner();
+				spnCapacityRAM = new JSpinner();
 				spnCapacityRAM.setModel(new SpinnerNumberModel(new Integer(4), new Integer(4), null, new Integer(1)));
 				spnCapacityRAM.setFont(new Font("Verdana", Font.PLAIN, 15));
 				spnCapacityRAM.setBounds(121, 41, 63, 22);
@@ -315,50 +346,10 @@ public class RegComps extends JDialog {
 				pnlRAM.add(lblTipo);
 				
 				txtTypeRAM = new JTextField();
+				txtTypeRAM.setFont(new Font("Verdana", Font.PLAIN, 15));
 				txtTypeRAM.setBounds(121, 104, 116, 22);
 				pnlRAM.add(txtTypeRAM);
 				txtTypeRAM.setColumns(10);
-				
-				pnlMicroP = new JPanel();
-				pnlMicroP.setBounds(255, 13, 452, 168);
-				pnlMicroP.setVisible(false);
-				infoPnl.add(pnlMicroP);
-				pnlMicroP.setLayout(null);
-				
-				JLabel label = new JLabel("Modelo:");
-				label.setFont(new Font("Verdana", Font.PLAIN, 15));
-				label.setBounds(27, 30, 66, 16);
-				pnlMicroP.add(label);
-				
-				JLabel label_1 = new JLabel("Socket: ");
-				label_1.setFont(new Font("Verdana", Font.PLAIN, 15));
-				label_1.setBounds(27, 76, 66, 16);
-				pnlMicroP.add(label_1);
-				
-				JLabel lblVelocidad = new JLabel("Velocidad:");
-				lblVelocidad.setFont(new Font("Verdana", Font.PLAIN, 15));
-				lblVelocidad.setBounds(12, 122, 81, 16);
-				pnlMicroP.add(lblVelocidad);
-				
-				txtModelMicro = new JTextField();
-				txtModelMicro.setColumns(10);
-				txtModelMicro.setBounds(105, 25, 116, 22);
-				pnlMicroP.add(txtModelMicro);
-				
-				txtSocketMicro = new JTextField();
-				txtSocketMicro.setColumns(10);
-				txtSocketMicro.setBounds(105, 72, 116, 22);
-				pnlMicroP.add(txtSocketMicro);
-				
-				txtSpeedMicro = new JTextField();
-				txtSpeedMicro.setColumns(10);
-				txtSpeedMicro.setBounds(105, 120, 116, 22);
-				pnlMicroP.add(txtSpeedMicro);
-				
-				JLabel lblMeasureMicro = new JLabel("GHz");
-				lblMeasureMicro.setFont(new Font("Verdana", Font.PLAIN, 15));
-				lblMeasureMicro.setBounds(226, 126, 32, 16);
-				pnlMicroP.add(lblMeasureMicro);
 				
 				pnlHardDisk = new JPanel();
 				pnlHardDisk.setBounds(255, 13, 452, 168);
@@ -382,12 +373,13 @@ public class RegComps extends JDialog {
 				pnlHardDisk.add(lblConexin);
 				
 				txtModelHD = new JTextField();
+				txtModelHD.setFont(new Font("Verdana", Font.PLAIN, 15));
 				txtModelHD.setColumns(10);
 				txtModelHD.setBounds(107, 28, 116, 22);
 				pnlHardDisk.add(txtModelHD);
 				
-				JSpinner spnCapacityHD = new JSpinner();
-				spnCapacityHD.setModel(new SpinnerNumberModel(new Integer(500), new Integer(500), null, new Integer(1)));
+				spnCapacityHD = new JSpinner();
+				spnCapacityHD.setModel(new SpinnerNumberModel(new Integer(500), null, null, new Integer(1)));
 				spnCapacityHD.setFont(new Font("Verdana", Font.PLAIN, 15));
 				spnCapacityHD.setBounds(107, 74, 83, 22);
 				pnlHardDisk.add(spnCapacityHD);
@@ -397,17 +389,78 @@ public class RegComps extends JDialog {
 				lblMeasureHD.setBounds(195, 80, 28, 16);
 				pnlHardDisk.add(lblMeasureHD);
 				
-				JComboBox<String> comboBox = new JComboBox<String>();
-				comboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"<Seleccionar>", "IDE", "SATA", "SATA-2", "SATA-3"}));
-				comboBox.setFont(new Font("Verdana", Font.PLAIN, 15));
-				comboBox.setBounds(107, 120, 139, 22);
-				pnlHardDisk.add(comboBox);
+				cbxConType = new JComboBox<String>();
+				cbxConType.setModel(new DefaultComboBoxModel<String>(new String[] {"<Seleccionar>", "IDE", "SATA", "SATA-2", "SATA-3"}));
+				cbxConType.setFont(new Font("Verdana", Font.PLAIN, 15));
+				cbxConType.setBounds(107, 120, 139, 22);
+				pnlHardDisk.add(cbxConType);
+				
+				JLabel lblSerie = new JLabel("Serie:");
+				lblSerie.setFont(new Font("Verdana", Font.PLAIN, 15));
+				lblSerie.setBounds(41, 174, 51, 16);
+				infoPnl.add(lblSerie);
+				
+				spnSerie = new JSpinner();
+				spnSerie.setModel(new SpinnerNumberModel(new Integer(1), new Integer(1), null, new Integer(1)));
+				spnSerie.setFont(new Font("Verdana", Font.PLAIN, 15));
+				spnSerie.setBounds(98, 173, 104, 22);
+				infoPnl.add(spnSerie);
+				
+				pnlMicroP = new JPanel();
+				pnlMicroP.setBounds(255, 13, 452, 168);
+				infoPnl.add(pnlMicroP);
+				pnlMicroP.setVisible(false);
+				pnlMicroP.setLayout(null);
+				
+				JLabel label = new JLabel("Modelo:");
+				label.setFont(new Font("Verdana", Font.PLAIN, 15));
+				label.setBounds(27, 30, 66, 16);
+				pnlMicroP.add(label);
+				
+				JLabel label_1 = new JLabel("Socket: ");
+				label_1.setFont(new Font("Verdana", Font.PLAIN, 15));
+				label_1.setBounds(27, 76, 66, 16);
+				pnlMicroP.add(label_1);
+				
+				JLabel lblVelocidad = new JLabel("Velocidad:");
+				lblVelocidad.setFont(new Font("Verdana", Font.PLAIN, 15));
+				lblVelocidad.setBounds(12, 122, 81, 16);
+				pnlMicroP.add(lblVelocidad);
+				
+				txtModelMicro = new JTextField();
+				txtModelMicro.setFont(new Font("Verdana", Font.PLAIN, 15));
+				txtModelMicro.setColumns(10);
+				txtModelMicro.setBounds(105, 25, 116, 22);
+				pnlMicroP.add(txtModelMicro);
+				
+				txtSocketMicro = new JTextField();
+				txtSocketMicro.setFont(new Font("Verdana", Font.PLAIN, 15));
+				txtSocketMicro.setColumns(10);
+				txtSocketMicro.setBounds(105, 72, 116, 22);
+				pnlMicroP.add(txtSocketMicro);
+				
+				JLabel lblMeasureMicro = new JLabel("GHz");
+				lblMeasureMicro.setFont(new Font("Verdana", Font.PLAIN, 15));
+				lblMeasureMicro.setBounds(226, 126, 32, 16);
+				pnlMicroP.add(lblMeasureMicro);
+				
+				spnSpeedMicro = new JSpinner();
+				spnSpeedMicro.setModel(new SpinnerNumberModel(new Float(1), new Float(1), null, new Float(1)));
+				spnSpeedMicro.setFont(new Font("Verdana", Font.PLAIN, 15));
+				spnSpeedMicro.setBounds(105, 120, 116, 22);
+				pnlMicroP.add(spnSpeedMicro);
 				
 				JPanel iconPane = new JPanel();
 				iconPane.setBackground(new Color(176, 224, 230));
 				iconPane.setBorder(new RoundedBorder(Color.BLACK,1,20));
 				iconPane.setBounds(399, 27, 154, 160);
 				pnlComponents.add(iconPane);
+				iconPane.setLayout(null);
+				
+				lblIcon = new JLabel("");
+				lblIcon.setBounds(0, 0, 154, 160);
+				setIcon();
+				iconPane.add(lblIcon);
 				
 				JButton btnCancel = new JButton("Cancelar");
 				btnCancel.addActionListener(new ActionListener() {
@@ -417,15 +470,33 @@ public class RegComps extends JDialog {
 				});
 				
 				btnCancel.setFont(new Font("Verdana", Font.PLAIN, 15));
-				btnCancel.setBounds(634, 407, 97, 25);
+				btnCancel.setBounds(634, 428, 97, 25);
 				btnCancel.setBorder(new RoundedBorder (Color.BLACK, 1, 25));
 				pnlComponents.add(btnCancel);
 				
 				JButton btnReg = new JButton("Registrar");
+				btnReg.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						boolean empty = isFieldEmpty();
+						if(empty)
+							lblWarning.setVisible(true);
+						else {
+							registerComp();
+						}
+							
+					}
+				});
 				btnReg.setFont(new Font("Verdana", Font.PLAIN, 15));
 				btnReg.setBorder(new RoundedBorder (Color.BLACK, 1, 25));
-				btnReg.setBounds(525, 407, 97, 25);
+				btnReg.setBounds(525, 428, 97, 25);
 				pnlComponents.add(btnReg);
+				
+				lblWarning = new JLabel("Por favor llenar todos los campos");
+				lblWarning.setForeground(Color.RED);
+				lblWarning.setFont(new Font("Verdana", Font.BOLD, 15));
+				lblWarning.setBounds(112, 176, 275, 16);
+				lblWarning.setVisible(false);
+				pnlComponents.add(lblWarning);
 			}
 			{
 				JPanel pnlCombos = new JPanel();
@@ -439,5 +510,122 @@ public class RegComps extends JDialog {
 				pnlCombos.add(lblNewLabel_1);
 			}
 		}
+	}
+	
+	private void registerComp() {
+		String id = txtId.getText();
+		String brand = txtBrand.getText();
+		double price = (double)spnPrice.getValue();
+		int units = (int)spnUnits.getValue();
+		int serie = (int)spnSerie.getValue();
+		
+		if(rdbtnMotherBoard.isSelected()) {
+			String model = txtModelMB.getText();
+			String socket = txtSocketMB.getText();
+			String type = txtRamTypeMB.getText();
+			ArrayList<String> conex = new ArrayList<String>();
+			if(chckbxIdeMB.isSelected())
+				conex.add("IDE");
+			if(chckbxSataMB.isSelected())
+				conex.add("SATA");
+			if(chckbxSata2MB.isSelected())
+				conex.add("SATA-2");
+			if(chckbxSata3MB.isSelected())
+				conex.add("SATA-3");
+			MotherBoard mb = new MotherBoard(id, brand, price, units, serie, model, socket, type, conex);
+			mb.setIcon((ImageIcon)lblIcon.getIcon());
+			Administration.getInstance().addComponent(mb);
+		} else if(rdbtnRAM.isSelected()) {
+			int capacity = (int)spnCapacityRAM.getValue();
+			String type = txtTypeRAM.getText();
+			RAM ram = new RAM(id, brand, price, units, serie, capacity, type);
+			ram.setIcon((ImageIcon)lblIcon.getIcon());
+			Administration.getInstance().addComponent(ram);
+		} else if(rdbtnMicro.isSelected()) {
+			String model = txtModelMicro.getText();
+			String socket = txtSocketMicro.getText();
+			float speed = (float)spnSpeedMicro.getValue();
+			MicroProcessor micro = new MicroProcessor(id, brand, price, units, serie, model, socket, speed);
+			micro.setIcon((ImageIcon)lblIcon.getIcon());
+			Administration.getInstance().addComponent(micro);
+		} else {
+			String model = txtModelHD.getText();
+			int capacity = (int)spnCapacityHD.getValue();
+			String conex = (String)cbxConType.getSelectedItem();
+			HardDisk disk = new HardDisk(id, brand, price, units, serie, model, capacity, conex);
+			disk.setIcon((ImageIcon)lblIcon.getIcon());
+			Administration.getInstance().addComponent(disk);
+		}
+		JOptionPane.showMessageDialog(null, "Operación satisfactoria", "Registrar Componente", JOptionPane.INFORMATION_MESSAGE);
+		clean();
+	}
+	
+	private boolean isFieldEmpty() {
+		boolean empty = false;
+		
+		if (txtBrand.getText().trim().isEmpty() || spnPrice.getValue() == null ||
+		        spnUnits.getValue() == null || spnSerie.getValue() == null) {
+		        empty = true;
+		    }
+
+		    if (rdbtnMotherBoard.isSelected()) {
+		        empty = empty || txtModelMB.getText().trim().isEmpty() || 
+		                  txtSocketMB.getText().trim().isEmpty() || 
+		                  txtRamTypeMB.getText().trim().isEmpty() || 
+		                  (!chckbxIdeMB.isSelected() && !chckbxSataMB.isSelected() && 
+		                		  !chckbxSata2MB.isSelected() && !chckbxSata3MB.isSelected());
+		    } else if (rdbtnRAM.isSelected()) {
+		        empty = empty || txtTypeRAM.getText().trim().isEmpty();
+		    } else if (rdbtnMicro.isSelected()) {
+		        empty = empty || txtModelMicro.getText().trim().isEmpty() || 
+		                  txtSocketMicro.getText().trim().isEmpty();
+		    } else if (rdbtnHardDisk.isSelected()) {
+		        empty = empty || txtModelHD.getText().trim().isEmpty() || 
+		                  cbxConType.getSelectedIndex() == 0;
+		    }
+		
+		return empty;
+	}
+	
+	private void clean() {
+		txtId.setText(IdGenerator.generateId());
+		txtBrand.setText("");
+		spnPrice.setValue(0);
+		spnUnits.setValue(1);
+		spnSerie.setValue(1);
+		txtModelMB.setText("");
+		txtSocketMB.setText("");
+		txtRamTypeMB.setText("");
+		chckbxIdeMB.setSelected(false);
+		chckbxSataMB.setSelected(false);
+		chckbxSata2MB.setSelected(false);
+		chckbxSata3MB.setSelected(false);
+		spnCapacityRAM.setValue(4);
+		txtTypeRAM.setText("");
+		txtModelMicro.setText("");
+		txtSocketMicro.setText("");
+		spnSpeedMicro.setValue(1);
+		txtModelHD.setText("");
+		spnCapacityHD.setValue(500);
+		cbxConType.setSelectedIndex(0);
+		lblWarning.setVisible(false);
+	}
+	
+	private void setIcon() {
+		String path = "";
+	    if (rdbtnMotherBoard.isSelected()) {
+	        path = "/Images/tarjeta-madre.png";
+	    } else if (rdbtnMicro.isSelected()) {
+	        path = "/Images/procesador (1).png";
+	    } else if (rdbtnHardDisk.isSelected()) {
+	        path = "/Images/disco-duro.png";
+	    } else if (rdbtnRAM.isSelected()) {
+	        path = "/Images/memoria-ram.png";
+	    }
+	    if (!path.isEmpty()) {
+	        img = new ImageIcon(this.getClass().getResource(path)).getImage();
+	        Image scaledImg = img.getScaledInstance(lblIcon.getWidth(), lblIcon.getHeight(), Image.SCALE_SMOOTH);
+	        lblIcon.setIcon(new ImageIcon(scaledImg));
+	    }
 	}
 }

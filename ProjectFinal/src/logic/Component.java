@@ -2,6 +2,8 @@ package logic;
 
 import java.io.Serializable;
 
+import javax.swing.ImageIcon;
+
 public abstract class Component implements Serializable{
 	/**
 	 * 
@@ -9,17 +11,26 @@ public abstract class Component implements Serializable{
 	private static final long serialVersionUID = 1L;
 	protected String id;
 	protected String brand;
+	protected ImageIcon icon;
 	protected double price;
 	protected int units;
 	protected int serie;
 	
-	public Component(String id, String brand, double price, int units, int serie) {
+	public Component(String id, String brand,double price, int units, int serie) {
 		super();
 		this.id = id;
 		this.brand = brand;
 		this.price = price;
 		this.units = units;
 		this.serie = serie;
+	}
+
+	public ImageIcon getIcon() {
+		return icon;
+	}
+
+	public void setIcon(ImageIcon icon) {
+		this.icon = icon;
 	}
 
 	public String getBrand() {
