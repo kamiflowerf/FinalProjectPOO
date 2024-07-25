@@ -2,12 +2,15 @@ package Visual;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.util.List;
+import java.util.Set;
 import java.util.ArrayList;
+import java.util.HashSet;
+
 import javax.swing.AbstractCellEditor;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -24,6 +27,8 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JComboBox;
+
+import logic.*;
 
 public class Catalogo extends JDialog {
 
@@ -51,7 +56,7 @@ public class Catalogo extends JDialog {
         contentPanel.setLayout(new BorderLayout(0, 0));
         
         CustomTableModel tableModel = new CustomTableModel();
-        loadData(tableModel); // Cargar datos en el modelo de la tabla
+        loadComponents(tableModel); // Cargar datos en el modelo de la tabla
 
         JTable table = new JTable(tableModel);
         table.setRowHeight(200);
@@ -61,7 +66,7 @@ public class Catalogo extends JDialog {
         for (int i = 0; i < tableModel.getColumnCount(); i++) {
             TableColumn column = columnModel.getColumn(i);
             column.setCellRenderer(new CustomTableCellRenderer());
-            column.setCellEditor(new CustomTableCellEditor());
+            column.setCellEditor(new TableEditor());
         }
 
         JScrollPane scrollPane = new JScrollPane(table);
@@ -103,224 +108,24 @@ public class Catalogo extends JDialog {
         buttonsPanel.add(cancelButton);
     }
 
-    private void loadData(CustomTableModel tableModel) {
+    public static void loadComponents(CustomTableModel tableModel) {
+        ArrayList<Component> aux = Administration.getInstance().getTheComponents();
         List<DataWrapper> data = new ArrayList<>();
-        data.add(new DataWrapper("Element 1", "Text 1", 5, false));
-        data.add(new DataWrapper("Element 2", "Text 2", 10, false));
-        data.add(new DataWrapper("Element 3", "Text 3", 15, false));
+        Set<String> uniqueIds = new HashSet<>(); // Conjunto para almacenar los IDs únicos
+
+        for (Component comp : aux) {
+            ImageIcon icon = comp.getIcon();
+            String textField = comp.getId();
+            int spinnerValue = comp.getUnits();
+            boolean radioButtonSelected = false; // Si tienes una lógica específica para esto, ajusta en consecuencia
+
+            if (!uniqueIds.contains(textField)) { // Verifica si el ID ya está presente en el conjunto
+                uniqueIds.add(textField); // Agrega el ID al conjunto
+                data.add(new DataWrapper(icon, textField, spinnerValue, radioButtonSelected)); // Agrega el componente a la lista de datos
+            }
+        }
 
         tableModel.setData(data);
     }
 
-    private static class CustomTableModel extends AbstractTableModel {
-        /**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-		private final String[] columnNames = {"Column 1", "Column 2", "Column 3"};
-        private List<DataWrapper> data;
-
-        public CustomTableModel() {
-            data = new ArrayList<>();
-        }
-
-        public void setData(List<DataWrapper> data) {
-            this.data = data;
-            fireTableDataChanged();
-        }
-
-        @Override
-        public int getRowCount() {
-            return data.size();
-        }
-
-        @Override
-        public int getColumnCount() {
-            return columnNames.length;
-        }
-
-        @Override
-        public Object getValueAt(int rowIndex, int columnIndex) {
-            return data.get(rowIndex);
-        }
-
-        @Override
-        public String getColumnName(int column) {
-            return columnNames[column];
-        }
-
-        @Override
-        public boolean isCellEditable(int rowIndex, int columnIndex) {
-            return true;
-        }
-
-        @Override
-        public void setValueAt(Object value, int rowIndex, int columnIndex) {
-            data.set(rowIndex, (DataWrapper) value);
-            fireTableCellUpdated(rowIndex, columnIndex);
-        }
-    }
-
-    private static class DataWrapper {
-        private String label;
-        private String textField;
-        private int spinnerValue;
-        private boolean radioButtonSelected;
-
-        public DataWrapper(String label, String textField, int spinnerValue, boolean radioButtonSelected) {
-            this.label = label;
-            this.textField = textField;
-            this.spinnerValue = spinnerValue;
-            this.radioButtonSelected = radioButtonSelected;
-        }
-
-        public String getLabel() {
-            return label;
-        }
-
-        public void setLabel(String label) {
-            this.label = label;
-        }
-
-        public String getTextField() {
-            return textField;
-        }
-
-        public void setTextField(String textField) {
-            this.textField = textField;
-        }
-
-        public int getSpinnerValue() {
-            return spinnerValue;
-        }
-
-        public void setSpinnerValue(int spinnerValue) {
-            this.spinnerValue = spinnerValue;
-        }
-
-        public boolean isRadioButtonSelected() {
-            return radioButtonSelected;
-        }
-
-        public void setRadioButtonSelected(boolean radioButtonSelected) {
-            this.radioButtonSelected = radioButtonSelected;
-        }
-    }
-
-    private static class CustomTableCellRenderer extends JPanel implements TableCellRenderer {
-        /**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-		private final JLabel lblNewLabel;
-        private final JTextField textField;
-        private final JRadioButton rdbtnNewRadioButton;
-        private final JSpinner spinner;
-
-        public CustomTableCellRenderer() {
-            setLayout(new BorderLayout());
-            JPanel innerPanel = new JPanel();
-            innerPanel.setLayout(null);
-            innerPanel.setPreferredSize(new Dimension(227, 194));
-
-            lblNewLabel = new JLabel();
-            lblNewLabel.setBounds(70, 16, 79, 63);
-            lblNewLabel.setOpaque(true); 
-            innerPanel.add(lblNewLabel);
-
-            textField = new JTextField();
-            textField.setBounds(41, 85, 146, 26);
-            innerPanel.add(textField);
-
-            rdbtnNewRadioButton = new JRadioButton("");
-            rdbtnNewRadioButton.setBounds(11, 153, 34, 29);
-            innerPanel.add(rdbtnNewRadioButton);
-
-            spinner = new JSpinner();
-            spinner.setBounds(41, 126, 146, 26);
-            innerPanel.add(spinner);
-
-            add(innerPanel, BorderLayout.CENTER);
-        }
-
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            DataWrapper data = (DataWrapper) value;
-            lblNewLabel.setText(data.getLabel());
-            textField.setText(data.getTextField());
-            spinner.setValue(data.getSpinnerValue());
-            rdbtnNewRadioButton.setSelected(data.isRadioButtonSelected());
-
-            if (isSelected) {
-                setBackground(table.getSelectionBackground());
-                lblNewLabel.setForeground(table.getSelectionForeground());
-                textField.setForeground(table.getSelectionForeground());
-                rdbtnNewRadioButton.setForeground(table.getSelectionForeground());
-                spinner.setForeground(table.getSelectionForeground());
-            } else {
-                setBackground(table.getBackground());
-                lblNewLabel.setForeground(table.getForeground());
-                textField.setForeground(table.getForeground());
-                rdbtnNewRadioButton.setForeground(table.getForeground());
-                spinner.setForeground(table.getForeground());
-            }
-
-            return this;
-        }
-    }
-
-    private static class CustomTableCellEditor extends AbstractCellEditor implements TableCellEditor {
-        /**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-		private final JPanel panel;
-        private final JTextField textField;
-        private final JRadioButton rdbtnNewRadioButton;
-        private final JSpinner spinner;
-        private DataWrapper currentData;
-
-        public CustomTableCellEditor() {
-            panel = new JPanel();
-            panel.setLayout(new BorderLayout());
-            panel.setPreferredSize(new Dimension(227, 194));
-
-            JPanel innerPanel = new JPanel();
-            innerPanel.setLayout(null);
-            innerPanel.setPreferredSize(new Dimension(227, 194));
-
-            textField = new JTextField();
-            textField.setBounds(41, 85, 146, 26);
-            innerPanel.add(textField);
-
-            rdbtnNewRadioButton = new JRadioButton("");
-            rdbtnNewRadioButton.setBounds(11, 153, 34, 29);
-            innerPanel.add(rdbtnNewRadioButton);
-
-            spinner = new JSpinner();
-            spinner.setBounds(41, 126, 146, 26);
-            innerPanel.add(spinner);
-
-            panel.add(innerPanel, BorderLayout.CENTER);
-        }
-
-        @Override
-        public Object getCellEditorValue() {
-            currentData.setTextField(textField.getText());
-            currentData.setSpinnerValue((Integer) spinner.getValue());
-            currentData.setRadioButtonSelected(rdbtnNewRadioButton.isSelected());
-            return currentData;
-        }
-
-        @Override
-        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-            currentData = (DataWrapper) value;
-            textField.setText(currentData.getTextField());
-            spinner.setValue(currentData.getSpinnerValue());
-            rdbtnNewRadioButton.setSelected(currentData.isRadioButtonSelected());
-
-            panel.setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
-            return panel;
-        }
-    }
 }

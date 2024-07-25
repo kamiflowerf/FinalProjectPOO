@@ -293,6 +293,13 @@ public class Principal extends JFrame {
 			public void mouseExited(MouseEvent e) {
 				lblListComp.setForeground(Color.WHITE);
 			}
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				Catalogo catalogo = new Catalogo();
+				catalogo.setModal(true);
+				catalogo.setVisible(true);
+				catalogo.setResizable(false);
+			}
 			
 		});
 		lblListComp.setForeground(Color.WHITE);
