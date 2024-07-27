@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.Set;
 import java.util.ArrayList;
@@ -12,31 +14,29 @@ import java.util.HashSet;
 import javax.swing.AbstractCellEditor;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
-import javax.swing.JTextField;
-import javax.swing.JRadioButton;
 import javax.swing.JTable;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JComboBox;
 
 import logic.*;
 
 public class Catalogo extends JDialog {
 
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private final JPanel contentPanel = new JPanel();
+    private static final long serialVersionUID = 1L;
+    private final JPanel contentPanel = new JPanel();
+    private CustomTableModel tableModel = new CustomTableModel();
+    private JTable table;
+    private JTable table2;
+    private JTable table3;
+ 
 
     public static void main(String[] args) {
         try {
@@ -55,19 +55,18 @@ public class Catalogo extends JDialog {
         getContentPane().add(contentPanel, BorderLayout.CENTER);
         contentPanel.setLayout(new BorderLayout(0, 0));
         
-        CustomTableModel tableModel = new CustomTableModel();
-        loadComponents(tableModel); // Cargar datos en el modelo de la tabla
+        // Load initial data into the model
+        loadComponents(tableModel, "Todos");
 
-        JTable table = new JTable(tableModel);
+        table = new JTable(tableModel);
         table.setRowHeight(200);
-
-        // Set custom renderers and editors for each column
-        TableColumnModel columnModel = table.getColumnModel();
-        for (int i = 0; i < tableModel.getColumnCount(); i++) {
-            TableColumn column = columnModel.getColumn(i);
-            column.setCellRenderer(new CustomTableCellRenderer());
-            column.setCellEditor(new TableEditor());
-        }
+        table2 = new JTable(tableModel);
+        table2.setRowHeight(200);
+        table3 = new JTable(tableModel);
+        table3.setRowHeight(200);
+        
+        // Initialize columns
+        initializeColumns();
 
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setPreferredSize(new Dimension(700, 400));
@@ -79,7 +78,20 @@ public class Catalogo extends JDialog {
         JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         buttonPane.add(buttonsPanel, BorderLayout.CENTER);
 
-        JComboBox<String> comboBox = new JComboBox<String>();
+        JComboBox<String> comboBox = new JComboBox<>();
+        comboBox.addItem("Todos");
+        comboBox.addItem("Tarjeta Madre");
+        comboBox.addItem("Disco Duro");
+        comboBox.addItem("Ram");
+        comboBox.addItem("Microprocesador");
+
+        comboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String selectedType = (String) comboBox.getSelectedItem();
+                filterComponents(selectedType);
+            }
+        });
         buttonsPanel.add(comboBox);
 
         JButton btnSeleccionar = new JButton("Seleccionar");
@@ -108,24 +120,55 @@ public class Catalogo extends JDialog {
         buttonsPanel.add(cancelButton);
     }
 
-    public static void loadComponents(CustomTableModel tableModel) {
+    private void initializeColumns() {
+        TableColumnModel columnModel = table.getColumnModel();
+        for (int i = 0; i < tableModel.getColumnCount(); i++) {
+            TableColumn column = columnModel.getColumn(i);
+            column.setCellRenderer(new CustomTableCellRenderer());
+            column.setCellEditor(new TableEditor());
+        }
+    }
+
+    public void filterComponents(String componentType) {
+        CustomTableModel newTableModel = new CustomTableModel();
+        loadComponents(newTableModel, componentType);
+        table.setModel(newTableModel);
+        initializeColumns();
+    }
+
+    public static void loadComponents(CustomTableModel tableModel, String componentType) {
         ArrayList<Component> aux = Administration.getInstance().getTheComponents();
         List<DataWrapper> data = new ArrayList<>();
-        Set<String> uniqueIds = new HashSet<>(); // Conjunto para almacenar los IDs únicos
-
+        Set<String> uniqueIds = new HashSet<>();
+        
         for (Component comp : aux) {
-            ImageIcon icon = comp.getIcon();
-            String textField = comp.getId();
-            int spinnerValue = comp.getUnits();
-            boolean radioButtonSelected = false; // Si tienes una lógica específica para esto, ajusta en consecuencia
+            if (componentType.equals("Todos") || getComponentType(comp).equals(componentType)) {
+                ImageIcon icon = comp.getIcon();
+                String textField = comp.getId();
+                int spinnerValue = comp.getUnits();
+                boolean radioButtonSelected = false;
 
-            if (!uniqueIds.contains(textField)) { // Verifica si el ID ya está presente en el conjunto
-                uniqueIds.add(textField); // Agrega el ID al conjunto
-                data.add(new DataWrapper(icon, textField, spinnerValue, radioButtonSelected)); // Agrega el componente a la lista de datos
+                if (!uniqueIds.contains(textField)) {
+                    uniqueIds.add(textField);
+                    data.add(new DataWrapper(icon, textField, spinnerValue, radioButtonSelected));
+                }
             }
         }
 
         tableModel.setData(data);
     }
 
+    private static String getComponentType(Component comp) {
+        if (comp instanceof MotherBoard) {
+            return "Tarjeta Madre";
+        } else if (comp instanceof HardDisk) {
+            return "Disco Duro";
+        } else if (comp instanceof RAM) {
+            return "Ram";
+        } else if (comp instanceof MicroProcessor) {
+            return "Microprocesador";
+        } else {
+            return "Otros";
+        }
+    }
 }

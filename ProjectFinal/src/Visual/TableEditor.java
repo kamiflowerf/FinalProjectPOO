@@ -17,7 +17,9 @@ import Visual.*;
 //import Visual.Catalogo.DataWrapper;
 
 public class TableEditor extends AbstractCellEditor implements TableCellEditor {
- 
+    /**
+	 * 
+	 */
 	private static final long serialVersionUID = 1L;
 	private final JPanel panel;
     private final JLabel lblIcon;

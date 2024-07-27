@@ -2,16 +2,11 @@ package Visual;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.ImageIcon;
 import javax.swing.table.AbstractTableModel;
 
 public class CustomTableModel extends AbstractTableModel {
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private final String[] columnNames = {"Column 1", "Column 2", "Column 3"};
+    private static final long serialVersionUID = 1L;
+    private final String[] columnNames = {"", "Lista de componentes", ""};
     private List<DataWrapper> data;
 
     public CustomTableModel() {
@@ -25,7 +20,7 @@ public class CustomTableModel extends AbstractTableModel {
 
     @Override
     public int getRowCount() {
-        return data.size();
+        return (data.size() + 2) / 3; // Número de filas necesario para acomodar todos los elementos
     }
 
     @Override
@@ -35,7 +30,12 @@ public class CustomTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        return data.get(rowIndex);
+        int dataIndex = rowIndex * 3 + columnIndex;
+        if (dataIndex < data.size()) {
+            return data.get(dataIndex);
+        } else {
+            return null; // Si no hay datos, devuelve nulo
+        }
     }
 
     @Override
@@ -50,8 +50,10 @@ public class CustomTableModel extends AbstractTableModel {
 
     @Override
     public void setValueAt(Object value, int rowIndex, int columnIndex) {
-        data.set(rowIndex, (DataWrapper) value);
-        fireTableCellUpdated(rowIndex, columnIndex);
+        int dataIndex = rowIndex * 3 + columnIndex;
+        if (dataIndex < data.size()) {
+            data.set(dataIndex, (DataWrapper) value);
+            fireTableCellUpdated(rowIndex, columnIndex);
+        }
     }
 }
-

@@ -3,6 +3,7 @@ package Visual;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -10,26 +11,20 @@ import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.TableCellRenderer;
-
-import Visual.*;
-
 import java.awt.Component;
 
 public class CustomTableCellRenderer extends JPanel implements TableCellRenderer {
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private final JLabel lblIcon;
+    private final JLabel lblIcon;
     private final JTextField textField;
     private final JRadioButton rdbtnNewRadioButton;
     private final JSpinner spinner;
+    private final JPanel innerPanel;
 
     public CustomTableCellRenderer() {
         setLayout(new BorderLayout());
-        JPanel innerPanel = new JPanel();
+        innerPanel = new JPanel();
         innerPanel.setLayout(null);
-        innerPanel.setPreferredSize(new Dimension(227, 194));
+        innerPanel.setPreferredSize(new Dimension(227/3, 194));
 
         lblIcon = new JLabel();
         lblIcon.setBounds(70, 16, 79, 63);
@@ -52,16 +47,26 @@ public class CustomTableCellRenderer extends JPanel implements TableCellRenderer
 
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-        DataWrapper data = (DataWrapper) value;
-        lblIcon.setIcon(data.getIcon());
-        textField.setText(data.getTextField());
-        spinner.setValue(data.getSpinnerValue());
-        rdbtnNewRadioButton.setSelected(data.isRadioButtonSelected());
+        if (value instanceof DataWrapper) {
+            DataWrapper data = (DataWrapper) value;
 
-        if (isSelected) {
-            setBackground(table.getSelectionBackground());
+            lblIcon.setIcon(data.getIcon() != null ? data.getIcon() : new ImageIcon());
+            if(data.getTextField() != null) {
+            textField.setText(data.getTextField());
+            spinner.setValue(data.getSpinnerValue());
+            rdbtnNewRadioButton.setSelected(data.isRadioButtonSelected());
+
+            }else {
+            	textField.setVisible(false);
+            	spinner.setVisible(false);
+            	rdbtnNewRadioButton.setVisible(false);
+            }
+
         } else {
-            setBackground(table.getBackground());
+            lblIcon.setIcon(null);
+            textField.setVisible(false);
+            spinner.setVisible(false);
+            rdbtnNewRadioButton.setVisible(false);
         }
 
         return this;
