@@ -4,26 +4,40 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.net.UnknownHostException;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 import logic.Administration;
+import javax.swing.ImageIcon;
 
 public class Principal extends JFrame {
 
 	private static final long serialVersionUID = 1L;
+	static Socket sfd = null;
+	static DataInputStream EntradaSocket;
+	static DataOutputStream SalidaSocket;
+	static ObjectOutputStream writeSocket;
 	private JPanel contentPane;
 	private Dimension dim;
 	private JTextField txtComponents;
@@ -48,6 +62,9 @@ public class Principal extends JFrame {
 	private JTextField txtUsuario;
 	private JPanel pnlUser;
 	private JLabel lblRegUser;
+	private JLabel lblMore;
+	private JPanel morePnl;
+	private JLabel lblRespaldo;
 
 	/**
 	 * Launch the application.
@@ -75,7 +92,7 @@ public class Principal extends JFrame {
 				FileOutputStream empresa;
 				ObjectOutputStream empresaWrite;
 				try {
-					empresa = new  FileOutputStream("adkEnterprise.dat");
+					empresa = new FileOutputStream("adkEnterprise.dat");
 					empresaWrite = new ObjectOutputStream(empresa);
 					empresaWrite.writeObject(Administration.getInstance());
 				} catch (FileNotFoundException e1) {
@@ -129,6 +146,7 @@ public class Principal extends JFrame {
 				pnlSup.setVisible(false);
 				pnlAdmin.setVisible(false);
 				pnlUser.setVisible(false);
+				morePnl.setVisible(false);
 			}
 		});
 		txtComponents.setForeground(new Color(255, 255, 255));
@@ -157,6 +175,7 @@ public class Principal extends JFrame {
 				pnlSup.setVisible(false);
 				pnlAdmin.setVisible(false);
 				pnlUser.setVisible(false);
+				morePnl.setVisible(false);
 			}
 		});
 		txtClients.setText("               Clientes");
@@ -185,6 +204,7 @@ public class Principal extends JFrame {
 				pnlSup.setVisible(true);
 				pnlAdmin.setVisible(false);
 				pnlUser.setVisible(false);
+				morePnl.setVisible(false);
 			}
 		});
 		txtSupplier.setText("            Proveedores");
@@ -213,6 +233,7 @@ public class Principal extends JFrame {
 				pnlSup.setVisible(false);
 				pnlAdmin.setVisible(true);
 				pnlUser.setVisible(false);
+				morePnl.setVisible(false);
 			}
 		});
 		txtAdmin.setText("                 Ventas");
@@ -241,6 +262,7 @@ public class Principal extends JFrame {
 				pnlSup.setVisible(false);
 				pnlAdmin.setVisible(false);
 				pnlUser.setVisible(true);
+				morePnl.setVisible(false);
 			}
 		});
 		txtUsuario.setText("                Usuario");
@@ -251,6 +273,77 @@ public class Principal extends JFrame {
 		txtUsuario.setBackground(new Color(51, 51, 51));
 		txtUsuario.setBounds(-12, 0, 304, 88);
 		panel_1.add(txtUsuario);
+		
+		lblMore = new JLabel("");
+		lblMore.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				morePnl.setVisible(true);
+			}
+		});
+		lblMore.setBounds(12, 948, 53, 53);
+		Image img = new ImageIcon(this.getClass().getResource("/Images/menu-bar (1).png")).getImage();
+		Image scaledImg = img.getScaledInstance(lblMore.getWidth(), lblMore.getHeight(), Image.SCALE_SMOOTH);
+		lblMore.setIcon(new ImageIcon(scaledImg));
+		panel.add(lblMore);
+		
+		morePnl = new JPanel();
+		morePnl.setBorder(null);
+		morePnl.setBounds(62, 915, 242, 86);
+		morePnl.setVisible(false);
+		morePnl.setBackground(new Color(51,51,51));
+		panel.add(morePnl);
+		morePnl.setLayout(null);
+		
+		lblRespaldo = new JLabel("      Respaldo");
+		lblRespaldo.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				lblRespaldo.setForeground(selected);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				lblRespaldo.setForeground(Color.WHITE);
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				try {
+					sfd = new Socket("127.0.0.1", 7000);
+					EntradaSocket = new DataInputStream(new BufferedInputStream(sfd.getInputStream()));
+					SalidaSocket = new DataOutputStream(new BufferedOutputStream(sfd.getOutputStream()));
+					SalidaSocket.writeUTF("adkEnterprise.dat");
+					
+					// Enviar el contenido del archivo
+		            FileInputStream fileInputStream = new FileInputStream("adkEnterprise.dat");
+		            byte[] buffer = new byte[4096];
+		            int bytesRead;
+		            while ((bytesRead = fileInputStream.read(buffer)) != -1) {
+		                SalidaSocket.write(buffer, 0, bytesRead);
+		            }
+		            SalidaSocket.flush();
+		            fileInputStream.close();
+		            System.out.println("Archivo enviado: adkEnterprise.dat");
+
+		            EntradaSocket.close();
+		            SalidaSocket.close();
+		            sfd.close();
+		            JOptionPane.showMessageDialog(null, "Operación satisfactoria", "Respaldo", JOptionPane.INFORMATION_MESSAGE);
+				} catch (UnknownHostException e1) {
+					e1.printStackTrace();
+					System.out.println("No se puede acceder al servidor.");
+					System.exit(1);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+					System.out.println("Comunicación rechazada.");
+		            System.exit(1);
+				}
+			}
+		});
+		lblRespaldo.setForeground(Color.WHITE);
+		lblRespaldo.setFont(new Font("Verdana", Font.PLAIN, 18));
+		lblRespaldo.setBounds(0, 18, 242, 55);
+		morePnl.add(lblRespaldo);
 		
 		pnlCompMenu = new JPanel();
 		pnlCompMenu.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -349,6 +442,7 @@ public class Principal extends JFrame {
 			}
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
+				
 			}
 		});
 		lblListClient.setForeground(Color.WHITE);
