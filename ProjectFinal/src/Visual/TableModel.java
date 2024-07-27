@@ -25,7 +25,7 @@ public class TableModel extends DefaultTableModel {
         }
         
         this.titles = titles;
-        this.data = data;
+        this.setData(data);
         setDataVector(data, titles);
     }
 
@@ -42,4 +42,8 @@ public class TableModel extends DefaultTableModel {
         // Aquí puedes definir qué celdas son editables
         return false; // Ejemplo: ninguna celda es editable
     }*/
+
+	public void setData(Object[][] data) {
+		this.data = data;
+	}
 }

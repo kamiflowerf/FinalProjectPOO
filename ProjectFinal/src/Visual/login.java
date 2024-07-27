@@ -122,11 +122,13 @@ public class login extends JFrame {
 		panel_1.add(label_1);
 		
 		txtUsername = new JTextField();
+		txtUsername.setFont(new Font("Verdana", Font.PLAIN, 17));
 		txtUsername.setBounds(129, 41, 167, 22);
 		panel_1.add(txtUsername);
 		txtUsername.setColumns(10);
 		
 		password = new JPasswordField();
+		password.setFont(new Font("Verdana", Font.PLAIN, 17));
 		password.setBounds(129, 99, 268, 22);
 		panel_1.add(password);
 		

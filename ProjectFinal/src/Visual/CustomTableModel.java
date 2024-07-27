@@ -9,9 +9,13 @@ public class CustomTableModel extends AbstractTableModel {
     private final String[] columnNames = {"", "Lista de componentes", ""};
     private List<DataWrapper> data;
 
-    public CustomTableModel() {
+	public CustomTableModel() {
         data = new ArrayList<>();
     }
+
+	public List<DataWrapper> getData() {
+		return data;
+	}
 
     public void setData(List<DataWrapper> data) {
         this.data = data;

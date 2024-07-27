@@ -10,7 +10,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.JTextField;
 import java.awt.Font;
 
-public class Ventas extends JDialog {
+public class ControlVentas extends JDialog {
 
 	/**
 	 * 
@@ -25,7 +25,7 @@ public class Ventas extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			Ventas dialog = new Ventas();
+			ControlVentas dialog = new ControlVentas();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -36,7 +36,7 @@ public class Ventas extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public Ventas() {
+	public ControlVentas() {
 		setBounds(100, 100, 822, 553);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));

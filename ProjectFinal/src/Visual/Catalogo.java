@@ -11,36 +11,45 @@ import java.util.Set;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import javax.swing.AbstractCellEditor;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableCellRenderer;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
 import logic.*;
+import java.awt.Font;
 
 public class Catalogo extends JDialog {
 
     private static final long serialVersionUID = 1L;
     private final JPanel contentPanel = new JPanel();
     private CustomTableModel tableModel = new CustomTableModel();
+    private List<DataWrapper> selectedItems = new ArrayList<>();
+    public interface onSelectedComp{
+    	void getSelectedComp(String ID);
+    }
     private JTable table;
     private JTable table2;
     private JTable table3;
+    private JButton cancelButton;
+    private static JButton deleteBtn;
+    private static JButton selectBtn;
+    private static JButton addBtn;
  
 
     public static void main(String[] args) {
         try {
-            Catalogo dialog = new Catalogo();
+            Catalogo dialog = new Catalogo(null);
             dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
             dialog.setVisible(true);
         } catch (Exception e) {
@@ -48,8 +57,10 @@ public class Catalogo extends JDialog {
         }
     }
 
-    public Catalogo() {
-        setBounds(100, 100, 800, 600);
+    public Catalogo(onSelectedComp compInterface) {
+        setTitle("Catálogo");
+    	setBounds(100, 100, 800, 600);
+        setLocationRelativeTo(null);
         getContentPane().setLayout(new BorderLayout());
         contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
         getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -60,11 +71,26 @@ public class Catalogo extends JDialog {
 
         table = new JTable(tableModel);
         table.setRowHeight(200);
+        
+        table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION); // Allow multiple selection
+
+        table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent event) {
+                updateSelectedItems();
+            }
+        });
+
         table2 = new JTable(tableModel);
         table2.setRowHeight(200);
         table3 = new JTable(tableModel);
         table3.setRowHeight(200);
         
+        /*
+        if(compInterface == null) {
+        	deleteBtn.setEnabled(true);
+        } else {
+        	selectBtn.setEnabled(true);
+        }*/
         // Initialize columns
         initializeColumns();
 
@@ -79,6 +105,7 @@ public class Catalogo extends JDialog {
         buttonPane.add(buttonsPanel, BorderLayout.CENTER);
 
         JComboBox<String> comboBox = new JComboBox<>();
+        comboBox.setFont(new Font("Verdana", Font.PLAIN, 15));
         comboBox.addItem("Todos");
         comboBox.addItem("Tarjeta Madre");
         comboBox.addItem("Disco Duro");
@@ -94,30 +121,75 @@ public class Catalogo extends JDialog {
         });
         buttonsPanel.add(comboBox);
 
-        JButton btnSeleccionar = new JButton("Seleccionar");
-        btnSeleccionar.setPreferredSize(new Dimension(75, 30));
-        btnSeleccionar.setBorder(new RoundedBorder(Color.BLACK, 1, 25));
-        btnSeleccionar.setActionCommand("OK");
-        buttonsPanel.add(btnSeleccionar);
+        selectBtn = new JButton("Seleccionar");
+        selectBtn.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		if(!selectedItems.isEmpty()) {
+        			for(DataWrapper dw : selectedItems) {
+        				compInterface.getSelectedComp(dw.getTextField());
+        			}
+        			dispose();
+        		}
+        	}
+        });
+        //selectBtn.setEnabled(false);
+        selectBtn.setFont(new Font("Verdana", Font.PLAIN, 15));
+        selectBtn.setPreferredSize(new Dimension(95, 30));
+        selectBtn.setBorder(new RoundedBorder(Color.BLACK, 1, 25));
+        selectBtn.setActionCommand("OK");
+        buttonsPanel.add(selectBtn);
 
-        JButton btnEliminar = new JButton("Eliminar");
-        btnEliminar.setPreferredSize(new Dimension(75, 30));
-        btnEliminar.setBorder(new RoundedBorder(Color.BLACK, 1, 25));
-        btnEliminar.setActionCommand("OK");
-        buttonsPanel.add(btnEliminar);
+        deleteBtn = new JButton("Eliminar");
+        deleteBtn.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		if(!selectedItems.isEmpty()) {
+        			int option = JOptionPane.showConfirmDialog(null, "Seguro desea eliminar el/los componentes?", "Confirmación", JOptionPane.WARNING_MESSAGE);
+        			if(option == JOptionPane.YES_OPTION) {
+        				for(DataWrapper dw : selectedItems) {
+        					Administration.getInstance().deleteComponent(dw.getTextField());
+        				}
+        				deleteBtn.setEnabled(false);
+    					loadComponents(tableModel, "Todos");
+        			}
+        		}
+        	}
+        });
+        //deleteBtn.setEnabled(false);
+        deleteBtn.setFont(new Font("Verdana", Font.PLAIN, 15));
+        deleteBtn.setBorder(new RoundedBorder(Color.BLACK, 1, 25));
+        deleteBtn.setPreferredSize(new Dimension(75, 30)); 
+        deleteBtn.setActionCommand("OK");
+        buttonsPanel.add(deleteBtn);
+        getRootPane().setDefaultButton(deleteBtn);
 
-        JButton okButton = new JButton("Editar");
-        okButton.setBorder(new RoundedBorder(Color.BLACK, 1, 25));
-        okButton.setPreferredSize(new Dimension(75, 30)); // Set the preferred size of the OK button
-        okButton.setActionCommand("OK");
-        buttonsPanel.add(okButton);
-        getRootPane().setDefaultButton(okButton);
-
-        JButton cancelButton = new JButton("Cancel");
+        cancelButton = new JButton("Cancelar");
+        cancelButton.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent arg0) {
+        		dispose();
+        	}
+        });
+        
+        addBtn = new JButton("Agregar");
+        addBtn.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		RegComps newComp = new RegComps();
+        		newComp.setModal(true);
+        		newComp.setVisible(true);
+        		loadComponents(tableModel, "Todos");
+        	}
+        });
+        addBtn.setFont(new Font("Verdana", Font.PLAIN, 15));
+        addBtn.setBorder(new RoundedBorder(Color.BLACK,1,25));
+        addBtn.setPreferredSize(new Dimension(80, 30));
+        buttonsPanel.add(addBtn);
+        
+        cancelButton.setFont(new Font("Verdana", Font.PLAIN, 15));
         cancelButton.setBorder(new RoundedBorder(Color.BLACK, 1, 25));
-        cancelButton.setPreferredSize(new Dimension(75, 30)); // Set the preferred size of the Cancel button
+        cancelButton.setPreferredSize(new Dimension(80, 30)); 
         cancelButton.setActionCommand("Cancel");
         buttonsPanel.add(cancelButton);
+    
+    
     }
 
     private void initializeColumns() {
@@ -156,6 +228,10 @@ public class Catalogo extends JDialog {
         }
 
         tableModel.setData(data);
+        
+        //deleteBtn.setEnabled(false);
+        //selectBtn.setEnabled(false);
+        //addBtn.setEnabled(true);
     }
 
     private static String getComponentType(Component comp) {
@@ -171,4 +247,17 @@ public class Catalogo extends JDialog {
             return "Otros";
         }
     }
+    
+    private void updateSelectedItems() {
+        int[] selectedRows = table.getSelectedRows();
+        selectedItems.clear();
+        for (int row : selectedRows) {
+        	selectedItems.add(tableModel.getData().get(row));
+        }
+    }
+
+    public List<DataWrapper> getSelectedItems() {
+    	return new ArrayList<>(selectedItems);
+    }
+
 }

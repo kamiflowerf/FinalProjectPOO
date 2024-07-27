@@ -7,6 +7,9 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
+
+import Visual.Catalogo.onSelectedComp;
+
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JTextField;
@@ -14,7 +17,7 @@ import javax.swing.JScrollPane;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class Venta extends JDialog {
+public class Venta extends JDialog implements onSelectedComp{
 
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
@@ -160,6 +163,12 @@ public class Venta extends JDialog {
 			btnCancelar.setBorder(new RoundedBorder(Color.BLACK,1,20));
 			contentPanel.add(btnCancelar);
 		}
+	}
+
+	@Override
+	public void getSelectedComp(String ID) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

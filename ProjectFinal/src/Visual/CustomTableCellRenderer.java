@@ -2,6 +2,7 @@ package Visual;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Image;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -9,14 +10,18 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.table.TableCellRenderer;
 import java.awt.Component;
+import java.awt.Font;
 
 public class CustomTableCellRenderer extends JPanel implements TableCellRenderer {
-    private final JLabel lblIcon;
-    private final JTextField textField;
-    private final JRadioButton rdbtnNewRadioButton;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private final JLabel lblIcon;
+    private final JLabel lblName;
+    private final JRadioButton rdbtnSelected;
     private final JSpinner spinner;
     private final JPanel innerPanel;
 
@@ -30,15 +35,17 @@ public class CustomTableCellRenderer extends JPanel implements TableCellRenderer
         lblIcon.setBounds(70, 16, 79, 63);
         innerPanel.add(lblIcon);
 
-        textField = new JTextField();
-        textField.setBounds(41, 85, 146, 26);
-        innerPanel.add(textField);
+        lblName = new JLabel();
+        lblName.setFont(new Font("Verdana", Font.PLAIN, 15));
+        lblName.setBounds(41, 85, 146, 26);
+        innerPanel.add(lblName);
 
-        rdbtnNewRadioButton = new JRadioButton("");
-        rdbtnNewRadioButton.setBounds(11, 153, 34, 29);
-        innerPanel.add(rdbtnNewRadioButton);
+        rdbtnSelected = new JRadioButton("");
+        rdbtnSelected.setBounds(11, 153, 34, 29);
+        innerPanel.add(rdbtnSelected);
 
         spinner = new JSpinner();
+        spinner.setFont(new Font("Verdana", Font.PLAIN, 15));
         spinner.setBounds(41, 126, 146, 26);
         innerPanel.add(spinner);
 
@@ -50,23 +57,27 @@ public class CustomTableCellRenderer extends JPanel implements TableCellRenderer
         if (value instanceof DataWrapper) {
             DataWrapper data = (DataWrapper) value;
 
-            lblIcon.setIcon(data.getIcon() != null ? data.getIcon() : new ImageIcon());
+            Image img = data.getIcon().getImage();
+            Image scaledImg = img.getScaledInstance(lblIcon.getWidth(), lblIcon.getHeight(), Image.SCALE_SMOOTH);
+            ImageIcon icon = new ImageIcon(scaledImg);
+            lblIcon.setIcon(icon != null ? icon : new ImageIcon());
+            
             if(data.getTextField() != null) {
-            textField.setText(data.getTextField());
-            spinner.setValue(data.getSpinnerValue());
-            rdbtnNewRadioButton.setSelected(data.isRadioButtonSelected());
+            	lblName.setText(data.getTextField());
+            	spinner.setValue(data.getSpinnerValue());
+            	rdbtnSelected.setSelected(data.isRadioButtonSelected());
 
             }else {
-            	textField.setVisible(false);
+            	lblName.setVisible(false);
             	spinner.setVisible(false);
-            	rdbtnNewRadioButton.setVisible(false);
+            	rdbtnSelected.setVisible(false);
             }
 
         } else {
             lblIcon.setIcon(null);
-            textField.setVisible(false);
+            lblName.setVisible(false);
             spinner.setVisible(false);
-            rdbtnNewRadioButton.setVisible(false);
+            rdbtnSelected.setVisible(false);
         }
 
         return this;

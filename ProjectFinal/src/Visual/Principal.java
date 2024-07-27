@@ -295,7 +295,7 @@ public class Principal extends JFrame {
 			}
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				Catalogo catalogo = new Catalogo();
+				Catalogo catalogo = new Catalogo(null);
 				catalogo.setModal(true);
 				catalogo.setVisible(true);
 				catalogo.setResizable(false);
