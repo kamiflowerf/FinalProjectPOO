@@ -15,6 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
@@ -69,11 +70,11 @@ public class SupplierRegistry extends JDialog {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		if(suppli != null)
 		{
-			setTitle("Actualizar Suplidor");
+			setTitle("Actualizar Proveedor");
 		}
 		else
 		{
-			setTitle("Registro Suplidor");
+			setTitle("Registro Proveedor");
 		}
 		setBounds(100, 100, 614, 561);
 		getContentPane().setLayout(new BorderLayout());
@@ -233,7 +234,7 @@ public class SupplierRegistry extends JDialog {
 			foto.setBounds(104, 85, 56, 16);
 			panel_3.add(foto);
 			{
-				JLabel lbl_info = new JLabel("Informaci\u00F3n del Suplidor");
+				JLabel lbl_info = new JLabel("Informaci\u00F3n del Proveedor");
 				lbl_info.setFont(new Font("Verdana", Font.PLAIN, 12));
 				lbl_info.setBounds(353, 27, 167, 16);
 				panel.add(lbl_info);
@@ -334,6 +335,7 @@ public class SupplierRegistry extends JDialog {
 								}
 									
 								Administration.getInstance().addPerson(sup);
+								JOptionPane.showMessageDialog(null, "Operación satisfactoriamente completada.", "Registro Proveedor", JOptionPane.INFORMATION_MESSAGE);
 								clean();
 							}
 						
@@ -421,11 +423,6 @@ public class SupplierRegistry extends JDialog {
 	    	}  
 	    }
 	}
-	
-	
-
-
-
 	private void clean() {
 	
 		try 

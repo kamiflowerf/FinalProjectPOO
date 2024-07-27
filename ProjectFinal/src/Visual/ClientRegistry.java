@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
@@ -206,7 +207,7 @@ public class ClientRegistry extends JDialog {
 			{
 				JButton reg_btn = new JButton("Registrar");
 				reg_btn.setFont(new Font("Verdana", Font.BOLD, 14));
-				reg_btn.setPreferredSize(new Dimension(75, 30));
+				reg_btn.setPreferredSize(new Dimension(85, 30));
 				reg_btn.setBorder(new RoundedBorder(Color.BLACK,1,25));
 				if(client != null)
 				{
@@ -262,6 +263,7 @@ public class ClientRegistry extends JDialog {
 				                if(client == null) {
 				                    Client newClient = new Client(personalDoc, name, phoneNum, address, email, id);
 				                    Administration.getInstance().addPerson(newClient);
+									JOptionPane.showMessageDialog(null, "Operación satisfactoriamente completada.", "Registro Cliente", JOptionPane.INFORMATION_MESSAGE);
 				                    clean();
 				                } else {
 				                    client.setName(name);
@@ -289,7 +291,7 @@ public class ClientRegistry extends JDialog {
 				JButton cancel_btn = new JButton("Cancelar");
 				cancel_btn.setFont(new Font("Verdana", Font.BOLD, 14));
 				cancel_btn.setBorder(new RoundedBorder(Color.BLACK,1,25));
-				cancel_btn.setPreferredSize(new Dimension(75, 30));
+				cancel_btn.setPreferredSize(new Dimension(85, 30));
 				cancel_btn.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
 						dispose();

@@ -38,7 +38,7 @@ public class SupplierList extends JFrame implements MouseListener {
 	static TableModel model;
 	private static int rows;
 	private static int columns;
-	private JPanel banelBotton;
+	private JPanel panelBotton;
 	private JButton btn_cancel;
 	private JButton btn_update;
 	private JButton btn_select;
@@ -193,7 +193,7 @@ public class SupplierList extends JFrame implements MouseListener {
 		contentPane.setLayout(new BorderLayout(0,0));
 		
 		JLabel lbl_supplierTable = new JLabel("Listado suplidores");
-		lbl_supplierTable.setFont(new Font("Centaur",Font.PLAIN,30));
+		lbl_supplierTable.setFont(new Font("Verdana", Font.BOLD, 30));
 		contentPane.add(lbl_supplierTable, BorderLayout.NORTH);
 		
 		scrollPaneTable = new JScrollPane();
@@ -206,10 +206,11 @@ public class SupplierList extends JFrame implements MouseListener {
 		SupplierTable.setOpaque(false);
 		scrollPaneTable.setViewportView(SupplierTable);
 		
-		banelBotton = new JPanel();
-		contentPane.add(banelBotton, BorderLayout.SOUTH);
+		panelBotton = new JPanel();
+		contentPane.add(panelBotton, BorderLayout.SOUTH);
 		
 		btn_select = new JButton("Seleccionar");
+		btn_select.setFont(new Font("Verdana", Font.BOLD, 12));
 		btn_select.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -222,9 +223,10 @@ public class SupplierList extends JFrame implements MouseListener {
 		btn_select.setPreferredSize(new Dimension(85, 30));
 		btn_select.setBorder(new RoundedBorder(Color.BLACK,1,25));
 		btn_select.setEnabled(false);
-		banelBotton.add(btn_select);
+		panelBotton.add(btn_select);
 		
 		btn_update = new JButton("Actualizar");
+		btn_update.setFont(new Font("Verdana", Font.BOLD, 12));
 		btn_update.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -244,9 +246,10 @@ public class SupplierList extends JFrame implements MouseListener {
 		btn_update.setPreferredSize(new Dimension(85, 30));
 		btn_update.setBorder(new RoundedBorder(Color.BLACK,1,25));
 		btn_update.setEnabled(false);
-		banelBotton.add(btn_update);
+		panelBotton.add(btn_update);
 		
 		btn_delete = new JButton("Eliminar");
+		btn_delete.setFont(new Font("Verdana", Font.BOLD, 12));
 		btn_delete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -265,9 +268,10 @@ public class SupplierList extends JFrame implements MouseListener {
 		btn_delete.setPreferredSize(new Dimension(85, 30));
 		btn_delete.setBorder(new RoundedBorder(Color.BLACK,1,25));
 		btn_delete.setEnabled(false);
-		banelBotton.add(btn_delete);
+		panelBotton.add(btn_delete);
 		
 		btn_addNew = new JButton("Agregar");
+		btn_addNew.setFont(new Font("Verdana", Font.BOLD, 12));
 		btn_addNew.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			
@@ -279,9 +283,10 @@ public class SupplierList extends JFrame implements MouseListener {
 		});
 		btn_addNew.setPreferredSize(new Dimension(85, 30));
 		btn_addNew.setBorder(new RoundedBorder(Color.BLACK,1,25));
-		banelBotton.add(btn_addNew);
+		panelBotton.add(btn_addNew);
 		
 		btn_cancel = new JButton("Cancelar");
+		btn_cancel.setFont(new Font("Verdana", Font.BOLD, 12));
 		btn_cancel.setPreferredSize(new Dimension(85, 30));
 		btn_cancel.setBorder(new RoundedBorder(Color.BLACK,1,25));
 		btn_cancel.addActionListener(new ActionListener() {
@@ -290,7 +295,7 @@ public class SupplierList extends JFrame implements MouseListener {
 				dispose();
 			}
 		});
-		banelBotton.add(btn_cancel);
+		panelBotton.add(btn_cancel);
 		
 		updateTable();
 	}

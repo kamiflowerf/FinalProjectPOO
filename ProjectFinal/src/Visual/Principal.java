@@ -21,6 +21,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -29,7 +30,6 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 import logic.Administration;
-import javax.swing.ImageIcon;
 
 public class Principal extends JFrame {
 
@@ -442,7 +442,8 @@ public class Principal extends JFrame {
 			}
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				
+				ClientList list = new ClientList(null);
+				list.setVisible(true);
 			}
 		});
 		lblListClient.setForeground(Color.WHITE);
