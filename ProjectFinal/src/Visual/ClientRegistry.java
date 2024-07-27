@@ -2,8 +2,10 @@ package Visual;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -51,6 +53,9 @@ public class ClientRegistry extends JDialog {
 	 * Create the dialog.
 	 */
 	public ClientRegistry(Client client) {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(ClientRegistry.class.getResource("/Images/nueva-cuenta (2).png")));
+		
+		try {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		if(client != null)
 		{
@@ -78,34 +83,42 @@ public class ClientRegistry extends JDialog {
 			panel_1.setLayout(null);
 			
 			JLabel lbl_clientInfo = new JLabel("Informaci\u00F3n del Cliente:");
-			lbl_clientInfo.setBounds(91, 13, 142, 16);
+			lbl_clientInfo.setFont(new Font("Verdana", Font.PLAIN, 12));
+			lbl_clientInfo.setBounds(70, 13, 166, 16);
 			panel_1.add(lbl_clientInfo);
 			
 			JLabel lbl_clientId = new JLabel("Id:");
+			lbl_clientId.setFont(new Font("Verdana", Font.PLAIN, 12));
 			lbl_clientId.setBounds(12, 66, 56, 16);
 			panel_1.add(lbl_clientId);
 			
 			JLabel lbl_clientName = new JLabel("Nombre:");
+			lbl_clientName.setFont(new Font("Verdana", Font.PLAIN, 12));
 			lbl_clientName.setBounds(12, 126, 56, 16);
 			panel_1.add(lbl_clientName);
 			
 			JLabel lbl_clientAddress = new JLabel("Direcci\u00F3n:");
+			lbl_clientAddress.setFont(new Font("Verdana", Font.PLAIN, 12));
 			lbl_clientAddress.setBounds(12, 306, 70, 16);
 			panel_1.add(lbl_clientAddress);
 			
 			JLabel lbl_clientPersonalDoc = new JLabel("C\u00E9dula:");
+			lbl_clientPersonalDoc.setFont(new Font("Verdana", Font.PLAIN, 12));
 			lbl_clientPersonalDoc.setBounds(12, 186, 56, 16);
 			panel_1.add(lbl_clientPersonalDoc);
 			
 			JLabel lbl_clientEmail = new JLabel("Correo electr\u00F3nico:");
-			lbl_clientEmail.setBounds(13, 246, 110, 16);
+			lbl_clientEmail.setFont(new Font("Verdana", Font.PLAIN, 12));
+			lbl_clientEmail.setBounds(13, 246, 137, 16);
 			panel_1.add(lbl_clientEmail);
 			
 			JLabel lbl_clientPhoneNum = new JLabel("Tel\u00E9fono:");
-			lbl_clientPhoneNum.setBounds(12, 366, 56, 16);
+			lbl_clientPhoneNum.setFont(new Font("Verdana", Font.PLAIN, 12));
+			lbl_clientPhoneNum.setBounds(12, 366, 81, 16);
 			panel_1.add(lbl_clientPhoneNum);
 			
 			txt_clientId = new JTextField();
+			txt_clientId.setFont(new Font("Verdana", Font.PLAIN, 12));
 			txt_clientId.setEditable(false);
 			txt_clientId.setBounds(139, 55, 148, 22);
 			panel_1.add(txt_clientId);
@@ -113,62 +126,67 @@ public class ClientRegistry extends JDialog {
 			txt_clientId.setColumns(10);    
 			
 			txt_clientName = new JTextField();
+			txt_clientName.setFont(new Font("Verdana", Font.PLAIN, 12));
 			txt_clientName.setBounds(139, 123, 148, 22);
 			panel_1.add(txt_clientName);
 			txt_clientName.setColumns(10);
 			
 			txt_clientPersonalDoc = new JTextField();
+			txt_clientPersonalDoc.setFont(new Font("Verdana", Font.PLAIN, 12));
 			txt_clientPersonalDoc.setBounds(139, 183, 148, 22);
 			panel_1.add(txt_clientPersonalDoc);
 			txt_clientPersonalDoc.setColumns(10);
 			
 			txt_clientEmail = new JTextField();
+			txt_clientEmail.setFont(new Font("Verdana", Font.PLAIN, 12));
 			txt_clientEmail.setBounds(139, 238, 148, 22);
 			panel_1.add(txt_clientEmail);
 			txt_clientEmail.setColumns(10);
 			
 			txt_clientAddress = new JTextField();
+			txt_clientAddress.setFont(new Font("Verdana", Font.PLAIN, 12));
 			txt_clientAddress.setBounds(139, 299, 148, 22);
 			panel_1.add(txt_clientAddress);
 			txt_clientAddress.setColumns(10);
 			
 			txt_clientPhoneNum = new JTextField();
+			txt_clientPhoneNum.setFont(new Font("Verdana", Font.PLAIN, 12));
 			txt_clientPhoneNum.setBounds(139, 360, 148, 22);
 			panel_1.add(txt_clientPhoneNum);
 			txt_clientPhoneNum.setColumns(10);
 			
 			lbl_warningName = new JLabel("ESTE CAMPO ES OBLIGATORIO");
-			lbl_warningName.setFont(new Font("Tahoma", Font.BOLD, 13));
+			lbl_warningName.setFont(new Font("Verdana", Font.BOLD, 12));
 			lbl_warningName.setForeground(Color.RED);
-			lbl_warningName.setBounds(91, 154, 208, 16);
+			lbl_warningName.setBounds(80, 154, 219, 16);
 			panel_1.add(lbl_warningName);
 			lbl_warningName.setVisible(false);
 			
 			lbl_warningPersonalDoc = new JLabel("ESTE CAMPO ES OBLIGATORIO");
 			lbl_warningPersonalDoc.setForeground(Color.RED);
-			lbl_warningPersonalDoc.setFont(new Font("Tahoma", Font.BOLD, 13));
-			lbl_warningPersonalDoc.setBounds(91, 217, 208, 16);
+			lbl_warningPersonalDoc.setFont(new Font("Verdana", Font.BOLD, 12));
+			lbl_warningPersonalDoc.setBounds(80, 217, 219, 16);
 			panel_1.add(lbl_warningPersonalDoc);
 			lbl_warningPersonalDoc.setVisible(false);
 			
 			lbl_warningEmail = new JLabel("ESTE CAMPO ES OBLIGATORIO");
 			lbl_warningEmail.setForeground(Color.RED);
-			lbl_warningEmail.setFont(new Font("Tahoma", Font.BOLD, 13));
-			lbl_warningEmail.setBounds(91, 270, 208, 16);
+			lbl_warningEmail.setFont(new Font("Verdana", Font.BOLD, 12));
+			lbl_warningEmail.setBounds(80, 270, 219, 16);
 			panel_1.add(lbl_warningEmail);
 			lbl_warningEmail.setVisible(false);
 			
 			lbl_warningAddress = new JLabel("ESTE CAMPO ES OBLIGATORIO");
 			lbl_warningAddress.setForeground(Color.RED);
-			lbl_warningAddress.setFont(new Font("Tahoma", Font.BOLD, 13));
-			lbl_warningAddress.setBounds(91, 331, 208, 16);
+			lbl_warningAddress.setFont(new Font("Verdana", Font.BOLD, 12));
+			lbl_warningAddress.setBounds(80, 331, 219, 16);
 			panel_1.add(lbl_warningAddress);
 			lbl_warningAddress.setVisible(false);
 			
 			lbl_warningPhoneNum = new JLabel("ESTE CAMPO ES OBLIGATORIO");
 			lbl_warningPhoneNum.setForeground(Color.RED);
-			lbl_warningPhoneNum.setFont(new Font("Tahoma", Font.BOLD, 13));
-			lbl_warningPhoneNum.setBounds(91, 393, 208, 16);
+			lbl_warningPhoneNum.setFont(new Font("Verdana", Font.BOLD, 12));
+			lbl_warningPhoneNum.setBounds(80, 393, 219, 16);
 			panel_1.add(lbl_warningPhoneNum);
 			lbl_warningPhoneNum.setVisible(false);
 			
@@ -187,110 +205,139 @@ public class ClientRegistry extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton reg_btn = new JButton("Registrar");
+				reg_btn.setFont(new Font("Verdana", Font.BOLD, 14));
+				reg_btn.setPreferredSize(new Dimension(75, 30));
+				reg_btn.setBorder(new RoundedBorder(Color.BLACK,1,25));
 				if(client != null)
 				{
 					reg_btn.setText("Actualizar");
 				}
 				reg_btn.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent arg0) {
-						
-						String id = txt_clientId.getText();
-						String name = txt_clientName.getText();
-						String personalDoc = txt_clientPersonalDoc.getText();
-						String address = txt_clientAddress.getText();
-						String email = txt_clientEmail.getText();
-						String phoneNum = txt_clientPhoneNum.getText();
-						boolean ready = true;
-						
-						if(name.isEmpty()){
-							lbl_warningName.setVisible(true);
-							ready = false;
-						} else {
-							lbl_warningName.setVisible(false);
-						}
-						
-						if(personalDoc.isEmpty()){
-							lbl_warningPersonalDoc.setVisible(true);
-							ready = false;
-						} else {
-							lbl_warningPersonalDoc.setVisible(false);
-						}
-						
-						if(address.isEmpty()){
-							lbl_warningAddress.setVisible(true);
-							ready = false;
-						} else {
-							lbl_warningAddress.setVisible(false);
-						}
-														
-						if(email.isEmpty()) {
-							lbl_warningEmail.setVisible(true);
-							ready = false;
-						} else {
-							lbl_warningEmail.setVisible(false);
-						}
-						
-						if(phoneNum.isEmpty()) {
-							lbl_warningPhoneNum.setVisible(true);
-							ready = false;
-						} else {
-							lbl_warningPhoneNum.setVisible(false);
-						}
-						
-						if(ready) {
-							if(client == null) {
-								Client newClient = new Client(personalDoc, name, phoneNum, address, email, id);
-								Administration.getInstance().addPerson(newClient);
-								clean();
-							} else {
-								client.setName(name);
-								client.setNi(personalDoc);
-								client.setEmail(email);
-								client.setAddress(address);
-								client.setPhone(phoneNum);
-								Administration.getInstance().updatePerson(client);
-								ClientList.updateTable();
-								dispose();
-							}
-						}
-					}
+				    public void actionPerformed(ActionEvent arg0) {
+				        try {
+				            String id = txt_clientId.getText();
+				            String name = txt_clientName.getText();
+				            String personalDoc = txt_clientPersonalDoc.getText();
+				            String address = txt_clientAddress.getText();
+				            String email = txt_clientEmail.getText();
+				            String phoneNum = txt_clientPhoneNum.getText();
+				            boolean ready = true;
+
+				            if(name.isEmpty()){
+				                lbl_warningName.setVisible(true);
+				                ready = false;
+				            } else {
+				                lbl_warningName.setVisible(false);
+				            }
+
+				            if(personalDoc.isEmpty()){
+				                lbl_warningPersonalDoc.setVisible(true);
+				                ready = false;
+				            } else {
+				                lbl_warningPersonalDoc.setVisible(false);
+				            }
+
+				            if(address.isEmpty()){
+				                lbl_warningAddress.setVisible(true);
+				                ready = false;
+				            } else {
+				                lbl_warningAddress.setVisible(false);
+				            }
+
+				            if(email.isEmpty()) {
+				                lbl_warningEmail.setVisible(true);
+				                ready = false;
+				            } else {
+				                lbl_warningEmail.setVisible(false);
+				            }
+
+				            if(phoneNum.isEmpty()) {
+				                lbl_warningPhoneNum.setVisible(true);
+				                ready = false;
+				            } else {
+				                lbl_warningPhoneNum.setVisible(false);
+				            }
+
+				            if(ready) {
+				                if(client == null) {
+				                    Client newClient = new Client(personalDoc, name, phoneNum, address, email, id);
+				                    Administration.getInstance().addPerson(newClient);
+				                    clean();
+				                } else {
+				                    client.setName(name);
+				                    client.setNi(personalDoc);
+				                    client.setEmail(email);
+				                    client.setAddress(address);
+				                    client.setPhone(phoneNum);
+				                    Administration.getInstance().updatePerson(client);
+				                    ClientList.updateTable();
+				                    dispose();
+				                }
+				            }
+				        } 
+				        catch (Exception e) {
+				            e.printStackTrace();
+				        }
+				    }
 				});
+
 				reg_btn.setActionCommand("OK");
 				buttonPane.add(reg_btn);
 				getRootPane().setDefaultButton(reg_btn);
 			}
 			{
-				JButton cancelButton = new JButton("Cancelar");
-				cancelButton.addActionListener(new ActionListener() {
+				JButton cancel_btn = new JButton("Cancelar");
+				cancel_btn.setFont(new Font("Verdana", Font.BOLD, 14));
+				cancel_btn.setBorder(new RoundedBorder(Color.BLACK,1,25));
+				cancel_btn.setPreferredSize(new Dimension(75, 30));
+				cancel_btn.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
 						dispose();
 					}
 				});
-				cancelButton.setActionCommand("Cancel");
-				buttonPane.add(cancelButton);
+				cancel_btn.setActionCommand("Cancel");
+				buttonPane.add(cancel_btn);
 			}
 		}
 		
 		loadClient(client);
+		
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 	
 	private void loadClient(Client client) {
-		if(client != null) {
-			txt_clientId.setText(client.getId());
-			txt_clientName.setText(client.getName());
-			txt_clientPersonalDoc.setText(client.getNi());
-			txt_clientEmail.setText(client.getEmail());
-			txt_clientAddress.setText(client.getAddress());
-			txt_clientPhoneNum.setText(client.getPhone());
-		} 
+	   
+		try {
+	        if(client != null) {
+	            txt_clientId.setText(client.getId());
+	            txt_clientName.setText(client.getName());
+	            txt_clientPersonalDoc.setText(client.getNi());
+	            txt_clientEmail.setText(client.getEmail());
+	            txt_clientAddress.setText(client.getAddress());
+	            txt_clientPhoneNum.setText(client.getPhone());
+	        }
+	    } 
+		catch (Exception e) {
+	        e.printStackTrace();
+	    }
 	}
 
+
 	private void clean() {
-		txt_clientId.setText(IdGenerator.generateId());
-		txt_clientName.setText("");
-		txt_clientPersonalDoc.setText("");
-		txt_clientEmail.setText("");
-		txt_clientAddress.setText("");
-		txt_clientPhoneNum.setText("");
+	    try {
+	        txt_clientId.setText(IdGenerator.generateId());
+	        txt_clientName.setText("");
+	        txt_clientPersonalDoc.setText("");
+	        txt_clientEmail.setText("");
+	        txt_clientAddress.setText("");
+	        txt_clientPhoneNum.setText("");
+	    } 
+	    catch (Exception e) {
+	        e.printStackTrace();
+	    }
 	}
+
 }

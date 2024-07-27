@@ -349,8 +349,6 @@ public class Principal extends JFrame {
 			}
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				ClientList cliList = new ClientList();
-				cliList.setVisible(true);
 			}
 		});
 		lblListClient.setForeground(Color.WHITE);
@@ -401,7 +399,7 @@ public class Principal extends JFrame {
 			}
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				SupplierList suppliList = new SupplierList();
+				SupplierList suppliList = new SupplierList(null);
 				suppliList.setVisible(true);
 			}
 		});

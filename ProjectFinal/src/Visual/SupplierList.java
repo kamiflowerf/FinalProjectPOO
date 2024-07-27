@@ -2,14 +2,21 @@ package Visual;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -18,6 +25,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.JTableHeader;
 
 import logic.Administration;
+import logic.Component;
 import logic.Supplier;
 
 public class SupplierList extends JFrame implements MouseListener {
@@ -30,14 +38,26 @@ public class SupplierList extends JFrame implements MouseListener {
 	static TableModel model;
 	private static int rows;
 	private static int columns;
+	private JPanel banelBotton;
+	private JButton btn_cancel;
+	private JButton btn_update;
+	private JButton btn_select;
+	private JButton btn_addNew;
+	private JButton btn_delete;
+	private String idSuppli = "";
+	public onSelectedSupplier supplierInterface;
 	
+	public interface onSelectedSupplier
+	{
+		void getSelectedSupplier(String id);
+	}
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		try {
-			SupplierList dialog = new SupplierList();
+			SupplierList dialog = new SupplierList(null);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -48,7 +68,8 @@ public class SupplierList extends JFrame implements MouseListener {
 	/**
 	 * Create the dialog.
 	 */
-	public SupplierList() {
+	public SupplierList(onSelectedSupplier supplierInterface) {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(SupplierList.class.getResource("/Images/empleado.png")));
 		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setSize(1000,551);
@@ -138,10 +159,31 @@ public class SupplierList extends JFrame implements MouseListener {
 			info[i][4] = suppliers.get(i).getAddress();
 			info[i][5] = suppliers.get(i).getPhone();
 			info[i][6] = deliveryTime;
-			//info[i][7] = suppliers.get(i).getMyComponents().toString();
-		}
-		return info;
+			
+			List<Component> components = suppliers.get(i).getMyComponents();
+	        StringBuilder componentsString = new StringBuilder();
+	        if (components != null) 
+	        {
+	            for (Component component : components)
+	            {
+	                componentsString.append(component.getId()).append(", "); 
+	            }
+	            if (componentsString.length() > 0) 
+	            {
+	                componentsString.setLength(componentsString.length() - 2);
+	            }
+	        } 
+	        else 
+	        {
+	            componentsString.append("No componentes");
+	        }
+	       
+	        info[i][7] = componentsString.toString();
+					
 	}
+		
+		return info;
+}
 
 	private void startComponents() {
 
@@ -163,6 +205,94 @@ public class SupplierList extends JFrame implements MouseListener {
 		SupplierTable.addMouseListener(this);
 		SupplierTable.setOpaque(false);
 		scrollPaneTable.setViewportView(SupplierTable);
+		
+		banelBotton = new JPanel();
+		contentPane.add(banelBotton, BorderLayout.SOUTH);
+		
+		btn_select = new JButton("Seleccionar");
+		btn_select.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				if(idSuppli != "") {
+					supplierInterface.getSelectedSupplier(idSuppli);
+					dispose();
+				}
+			}
+		});
+		btn_select.setPreferredSize(new Dimension(85, 30));
+		btn_select.setBorder(new RoundedBorder(Color.BLACK,1,25));
+		btn_select.setEnabled(false);
+		banelBotton.add(btn_select);
+		
+		btn_update = new JButton("Actualizar");
+		btn_update.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				if(idSuppli != "")
+				{
+					Supplier suppli = Administration.getInstance().searchSupplierById(idSuppli);
+					
+					if(suppli != null)
+					{
+						SupplierRegistry updateSuppli = new SupplierRegistry(suppli);
+						updateSuppli.setModal(true);
+						updateSuppli.setVisible(true);
+					}
+				}
+			}
+		});
+		btn_update.setPreferredSize(new Dimension(85, 30));
+		btn_update.setBorder(new RoundedBorder(Color.BLACK,1,25));
+		btn_update.setEnabled(false);
+		banelBotton.add(btn_update);
+		
+		btn_delete = new JButton("Eliminar");
+		btn_delete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				if(idSuppli != "")
+				{
+					int option = JOptionPane.showConfirmDialog(null, "Seguro desea eliminar el proveedor con código: "+idSuppli, "Confirmación", JOptionPane.WARNING_MESSAGE);
+					if(option == JOptionPane.YES_OPTION)
+					{
+						Administration.getInstance().deleteSupplier(idSuppli);
+						btn_delete.setEnabled(false);
+						updateTable();
+					}
+				}
+			}
+		});
+		btn_delete.setPreferredSize(new Dimension(85, 30));
+		btn_delete.setBorder(new RoundedBorder(Color.BLACK,1,25));
+		btn_delete.setEnabled(false);
+		banelBotton.add(btn_delete);
+		
+		btn_addNew = new JButton("Agregar");
+		btn_addNew.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			
+			SupplierRegistry newSuppli = new SupplierRegistry(null);
+			newSuppli.setModal(true);
+			newSuppli.setVisible(true);
+			updateTable();
+			}
+		});
+		btn_addNew.setPreferredSize(new Dimension(85, 30));
+		btn_addNew.setBorder(new RoundedBorder(Color.BLACK,1,25));
+		banelBotton.add(btn_addNew);
+		
+		btn_cancel = new JButton("Cancelar");
+		btn_cancel.setPreferredSize(new Dimension(85, 30));
+		btn_cancel.setBorder(new RoundedBorder(Color.BLACK,1,25));
+		btn_cancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				dispose();
+			}
+		});
+		banelBotton.add(btn_cancel);
+		
+		updateTable();
 	}
 
 	public static int getRows() {
@@ -182,24 +312,25 @@ public class SupplierList extends JFrame implements MouseListener {
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent e) {
+	public void mouseClicked(MouseEvent e) {		
 		
-		int row = SupplierTable.rowAtPoint(e.getPoint());
-		int column = SupplierTable.columnAtPoint(e.getPoint());
+		int i = SupplierTable.getSelectedRow();
 		
-		if(row >= 0 && column >= 0)
+		if( i >= 0)
 		{
-			Supplier selSuppli = suppliers.get(row);
+			idSuppli = new String(SupplierTable.getValueAt(i, 0).toString());
+			btn_addNew.setEnabled(false);
 			
-			if(SupplierTable != null)
+			if(supplierInterface == null)
 			{
-				SupplierRegistry updateSuppli = new SupplierRegistry(selSuppli);
-				updateSuppli.setModal(true);
-				updateSuppli.setVisible(true);
+				btn_delete.setEnabled(true);
+				btn_update.setEnabled(true);
 			}
-			
+			else
+			{
+				btn_select.setEnabled(true);
+			}
 		}
-		
 	}
 
 	@Override
@@ -230,6 +361,4 @@ public class SupplierList extends JFrame implements MouseListener {
 		buildTable();
 		
 	}
-	
-
 }

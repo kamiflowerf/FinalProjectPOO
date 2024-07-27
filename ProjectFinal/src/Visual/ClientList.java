@@ -2,14 +2,20 @@ package Visual;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -30,13 +36,27 @@ public class ClientList extends JFrame implements MouseListener {
 	static TableModel model; // modelo creado de la clase del modelo de la tabla
 	private static int rows;
 	private static int columns;
+	private JPanel bottonPanel;
+	private JButton btn_cancel;
+	private JButton btn_addNew;
+	private JButton btn_delete;
+	private JButton btn_update;
+	private JButton btn_select;
+	private String idClient = "";
+	public onSelectedClient clientInterface;
+	
+	public interface onSelectedClient
+	{
+		void getSelectedClient(String id);
+	}
+	
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		try {
-			ClientList dialog = new ClientList();
+			ClientList dialog = new ClientList(null);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -47,7 +67,8 @@ public class ClientList extends JFrame implements MouseListener {
 	/**
 	 * Create the dialog.
 	 */
-	public ClientList() {
+	public ClientList(onSelectedClient clientInterface) {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(ClientList.class.getResource("/Images/nueva-cuenta (2).png")));
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setSize(800,551);
 		
@@ -117,14 +138,9 @@ public class ClientList extends JFrame implements MouseListener {
 		
 		setRows(ClientTable.getRowCount());
 		setColumns(ClientTable.getColumnCount());
-		
-		//Se asigna el tipo de dato a cada celda
-		ClientTable.getColumnModel().getColumn(0).setCellRenderer(new CellsConfig ("number"));
-		ClientTable.getColumnModel().getColumn(2).setCellRenderer(new CellsConfig ("number"));
-		ClientTable.getColumnModel().getColumn(5).setCellRenderer(new CellsConfig ("number"));
-		
-		//Se recorre y asigna el resto e celdas que serian las que almacenanr datos de tipo texto
-		for(int i = 0; i < Titles.length-3; i++) // se resta 3 porque ya se asigno el tipo de formato numerico a 3 filas
+			
+		//Se recorre y asigna a la celdas que serian las que almacenanar datos de tipo texto
+		for(int i = 0; i < Titles.length; i++) 
 		{
 			ClientTable.getColumnModel().getColumn(i).setCellRenderer(new CellsConfig("text"));
 		}
@@ -173,6 +189,7 @@ public class ClientList extends JFrame implements MouseListener {
 			info[i][5] = clients.get(i).getPhone();
 				
 		}
+		
 		return info;
 	}
 
@@ -184,48 +201,118 @@ public class ClientList extends JFrame implements MouseListener {
 		contentPane.setLayout(new BorderLayout(0,0));
 		
 		JLabel lbl_clientTable = new JLabel("Listado Clientes");
-		lbl_clientTable.setFont(new Font("Centaur",Font.PLAIN,30));
+		lbl_clientTable.setFont(new Font("Verdana", Font.BOLD, 30));
 		contentPane.add(lbl_clientTable, BorderLayout.NORTH);
 		
 		scrollPaneTable = new JScrollPane();
 		contentPane.add(scrollPaneTable);
 		
 		ClientTable = new JTable();
+		ClientTable.setFont(new Font("Verdana", Font.PLAIN, 12));
 		ClientTable.setBackground(Color.white);
 		ClientTable.setBorder(new BevelBorder(BevelBorder.RAISED,null,null,null,null));
 		ClientTable.addMouseListener(this);
 		ClientTable.setOpaque(false);
 		scrollPaneTable.setViewportView(ClientTable);
 		
+		bottonPanel = new JPanel();
+		contentPane.add(bottonPanel, BorderLayout.SOUTH);
+		
+		btn_select = new JButton("Seleccionar");
+		btn_select.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				if(idClient != "") {
+					clientInterface.getSelectedClient(idClient);
+					dispose();
+				}
+				
+			}
+		});
+		btn_select.setEnabled(false);
+		btn_select.setPreferredSize(new Dimension(85, 30));
+		btn_select.setFont(new Font("Verdana", Font.BOLD, 12));
+		btn_select.setBorder(new RoundedBorder(Color.BLACK,1,25));
+		bottonPanel.add(btn_select);
+		
+		btn_update = new JButton("Actualizar");
+		btn_update.setEnabled(false);
+		btn_update.setPreferredSize(new Dimension(85, 30));
+		btn_update.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			if(idClient != "")
+			{
+				Client aux = Administration.getInstance().searchClientById(idClient);
+				
+				if(aux != null)
+				{
+					ClientRegistry updateClient = new ClientRegistry(aux);
+	            	updateClient.setModal(true);
+	            	updateClient.setVisible(true);
+				}
+			}
+		}
+		});
+		btn_update.setFont(new Font("Verdana", Font.BOLD, 12));
+		btn_update.setBorder(new RoundedBorder(Color.BLACK,1,25));
+		bottonPanel.add(btn_update);
+		
+		btn_delete = new JButton("Eliminar");
+		btn_delete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				if(idClient != "")
+				{
+					int option = JOptionPane.showConfirmDialog(null, "Seguro desea eliminar el cliente con código: "+idClient, "Confirmación", JOptionPane.WARNING_MESSAGE);
+					
+					if(option == JOptionPane.YES_OPTION)
+					{
+						Administration.getInstance().deleteClient(idClient);
+						btn_delete.setEnabled(false);
+						updateTable();
+					}
+				}
+			}
+		});
+		btn_delete.setEnabled(false);
+		btn_delete.setPreferredSize(new Dimension(85, 30));
+		btn_delete.setFont(new Font("Verdana", Font.BOLD, 12));
+		btn_delete.setBorder(new RoundedBorder(Color.BLACK,1,25));
+		bottonPanel.add(btn_delete);
+		
+		btn_addNew = new JButton("Agregar");
+		btn_addNew.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				ClientRegistry newClient = new ClientRegistry(null);
+				newClient.setModal(true);
+				newClient.setVisible(true);
+				updateTable();
+			}
+		});
+		btn_addNew.setPreferredSize(new Dimension(85, 30));
+		btn_addNew.setFont(new Font("Verdana", Font.BOLD, 12));
+		btn_addNew.setBorder(new RoundedBorder(Color.BLACK,1,25));
+		bottonPanel.add(btn_addNew);
+		
+		btn_cancel = new JButton("Cancelar");
+		btn_cancel.setPreferredSize(new Dimension(85, 30));
+		btn_cancel.setFont(new Font("Verdana", Font.BOLD, 12));
+		btn_cancel.setBorder(new RoundedBorder(Color.BLACK,1,25));
+		btn_cancel.setSize(50, 50);
+		btn_cancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				dispose();
+			}
+		});
+		bottonPanel.add(btn_cancel);
+		
+		updateTable();
+		
 	}
 
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		
-		int row = ClientTable.rowAtPoint(e.getPoint());
-		int column = ClientTable.columnAtPoint(e.getPoint());
-		
-		// validar que la seleccion se realizo encima del rango 
-		if(row >= 0 && column >= 0 )
-		{
-			Client selCli = clients.get(row);
-			
-			/*String info = "INFO CLIENTE\n";
-            info += "Código: " + selCli.getId() + "\n";
-            info += "Nombre: " + selCli.getName() + "\n";
-            info += "Cédula: " + selCli.getNi() + "\n";
-            info += "E-mail: " + selCli.getEmail() + "\n";
-            info += "Dirección: " + selCli.getAddress() + "\n";
-            info += "Teléfono: " + selCli.getPhone();*/
-            
-            if(ClientTable != null)
-            {
-            	ClientRegistry updateClient = new ClientRegistry(selCli);
-            	updateClient.setModal(true);
-            	updateClient.setVisible(true);
-            }
-		}
-	}
 
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
@@ -253,6 +340,30 @@ public class ClientList extends JFrame implements MouseListener {
 
 	public static void updateTable() {
 		buildTable();
+		
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent arg0) {	
+		
+		int i = ClientTable.getSelectedRow();
+		
+		if( i >= 0)
+		{
+			idClient = new String(ClientTable.getValueAt(i, 0).toString());
+			btn_addNew.setEnabled(false);
+			
+			if(clientInterface == null)
+			{
+				btn_delete.setEnabled(true);
+				btn_update.setEnabled(true);
+			}
+			else
+			{
+				btn_select.setEnabled(true);
+			}
+			
+		}
 		
 	}
 

@@ -2,12 +2,12 @@ package Visual;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import javax.swing.DefaultListModel;
@@ -46,7 +46,6 @@ public class SupplierRegistry extends JDialog {
 	private JSpinner spn_deliveryTime;
 	private JList<String> providedProducts;
 	private DefaultListModel<String> model;
-	private ArrayList<Component> myComponents;
 	
 
 	/**
@@ -66,6 +65,7 @@ public class SupplierRegistry extends JDialog {
 	 * Create the dialog.
 	 */
 	public SupplierRegistry(Supplier suppli) {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(SupplierRegistry.class.getResource("/Images/empleado.png")));
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		if(suppli != null)
 		{
@@ -82,7 +82,6 @@ public class SupplierRegistry extends JDialog {
 		contentPanel.setLayout(new BorderLayout(0, 0));
 		setLocationRelativeTo(null);
 		
-		myComponents = new ArrayList<>();
 		{
 			JPanel panel = new JPanel();
 			contentPanel.add(panel, BorderLayout.CENTER);
@@ -94,23 +93,28 @@ public class SupplierRegistry extends JDialog {
 			panel_1.setLayout(null);
 			
 			JLabel lbl_suppliName = new JLabel("Nombre:");
+			lbl_suppliName.setFont(new Font("Verdana", Font.PLAIN, 12));
 			lbl_suppliName.setBounds(12, 104, 56, 16);
 			panel_1.add(lbl_suppliName);
 			
 			JLabel lbl_suppliNi = new JLabel("C\u00E9dula:");
+			lbl_suppliNi.setFont(new Font("Verdana", Font.PLAIN, 12));
 			lbl_suppliNi.setBounds(12, 166, 56, 16);
 			panel_1.add(lbl_suppliNi);
 			
 			JLabel lbl_suppliEmail = new JLabel("Correo electr\u00F3nico:");
-			lbl_suppliEmail.setBounds(12, 228, 119, 16);
+			lbl_suppliEmail.setFont(new Font("Verdana", Font.PLAIN, 12));
+			lbl_suppliEmail.setBounds(12, 228, 137, 16);
 			panel_1.add(lbl_suppliEmail);
 			
 			JLabel lbl_suppliAddress = new JLabel("Direcci\u00F3n:");
+			lbl_suppliAddress.setFont(new Font("Verdana", Font.PLAIN, 12));
 			lbl_suppliAddress.setBounds(12, 290, 70, 16);
 			panel_1.add(lbl_suppliAddress);
 			
 			JLabel lbl_suppliPhone = new JLabel("Tel\u00E9fono:");
-			lbl_suppliPhone.setBounds(12, 352, 56, 16);
+			lbl_suppliPhone.setFont(new Font("Verdana", Font.PLAIN, 12));
+			lbl_suppliPhone.setBounds(12, 352, 70, 16);
 			panel_1.add(lbl_suppliPhone);
 			
 			txt_suppliName = new JTextField();
@@ -139,6 +143,7 @@ public class SupplierRegistry extends JDialog {
 			panel_1.add(txt_suppliPhone);
 			
 			JLabel lbl_suppliId = new JLabel("Id:");
+			lbl_suppliId.setFont(new Font("Verdana", Font.PLAIN, 12));
 			lbl_suppliId.setBounds(12, 42, 56, 16);
 			panel_1.add(lbl_suppliId);
 			
@@ -151,36 +156,36 @@ public class SupplierRegistry extends JDialog {
 			
 			lbl_warningName = new JLabel("ESTE CAMPO ES OBLIGATORIO");
 			lbl_warningName.setForeground(Color.RED);
-			lbl_warningName.setFont(new Font("Tahoma", Font.BOLD, 13));
-			lbl_warningName.setBounds(71, 134, 188, 16);
+			lbl_warningName.setFont(new Font("Verdana", Font.BOLD, 12));
+			lbl_warningName.setBounds(44, 134, 215, 16);
 			panel_1.add(lbl_warningName);
 			lbl_warningName.setVisible(false);
 			
 			lbl_warningNi = new JLabel("ESTE CAMPO ES OBLIGATORIO");
 			lbl_warningNi.setForeground(Color.RED);
-			lbl_warningNi.setFont(new Font("Tahoma", Font.BOLD, 13));
-			lbl_warningNi.setBounds(71, 197, 188, 16);
+			lbl_warningNi.setFont(new Font("Verdana", Font.BOLD, 12));
+			lbl_warningNi.setBounds(44, 197, 215, 16);
 			panel_1.add(lbl_warningNi);
 			lbl_warningNi.setVisible(false);
 			
 			lbl_warningEmail = new JLabel("ESTE CAMPO ES OBLIGATORIO");
 			lbl_warningEmail.setForeground(Color.RED);
-			lbl_warningEmail.setFont(new Font("Tahoma", Font.BOLD, 13));
-			lbl_warningEmail.setBounds(71, 257, 188, 16);
+			lbl_warningEmail.setFont(new Font("Verdana", Font.BOLD, 12));
+			lbl_warningEmail.setBounds(44, 257, 215, 16);
 			panel_1.add(lbl_warningEmail);
 			lbl_warningEmail.setVisible(false);
 			
 			lbl_warningAddress = new JLabel("ESTE CAMPO ES OBLIGATORIO");
 			lbl_warningAddress.setForeground(Color.RED);
-			lbl_warningAddress.setFont(new Font("Tahoma", Font.BOLD, 13));
-			lbl_warningAddress.setBounds(71, 323, 188, 16);
+			lbl_warningAddress.setFont(new Font("Verdana", Font.BOLD, 12));
+			lbl_warningAddress.setBounds(44, 323, 215, 16);
 			panel_1.add(lbl_warningAddress);
 			lbl_warningAddress.setVisible(false);
 			
 			lbl_warningPhone = new JLabel("ESTE CAMPO ES OBLIGATORIO");
 			lbl_warningPhone.setForeground(Color.RED);
-			lbl_warningPhone.setFont(new Font("Tahoma", Font.BOLD, 13));
-			lbl_warningPhone.setBounds(71, 384, 188, 16);
+			lbl_warningPhone.setFont(new Font("Verdana", Font.BOLD, 12));
+			lbl_warningPhone.setBounds(44, 384, 215, 16);
 			panel_1.add(lbl_warningPhone);
 			lbl_warningPhone.setVisible(false);
 			
@@ -201,28 +206,12 @@ public class SupplierRegistry extends JDialog {
 					model.addElement(c.getId());
 				}
 			}
-				
-			
-			
-			providedProducts = new JList<>();
-			providedProducts.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent arg0) {
-					
-					myComponents.clear();
-                    for (String selectedId : providedProducts.getSelectedValuesList()) {
-                    		Component c = Administration.getInstance().searchComponentById(selectedId);
-                    		if (c != null) {
-                    			myComponents.add(c);
-                        }
-                    }
-					
-				}
-			});
+			providedProducts = new JList<>(model);
 			scrollPane.setViewportView(providedProducts);
 			
 			JLabel lbl_suppliDeliveryTime = new JLabel("Tiempo de entrega:");
-			lbl_suppliDeliveryTime.setBounds(22, 13, 114, 16);
+			lbl_suppliDeliveryTime.setFont(new Font("Verdana", Font.PLAIN, 12));
+			lbl_suppliDeliveryTime.setBounds(22, 13, 145, 16);
 			panel.add(lbl_suppliDeliveryTime);
 			
 			spn_deliveryTime = new JSpinner();
@@ -231,7 +220,8 @@ public class SupplierRegistry extends JDialog {
 			panel.add(spn_deliveryTime);
 			
 			JLabel lbl_products = new JLabel("Componentes que provee: ");
-			lbl_products.setBounds(22, 53, 171, 16);
+			lbl_products.setFont(new Font("Verdana", Font.PLAIN, 12));
+			lbl_products.setBounds(22, 53, 194, 16);
 			panel.add(lbl_products);
 			
 			JPanel panel_3 = new JPanel();
@@ -244,14 +234,15 @@ public class SupplierRegistry extends JDialog {
 			panel_3.add(foto);
 			{
 				JLabel lbl_info = new JLabel("Informaci\u00F3n del Suplidor");
-				lbl_info.setBounds(369, 27, 151, 16);
+				lbl_info.setFont(new Font("Verdana", Font.PLAIN, 12));
+				lbl_info.setBounds(353, 27, 167, 16);
 				panel.add(lbl_info);
 			}
 			
 			lbl_warningComponentsProv = new JLabel("!!");
 			lbl_warningComponentsProv.setForeground(Color.RED);
-			lbl_warningComponentsProv.setFont(new Font("Tahoma", Font.BOLD, 13));
-			lbl_warningComponentsProv.setBounds(186, 53, 56, 16);
+			lbl_warningComponentsProv.setFont(new Font("Verdana", Font.BOLD, 12));
+			lbl_warningComponentsProv.setBounds(202, 56, 56, 16);
 			panel.add(lbl_warningComponentsProv);
 			lbl_warningComponentsProv.setVisible(false);
 		}
@@ -261,10 +252,13 @@ public class SupplierRegistry extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton btn_reg = new JButton("Registrar");
+				btn_reg.setFont(new Font("Verdana", Font.BOLD, 12));
 				if(suppli != null)
 				{
 					btn_reg.setText("Actualizar");
 				}
+				btn_reg.setPreferredSize(new Dimension(85, 30));
+				btn_reg.setBorder(new RoundedBorder(Color.BLACK,1,25));
 				btn_reg.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
 						
@@ -277,6 +271,8 @@ public class SupplierRegistry extends JDialog {
 						String address = txt_suppliAddress.getText();
 						String phone = txt_suppliPhone.getText();
 						int deliTime = (int) spn_deliveryTime.getValue();
+						ArrayList<Component> componentsProvided = new ArrayList<>();
+						componentsProvided = getSelectedComponents();
 						boolean ready = true;
 						
 						if(name.isEmpty()){
@@ -314,12 +310,12 @@ public class SupplierRegistry extends JDialog {
 							lbl_warningPhone.setVisible(false);
 						}
 						
-						/*if(providedProducts.getSelectedIndex() == -1){
+						if(providedProducts.getSelectedIndex() == -1){
 							lbl_warningComponentsProv.setVisible(true);
 							ready = false;
 						}
 						else
-							lbl_warningComponentsProv.setVisible(false); */
+							lbl_warningComponentsProv.setVisible(false); 
 						
 						
 						if(ready) 
@@ -327,14 +323,14 @@ public class SupplierRegistry extends JDialog {
 							if(suppli == null) 
 							{
 								
-								if(myComponents.isEmpty())
+								if(componentsProvided.isEmpty())
 								{
 									sup = new Supplier(personalDoc, name, phone, address, email, id, deliTime, null);
 								}
 								
 								else 
 								{
-									sup = new Supplier(personalDoc, name, phone, address, email, id, deliTime, myComponents);
+									sup = new Supplier(personalDoc, name, phone, address, email, id, deliTime, componentsProvided);
 								}
 									
 								Administration.getInstance().addPerson(sup);
@@ -351,7 +347,7 @@ public class SupplierRegistry extends JDialog {
 								suppli.setAddress(address);
 								suppli.setPhone(phone);
 								suppli.setDeliveryTime(deliTime);
-								suppli.setMyComponents(myComponents);
+								suppli.setMyComponents(componentsProvided);
 								Administration.getInstance().updatePerson(suppli);
 								SupplierList.updateTable();
 								dispose();
@@ -365,6 +361,23 @@ public class SupplierRegistry extends JDialog {
 							e.printStackTrace();
 						}
 					}
+
+					private ArrayList<Component> getSelectedComponents() {
+						
+						ArrayList<Component> selection = new ArrayList<>();
+						
+						for(String componentId : providedProducts.getSelectedValuesList())
+						{
+							for(Component c : Administration.getInstance().getTheComponents())
+							{
+								if(c.getId().equalsIgnoreCase(componentId))
+								{
+									selection.add(c);
+								}
+							}	
+						}
+						return selection;
+					}
 					
 				});
 				btn_reg.setActionCommand("OK");
@@ -373,6 +386,9 @@ public class SupplierRegistry extends JDialog {
 			}
 			{
 				JButton cancelButton = new JButton("Cancelar");
+				cancelButton.setFont(new Font("Verdana", Font.BOLD, 12));
+				cancelButton.setPreferredSize(new Dimension(85, 30));
+				cancelButton.setBorder(new RoundedBorder(Color.BLACK,1,25));
 				cancelButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
 						dispose();
@@ -398,35 +414,11 @@ public class SupplierRegistry extends JDialog {
 		        txt_suppliAddress.setText(suppli.getAddress());
 		        txt_suppliPhone.setText(suppli.getPhone());
 		        spn_deliveryTime.setValue(suppli.getDeliveryTime());
-
-		        // Verificar que myComponents no sea null
-		        if (suppli.getMyComponents() != null) {
-		            myComponents = new ArrayList<>(suppli.getMyComponents()); // si es distinto de null se inicializa con los componentes asociados
-		        } else {
-		            myComponents = new ArrayList<>();// si es null pues se inicializa la lista de los componentes vacia.
-		        }
-
-		        // Crear un array de los IDs de los componentes del suplidor
-		        ArrayList<String> selectedIds = new ArrayList<>();
-		        for (Component c : myComponents) {
-		            selectedIds.add(c.getId());
-		        }
-
-		        // Verificar que model no sea null
-		        if (model != null) {
-		            providedProducts.clearSelection();
-		            for (int i = 0; i < model.getSize(); i++) {
-		                if (selectedIds.contains(model.getElementAt(i))) {
-		                    providedProducts.addSelectionInterval(i, i);
-		                }
-		            }
-		        }
 	    	} 
 	    	catch(Exception e)
 	    	{
 	    		e.printStackTrace();
-	    	}
-	        
+	    	}  
 	    }
 	}
 	
@@ -444,9 +436,7 @@ public class SupplierRegistry extends JDialog {
 			txt_suppliEmail.setText("");
 			txt_suppliAddress.setText("");
 			txt_suppliPhone.setText("");
-			providedProducts.clearSelection();
 	        spn_deliveryTime.setValue(1);
-	        myComponents.clear();
 		}
 		catch (Exception e)
 		{
