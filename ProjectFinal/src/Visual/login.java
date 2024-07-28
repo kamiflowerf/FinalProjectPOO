@@ -3,19 +3,8 @@ package Visual;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-
-import logic.Administration;
-import logic.User;
-
-import javax.swing.JLabel;
 import java.awt.Font;
-import javax.swing.JTextField;
-import javax.swing.JPasswordField;
-import javax.swing.JButton;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -23,7 +12,18 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.awt.event.ActionEvent;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+
+import logic.Administration;
+import logic.User;
 
 public class login extends JFrame {
 
@@ -137,10 +137,15 @@ public class login extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				char[] passTemp = password.getPassword();
 				String pass = new String(passTemp);
-				if(Administration.getInstance().confirmLogin(txtUsername.getText(), pass)) {
-					Principal frame = new Principal();
+				if(Administration.getInstance().confirmLogin(new String (txtUsername.getText()), pass)) {
+					User authenticatedUser = Administration.getInstance().getConfirmedUser(new String (txtUsername.getText()), pass);
+					Principal frame = new Principal(authenticatedUser);
 					dispose();
 					frame.setVisible(true);
+				}
+				else
+				{
+					JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos", "Error de inicio de sesión", JOptionPane.ERROR_MESSAGE);				
 				}
 			}
 		});

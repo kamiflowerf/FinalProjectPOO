@@ -299,5 +299,12 @@ public class Administration implements Serializable{
 		}
 		return login;
 	}
+
+	public User getConfirmedUser(String username, String pass) {
+        if (confirmLogin(username, pass)) {
+            return loginUser;
+        }
+        return null;
+    }
 	
 }

@@ -108,7 +108,7 @@ public class RegUser extends JDialog {
 			
 			cbxUserType = new JComboBox<String>();
 			cbxUserType.setFont(new Font("Verdana", Font.PLAIN, 14));
-			cbxUserType.setModel(new DefaultComboBoxModel<String>(new String[] {"<Seleci\u00F3n>", "Administrador", "Empleado"}));
+			cbxUserType.setModel(new DefaultComboBoxModel<String>(new String[] {"<Seleci\u00F3n>", "Administrador", "Vendedor"}));
 			cbxUserType.setBounds(343, 115, 139, 22);
 			panel.add(cbxUserType);
 			
@@ -220,6 +220,11 @@ public class RegUser extends JDialog {
 			}
 			{
 				JButton cancelButton = new JButton("Cancelar");
+				cancelButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						dispose();
+						}
+				});
 				cancelButton.setPreferredSize(new Dimension(85, 30));
 				cancelButton.setBorder(new RoundedBorder(Color.BLACK,1,25));
 				cancelButton.setActionCommand("Cancel");

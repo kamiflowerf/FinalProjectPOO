@@ -30,6 +30,7 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 import logic.Administration;
+import logic.User;
 
 public class Principal extends JFrame {
 
@@ -73,7 +74,8 @@ public class Principal extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Principal frame = new Principal();
+					User loggedInUser = Administration.getLoginUser();
+					Principal frame = new Principal(loggedInUser);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -85,7 +87,7 @@ public class Principal extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Principal() {
+	public Principal(User user) {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
@@ -115,6 +117,8 @@ public class Principal extends JFrame {
 		contentPane.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		
+		
 		
 		JPanel panel = new JPanel();
 		panel.setBackground(background);
@@ -199,12 +203,26 @@ public class Principal extends JFrame {
 			}
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				pnlCompMenu.setVisible(false);
-				pnlCliMenu.setVisible(false);
-				pnlSup.setVisible(true);
-				pnlAdmin.setVisible(false);
-				pnlUser.setVisible(false);
-				morePnl.setVisible(false);
+				
+				if(user.getType().equals("Vendedor"))
+				{
+					pnlCompMenu.setVisible(false);
+					pnlCliMenu.setVisible(false);
+					pnlSup.setVisible(false);
+					pnlAdmin.setVisible(false);
+					pnlUser.setVisible(false);
+					morePnl.setVisible(false);
+					JOptionPane.showMessageDialog(null, "No posee acceso a esta sección", "Proveedores", JOptionPane.INFORMATION_MESSAGE);
+				}
+				else
+				{
+					pnlCompMenu.setVisible(false);
+					pnlCliMenu.setVisible(false);
+					pnlSup.setVisible(true);
+					pnlAdmin.setVisible(false);
+					pnlUser.setVisible(false);
+					morePnl.setVisible(false);
+				}
 			}
 		});
 		txtSupplier.setText("            Proveedores");
@@ -257,12 +275,27 @@ public class Principal extends JFrame {
 			}
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				pnlCompMenu.setVisible(false);
-				pnlCliMenu.setVisible(false);
-				pnlSup.setVisible(false);
-				pnlAdmin.setVisible(false);
-				pnlUser.setVisible(true);
-				morePnl.setVisible(false);
+				if(user.getType().equals("Vendedor"))
+				{
+					pnlCompMenu.setVisible(false);
+					pnlCliMenu.setVisible(false);
+					pnlSup.setVisible(false);
+					pnlAdmin.setVisible(false);
+					pnlUser.setVisible(false);
+					morePnl.setVisible(false);
+					JOptionPane.showMessageDialog(null, "No posee acceso a esta sección", "Usuario", JOptionPane.INFORMATION_MESSAGE);
+
+				}
+				else
+				{
+					pnlCompMenu.setVisible(false);
+					pnlCliMenu.setVisible(false);
+					pnlSup.setVisible(false);
+					pnlAdmin.setVisible(false);
+					pnlUser.setVisible(true);
+					morePnl.setVisible(false);
+				}
+				
 			}
 		});
 		txtUsuario.setText("                Usuario");
@@ -603,5 +636,31 @@ public class Principal extends JFrame {
 		lblRegUser.setFont(new Font("Verdana", Font.PLAIN, 16));
 		lblRegUser.setBounds(0, 15, 335, 55);
 		pnlUser.add(lblRegUser);
+		
+		if(user != null && user.getType().equals("Vendedor")) {
+			restrictSellerFunctions();
+		}
 	}
+
+	private void restrictSellerFunctions() {
+		
+		if(pnlUser != null) {
+			pnlUser.setVisible(false);
+		}
+		if(pnlSup != null) {
+			pnlSup.setVisible(false);
+		}
+        if (lblRegUser != null) {
+        	lblRegUser.setVisible(false);
+        }
+        if (lblRegSup != null) {
+        	lblRegSup.setVisible(false);
+        }
+        if (lblListSup != null) {
+        	lblListSup.setVisible(false);
+        }
+        if (lblSaleManage != null) {
+            lblSaleManage.setVisible(false);
+        }
+    }
 }
