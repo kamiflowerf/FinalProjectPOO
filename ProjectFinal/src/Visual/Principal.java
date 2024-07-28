@@ -600,6 +600,12 @@ public class Principal extends JFrame {
 			public void mouseExited(MouseEvent e) {
 				lblSaleManage.setForeground(Color.WHITE);
 			}
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				// Se crea el dialog con los graficos
+				Graphs inventory = new Graphs();
+				inventory.setVisible(true);
+			}
 		});
 		lblSaleManage.setForeground(Color.WHITE);
 		lblSaleManage.setFont(new Font("Verdana", Font.PLAIN, 16));

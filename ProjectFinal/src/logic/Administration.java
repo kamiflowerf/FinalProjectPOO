@@ -2,6 +2,7 @@ package logic;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 public class Administration implements Serializable{
@@ -306,5 +307,71 @@ public class Administration implements Serializable{
         }
         return null;
     }
+
+	public int getHowManyHDs() {
+		int hds = 0;
+		
+		for(Component c : theComponents)
+		{
+			if(c instanceof HardDisk)
+			{
+				hds++;
+			}
+		}
+		return hds;
+	}
+
+	public int getHowManyMPs() {
+		int mps = 0;
+		
+		for(Component c : theComponents)
+		{
+			if(c instanceof MicroProcessor)
+			{
+				mps++;
+			}
+		}
+		return mps;
+}
+
+	public int getHowManyMBs() {
+		int mbs = 0;
+		
+		for(Component c : theComponents)
+		{
+			if(c instanceof MotherBoard)
+			{
+				mbs++;
+			}
+		}
+		return mbs;
+	}
+
+	public int getHowManyRAMs() {
+		int rams = 0;
+		
+		for(Component c : theComponents)
+		{
+			if(c instanceof RAM)
+			{
+				rams++;
+			}
+		}
+		return rams;
+
+	}
+
+	public double[] getMonthlyProfits() {
+	    double[] monthlyProfits = new double[12]; // Array para almacenar las ganancias de cada mes
+
+	    for (Bill bill : theBills) {
+	        Calendar cal = Calendar.getInstance();
+	        cal.setTime(bill.getSold());
+	        int month = cal.get(Calendar.MONTH); // Obtiene el mes de la factura (0 = Enero, 11 = Diciembre)
+	        monthlyProfits[month] += bill.getTotal();
+	    }
+
+	    return monthlyProfits;
+	}
 	
 }
