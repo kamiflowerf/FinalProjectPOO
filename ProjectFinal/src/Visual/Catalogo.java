@@ -7,9 +7,7 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
-import java.util.Set;
 import java.util.ArrayList;
-import java.util.HashSet;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -123,6 +121,7 @@ public class Catalogo extends JDialog {
         selectBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	getSelectedComps();
+
             	if (!selectedComps.isEmpty()) {
                     for (Component comp : selectedComps) {
                         System.out.println("Selected ID: " + comp.getId()); // Debugging line
@@ -146,14 +145,6 @@ public class Catalogo extends JDialog {
         deleteBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	getSelectedComps();
-            	
-            	// TRY IT OUT NOW
-            	System.out.println("Seleccionados: ");
-            	for (int i = 0; i < selectedComps.size(); i++) {
-        			System.out.println(selectedComps.get(i).getId());
-        		}
-            
-            // END
             	
             	if (!selectedComps.isEmpty()) {
                     int option = JOptionPane.showConfirmDialog(null, "Seguro desea eliminar el/los componentes?", "Confirmación", JOptionPane.WARNING_MESSAGE);
@@ -221,19 +212,13 @@ public class Catalogo extends JDialog {
     public static void loadComponents(CustomTableModel tableModel, String componentType) {
         ArrayList<Component> aux = Administration.getInstance().getTheComponents();
         List<DataWrapper> data = new ArrayList<>();
-        Set<String> uniqueIds = new HashSet<>();
         
         for (Component comp : aux) {
             if (componentType.equals("Todos") || getComponentType(comp).equals(componentType)) {
                 ImageIcon icon = comp.getIcon();
                 String textField = comp.getId();
                 int spinnerValue = comp.getUnits();
-                boolean radioButtonSelected = false;
-
-                if (!uniqueIds.contains(textField)) {
-                    uniqueIds.add(textField);
-                    data.add(new DataWrapper(icon, textField, spinnerValue, radioButtonSelected));
-                }
+                data.add(new DataWrapper(icon, textField, spinnerValue, false));       
             }
         }
 
@@ -258,22 +243,14 @@ public class Catalogo extends JDialog {
     private List<DataWrapper> getSelectedRadioButtons() {
     	
     	List<DataWrapper> selectedItems = new ArrayList<>();
-    	
-    	System.out.println("row: " + tableModel.getRowCount() + "\n");
-    	System.out.println("colum: " + tableModel.getColumnCount() + "\n");
-        // Iterar sobre todas las filas
+
         for (int row = 0; row < tableModel.getRowCount(); row++) {
-            // Iterar sobre todas las columnas
             for (int column = 0; column < tableModel.getColumnCount(); column++) {
                 Object value = tableModel.getValueAt(row, column);
-                //if (value instanceof DataWrapper) {
-                    DataWrapper data = (DataWrapper) value;
-                    System.out.println("Status: " + data.isRadioButtonSelected() + "\n");
-                    if (data.isRadioButtonSelected()) {
-                    
-                        selectedItems.add(data);
-                    }
-                //}
+                DataWrapper data = (DataWrapper) value;
+                if (data.isRadioButtonSelected()) {
+                    selectedItems.add(data);
+                }
             }
         }
 
@@ -281,7 +258,8 @@ public class Catalogo extends JDialog {
     }
     
     private void getSelectedComps(){	
-    	for(DataWrapper dw : getSelectedRadioButtons()) {
+    	List<DataWrapper> selectedItems = getSelectedRadioButtons();
+    	for(DataWrapper dw : selectedItems) {
     		if(dw != null && !selectedComps.contains(Administration.getInstance().searchComponentById(dw.getTextField())))
     			selectedComps.add(Administration.getInstance().searchComponentById(dw.getTextField()));
     	}

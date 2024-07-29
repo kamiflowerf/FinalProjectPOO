@@ -34,6 +34,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
+import javax.swing.JScrollPane;
 
 public class RegComps extends JDialog {
 
@@ -70,6 +71,9 @@ public class RegComps extends JDialog {
 	private JSpinner spnSpeedMicro;
 	private JSpinner spnCapacityHD;
 	private JComboBox<String> cbxConType;
+	private JButton btnSearch;
+	private JTextField txtIdCombo;
+	private JTextField textField;
 
 	/**
 	 * Launch the application.
@@ -504,10 +508,103 @@ public class RegComps extends JDialog {
 				tabbedPane.addTab("Combo", null, pnlCombos, null);
 				pnlCombos.setLayout(null);
 				
-				JLabel lblNewLabel_1 = new JLabel("tab 2");
+				JLabel lblNewLabel_1 = new JLabel("ID:");
 				lblNewLabel_1.setFont(new Font("Verdana", Font.PLAIN, 15));
-				lblNewLabel_1.setBounds(327, 162, 56, 16);
+				lblNewLabel_1.setBounds(176, 51, 23, 16);
 				pnlCombos.add(lblNewLabel_1);
+				
+				JLabel lblNombre = new JLabel("Nombre:");
+				lblNombre.setFont(new Font("Verdana", Font.PLAIN, 15));
+				lblNombre.setBounds(132, 123, 67, 16);
+				pnlCombos.add(lblNombre);
+				
+				JLabel lblDescuento = new JLabel("Descuento:");
+				lblDescuento.setFont(new Font("Verdana", Font.PLAIN, 15));
+				lblDescuento.setBounds(113, 204, 86, 16);
+				pnlCombos.add(lblDescuento);
+				
+				JLabel lblComponentes = new JLabel("Componentes:");
+				lblComponentes.setFont(new Font("Verdana", Font.PLAIN, 15));
+				lblComponentes.setBounds(87, 294, 112, 16);
+				pnlCombos.add(lblComponentes);
+				
+				JPanel panel = new JPanel();
+				panel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+				panel.setBounds(87, 315, 373, 138);
+				pnlCombos.add(panel);
+				panel.setLayout(new BorderLayout(0, 0));
+				
+				JScrollPane scrollPane = new JScrollPane();
+				panel.add(scrollPane, BorderLayout.CENTER);
+				
+				btnSearch = new JButton("Buscar");
+				btnSearch.setFont(new Font("Verdana", Font.PLAIN, 15));
+				btnSearch.setBounds(363, 285, 97, 25);
+				btnSearch.setBorder(new RoundedBorder(Color.BLACK,1,25));
+				pnlCombos.add(btnSearch);
+				
+				txtIdCombo = new JTextField();
+				txtIdCombo.setFont(new Font("Verdana", Font.PLAIN, 15));
+				txtIdCombo.setEnabled(false);
+				txtIdCombo.setText(IdGenerator.generateId());
+				txtIdCombo.setBounds(215, 49, 116, 22);
+				pnlCombos.add(txtIdCombo);
+				txtIdCombo.setColumns(10);
+				
+				textField = new JTextField();
+				textField.setFont(new Font("Verdana", Font.PLAIN, 15));
+				textField.setColumns(10);
+				textField.setBounds(215, 121, 245, 22);
+				pnlCombos.add(textField);
+				
+				JSpinner spinner = new JSpinner();
+				spinner.setModel(new SpinnerNumberModel(1, 1, 100, 1));
+				spinner.setFont(new Font("Verdana", Font.PLAIN, 15));
+				spinner.setBounds(215, 202, 73, 22);
+				pnlCombos.add(spinner);
+				
+				JLabel lblNewLabel_3 = new JLabel("%");
+				lblNewLabel_3.setFont(new Font("Verdana", Font.PLAIN, 15));
+				lblNewLabel_3.setBounds(297, 204, 56, 16);
+				pnlCombos.add(lblNewLabel_3);
+				
+				JButton btnRegCombo = new JButton("Registrar");
+				btnRegCombo.setFont(new Font("Verdana", Font.PLAIN, 15));
+				btnRegCombo.setBorder(new RoundedBorder (Color.BLACK, 1, 25));
+				btnRegCombo.setBounds(527, 428, 97, 25);
+				pnlCombos.add(btnRegCombo);
+				
+				JButton btnCancelCombo = new JButton("Cancelar");
+				btnCancelCombo.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						dispose();
+					}
+				});
+				btnCancelCombo.setFont(new Font("Verdana", Font.PLAIN, 15));
+				btnCancelCombo.setBorder(new RoundedBorder (Color.BLACK, 1, 25));
+				btnCancelCombo.setBounds(636, 428, 97, 25);
+				pnlCombos.add(btnCancelCombo);
+				
+				JPanel pnlComboIcon = new JPanel();
+				pnlComboIcon.setBackground(new Color(176, 224, 230));
+				pnlComboIcon.setBounds(498, 27, 216, 197);
+				pnlComboIcon.setBorder(new RoundedBorder(Color.BLACK,1,15));
+				pnlCombos.add(pnlComboIcon);
+				pnlComboIcon.setLayout(null);
+				
+				JLabel lblComboIcon = new JLabel("");
+				lblComboIcon.setBounds(12, 13, 192, 171);
+				pnlComboIcon.add(lblComboIcon);
+				Image icon = new ImageIcon(this.getClass().getResource("/Images/pc.png")).getImage();
+				Image scaledImg = icon.getScaledInstance(lblComboIcon.getWidth(), lblComboIcon.getHeight(), Image.SCALE_SMOOTH);
+				lblComboIcon.setIcon(new ImageIcon(scaledImg));
+				
+				JLabel lblNewLabel_4 = new JLabel("Por favor llene \r\ntodos los campos");
+				lblNewLabel_4.setForeground(Color.RED);
+				lblNewLabel_4.setFont(new Font("Verdana", Font.BOLD, 15));
+				lblNewLabel_4.setBounds(448, 224, 266, 55);
+				pnlCombos.add(lblNewLabel_4);
+				
 			}
 		}
 	}

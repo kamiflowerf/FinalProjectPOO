@@ -7,6 +7,7 @@ public class DataWrapper {
     private String textField;
     private int spinnerValue;
     private boolean radioButtonSelected;
+    
 
     public DataWrapper(ImageIcon icon, String textField, int spinnerValue, boolean radioButtonSelected) {
         this.icon = icon;

@@ -30,6 +30,7 @@ public class TableEditor extends AbstractCellEditor implements TableCellEditor {
     private final JRadioButton rdbtnNewRadioButton;
     private final JSpinner spinner;
     private DataWrapper currentData;
+    
 
     public TableEditor() {
     	
@@ -51,6 +52,11 @@ public class TableEditor extends AbstractCellEditor implements TableCellEditor {
         innerPanel.add(lblName);
 
         rdbtnNewRadioButton = new JRadioButton("");
+        rdbtnNewRadioButton.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent arg0) {
+        		currentData.setRadioButtonSelected(rdbtnNewRadioButton.isSelected());
+        	}
+        });
         rdbtnNewRadioButton.setBounds(11, 153, 34, 29);
         innerPanel.add(rdbtnNewRadioButton);
 
@@ -69,6 +75,10 @@ public class TableEditor extends AbstractCellEditor implements TableCellEditor {
         currentData.setRadioButtonSelected(rdbtnNewRadioButton.isSelected());
         return currentData;
     }
+    
+    public boolean getradbutton() {
+        return rdbtnNewRadioButton.isSelected();
+    }	
 
     @Override
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
@@ -80,6 +90,7 @@ public class TableEditor extends AbstractCellEditor implements TableCellEditor {
         lblIcon.setIcon(icon);
         lblName.setText(currentData.getTextField());
         spinner.setValue(currentData.getSpinnerValue());
+
         rdbtnNewRadioButton.setSelected(currentData.isRadioButtonSelected());
 
         panel.setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());

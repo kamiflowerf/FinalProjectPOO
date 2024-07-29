@@ -57,7 +57,6 @@ public class CustomTableModel extends AbstractTableModel {
         int dataIndex = rowIndex * 3 + columnIndex;
         if (dataIndex < data.size()) {
             data.set(dataIndex, (DataWrapper) value);
-            fireTableCellUpdated(rowIndex, columnIndex);
         }
     }
 }
