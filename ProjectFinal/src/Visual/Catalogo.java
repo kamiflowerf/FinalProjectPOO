@@ -21,8 +21,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
@@ -34,10 +32,12 @@ public class Catalogo extends JDialog {
     private static final long serialVersionUID = 1L;
     private final JPanel contentPanel = new JPanel();
     private CustomTableModel tableModel = new CustomTableModel();
-    private List<DataWrapper> selectedItems = new ArrayList<>();
-    public interface onSelectedComp{
-    	void getSelectedComp(String ID);
+    private ArrayList<Component> selectedComps = new ArrayList<Component>();
+    
+    public interface onSelectedComp {
+        void getSelectedComp(String ID);
     }
+    
     private JTable table;
     private JTable table2;
     private JTable table3;
@@ -45,7 +45,6 @@ public class Catalogo extends JDialog {
     private static JButton deleteBtn;
     private static JButton selectBtn;
     private static JButton addBtn;
- 
 
     public static void main(String[] args) {
         try {
@@ -59,7 +58,7 @@ public class Catalogo extends JDialog {
 
     public Catalogo(onSelectedComp compInterface) {
         setTitle("Catálogo");
-    	setBounds(100, 100, 800, 600);
+        setBounds(100, 100, 800, 600);
         setLocationRelativeTo(null);
         getContentPane().setLayout(new BorderLayout());
         contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -68,29 +67,28 @@ public class Catalogo extends JDialog {
         
         // Load initial data into the model
         loadComponents(tableModel, "Todos");
-
+        
         table = new JTable(tableModel);
         table.setRowHeight(200);
-        
         table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION); // Allow multiple selection
-
+/*
         table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent event) {
-                updateSelectedItems();
+                //getSelectedComps();
+             // TRY IT OUT NOW
+            	System.out.println("Seleccionados: ");
+            	for (int i = 0; i < selectedComps.size(); i++) {
+        			System.out.println(selectedComps.get(i).getId());
+        		}
             }
+            // END
         });
-
+*/
         table2 = new JTable(tableModel);
         table2.setRowHeight(200);
         table3 = new JTable(tableModel);
         table3.setRowHeight(200);
-        
-        /*
-        if(compInterface == null) {
-        	deleteBtn.setEnabled(true);
-        } else {
-        	selectBtn.setEnabled(true);
-        }*/
+
         // Initialize columns
         initializeColumns();
 
@@ -123,16 +121,21 @@ public class Catalogo extends JDialog {
 
         selectBtn = new JButton("Seleccionar");
         selectBtn.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		if(!selectedItems.isEmpty()) {
-        			for(DataWrapper dw : selectedItems) {
-        				compInterface.getSelectedComp(dw.getTextField());
-        			}
-        			dispose();
-        		}
-        	}
+            public void actionPerformed(ActionEvent e) {
+            	getSelectedComps();
+            	if (!selectedComps.isEmpty()) {
+                    for (Component comp : selectedComps) {
+                        System.out.println("Selected ID: " + comp.getId()); // Debugging line
+                        if (compInterface != null) {
+                            compInterface.getSelectedComp(comp.getId());
+                        }
+                    }
+                    dispose();
+                } else {
+                    JOptionPane.showMessageDialog(null, "No hay componentes seleccionados.");
+                }
+            }
         });
-        //selectBtn.setEnabled(false);
         selectBtn.setFont(new Font("Verdana", Font.PLAIN, 15));
         selectBtn.setPreferredSize(new Dimension(95, 30));
         selectBtn.setBorder(new RoundedBorder(Color.BLACK, 1, 25));
@@ -141,55 +144,62 @@ public class Catalogo extends JDialog {
 
         deleteBtn = new JButton("Eliminar");
         deleteBtn.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		if(!selectedItems.isEmpty()) {
-        			int option = JOptionPane.showConfirmDialog(null, "Seguro desea eliminar el/los componentes?", "Confirmación", JOptionPane.WARNING_MESSAGE);
-        			if(option == JOptionPane.YES_OPTION) {
-        				for(DataWrapper dw : selectedItems) {
-        					Administration.getInstance().deleteComponent(dw.getTextField());
-        				}
-        				deleteBtn.setEnabled(false);
-    					loadComponents(tableModel, "Todos");
-        			}
+            public void actionPerformed(ActionEvent e) {
+            	getSelectedComps();
+            	
+            	// TRY IT OUT NOW
+            	System.out.println("Seleccionados: ");
+            	for (int i = 0; i < selectedComps.size(); i++) {
+        			System.out.println(selectedComps.get(i).getId());
         		}
-        	}
+            
+            // END
+            	
+            	if (!selectedComps.isEmpty()) {
+                    int option = JOptionPane.showConfirmDialog(null, "Seguro desea eliminar el/los componentes?", "Confirmación", JOptionPane.WARNING_MESSAGE);
+                    if (option == JOptionPane.YES_OPTION) {
+                        for (Component comp: selectedComps) {
+                            Administration.getInstance().deleteComponent(comp.getId());
+                        }
+                        deleteBtn.setEnabled(false);
+                        loadComponents(tableModel, "Todos");
+                    }
+                }
+            }
         });
-        //deleteBtn.setEnabled(false);
         deleteBtn.setFont(new Font("Verdana", Font.PLAIN, 15));
         deleteBtn.setBorder(new RoundedBorder(Color.BLACK, 1, 25));
-        deleteBtn.setPreferredSize(new Dimension(75, 30)); 
+        deleteBtn.setPreferredSize(new Dimension(75, 30));
         deleteBtn.setActionCommand("OK");
         buttonsPanel.add(deleteBtn);
         getRootPane().setDefaultButton(deleteBtn);
 
         cancelButton = new JButton("Cancelar");
         cancelButton.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent arg0) {
-        		dispose();
-        	}
+            public void actionPerformed(ActionEvent arg0) {
+                dispose();
+            }
         });
-        
+
         addBtn = new JButton("Agregar");
         addBtn.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		RegComps newComp = new RegComps();
-        		newComp.setModal(true);
-        		newComp.setVisible(true);
-        		loadComponents(tableModel, "Todos");
-        	}
+            public void actionPerformed(ActionEvent e) {
+                RegComps newComp = new RegComps();
+                newComp.setModal(true);
+                newComp.setVisible(true);
+                loadComponents(tableModel, "Todos");
+            }
         });
         addBtn.setFont(new Font("Verdana", Font.PLAIN, 15));
-        addBtn.setBorder(new RoundedBorder(Color.BLACK,1,25));
+        addBtn.setBorder(new RoundedBorder(Color.BLACK, 1, 25));
         addBtn.setPreferredSize(new Dimension(80, 30));
         buttonsPanel.add(addBtn);
-        
+
         cancelButton.setFont(new Font("Verdana", Font.PLAIN, 15));
         cancelButton.setBorder(new RoundedBorder(Color.BLACK, 1, 25));
-        cancelButton.setPreferredSize(new Dimension(80, 30)); 
+        cancelButton.setPreferredSize(new Dimension(80, 30));
         cancelButton.setActionCommand("Cancel");
         buttonsPanel.add(cancelButton);
-    
-    
     }
 
     private void initializeColumns() {
@@ -228,13 +238,9 @@ public class Catalogo extends JDialog {
         }
 
         tableModel.setData(data);
-        
-        //deleteBtn.setEnabled(false);
-        //selectBtn.setEnabled(false);
-        //addBtn.setEnabled(true);
     }
 
-    private static String getComponentType(Component comp) {
+    public static String getComponentType(Component comp) {
         if (comp instanceof MotherBoard) {
             return "Tarjeta Madre";
         } else if (comp instanceof HardDisk) {
@@ -247,17 +253,73 @@ public class Catalogo extends JDialog {
             return "Otros";
         }
     }
-    
-    private void updateSelectedItems() {
-        int[] selectedRows = table.getSelectedRows();
-        selectedItems.clear();
-        for (int row : selectedRows) {
-        	selectedItems.add(tableModel.getData().get(row));
+
+    // Método para obtener todas las celdas cuyo JRadioButton está seleccionado
+    private List<DataWrapper> getSelectedRadioButtons() {
+    	
+    	List<DataWrapper> selectedItems = new ArrayList<>();
+    	
+    	System.out.println("row: " + tableModel.getRowCount() + "\n");
+    	System.out.println("colum: " + tableModel.getColumnCount() + "\n");
+        // Iterar sobre todas las filas
+        for (int row = 0; row < tableModel.getRowCount(); row++) {
+            // Iterar sobre todas las columnas
+            for (int column = 0; column < tableModel.getColumnCount(); column++) {
+                Object value = tableModel.getValueAt(row, column);
+                //if (value instanceof DataWrapper) {
+                    DataWrapper data = (DataWrapper) value;
+                    System.out.println("Status: " + data.isRadioButtonSelected() + "\n");
+                    if (data.isRadioButtonSelected()) {
+                    
+                        selectedItems.add(data);
+                    }
+                //}
+            }
         }
-    }
 
-    public List<DataWrapper> getSelectedItems() {
-    	return new ArrayList<>(selectedItems);
+        return selectedItems;
     }
+    
+    private void getSelectedComps(){	
+    	for(DataWrapper dw : getSelectedRadioButtons()) {
+    		if(dw != null && !selectedComps.contains(Administration.getInstance().searchComponentById(dw.getTextField())))
+    			selectedComps.add(Administration.getInstance().searchComponentById(dw.getTextField()));
+    	}
+    }
+    /*
+    public List<Component> updateSelectedItems() {
+        int[] selectedRows = table.getSelectedRows();
+        List<DataWrapper> selectedItems = getSelectedRadioButtons();
+        selectedItems.clear();
+        
+        for (int row : selectedRows) {
+            DataWrapper dw = tableModel.getData().get(row);
+            if(dw.isRadioButtonSelected()) {
+            	selectedItems.add(dw);
+                System.out.println("Selected Item ID: " + dw.getTextField()); // Debugging line
+            }
+        }
+        
+        List<Component> selectedComponents = new ArrayList<>();
+        for (DataWrapper dw : selectedItems) {
+            Component comp = Administration.getInstance().searchComponentById(dw.getTextField());
+            if (comp != null) {
+                selectedComponents.add(comp);
+            }
+        }
+        
+        
+        System.out.println("Todos los elementos seleccionados: " + selectedComponents);
+        return selectedComponents;
+    }*/
 
+    /*
+    // Método para obtener los IDs de los componentes seleccionados
+    public List<String> getSelectedComponentIds() {
+        List<String> selectedComponentIds = new ArrayList<>();
+        for (DataWrapper dw : selectedItems) {
+            selectedComponentIds.add(dw.getTextField());
+        }
+        return selectedComponentIds;
+    }*/
 }

@@ -7,6 +7,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
 
 import Visual.Catalogo.onSelectedComp;
 
@@ -14,6 +15,10 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
+
+import logic.*; 
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -25,6 +30,8 @@ public class Venta extends JDialog implements onSelectedComp{
 	private JTextField txtBillId;
 	private JTextField txtBillDate;
 	private JTextField txtTotal;
+	private JTable tableComponents;
+	private DefaultTableModel tableModel;
 
 	/**
 	 * Launch the application.
@@ -43,13 +50,13 @@ public class Venta extends JDialog implements onSelectedComp{
 	 * Create the dialog.
 	 */
 	public Venta() {
-		setTitle("Venta");
-		setBounds(100, 100, 668, 369);
-		setLocationRelativeTo(null);
-		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		contentPanel.setLayout(null);
+	    setTitle("Venta");
+	    setBounds(100, 100, 668, 369);
+	    setLocationRelativeTo(null);
+	    getContentPane().setLayout(new BorderLayout());
+	    contentPanel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+	    getContentPane().add(contentPanel, BorderLayout.CENTER);
+	    contentPanel.setLayout(null);
 		{
 			JLabel lblNewLabel = new JLabel("ID Cliente");
 			lblNewLabel.setFont(new Font("Verdana", Font.BOLD, 14));
@@ -71,22 +78,34 @@ public class Venta extends JDialog implements onSelectedComp{
 			contentPanel.add(lblComponentes);
 		}
 		{
-			JPanel pnlComponents = new JPanel();
-			pnlComponents.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			pnlComponents.setBounds(25, 158, 320, 140);
-			contentPanel.add(pnlComponents);
-			pnlComponents.setLayout(new BorderLayout(0, 0));
+		    JPanel pnlComponents = new JPanel();
+		    pnlComponents.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		    pnlComponents.setBounds(25, 158, 320, 140);
+		    contentPanel.add(pnlComponents);
+		    pnlComponents.setLayout(new BorderLayout(0, 0));
 			{
-				JScrollPane scrollPane = new JScrollPane();
-				pnlComponents.add(scrollPane, BorderLayout.CENTER);
+			    JScrollPane scrollPane = new JScrollPane();
+			    pnlComponents.add(scrollPane, BorderLayout.CENTER);
+			    
+			    tableModel = new DefaultTableModel(new Object[]{"ID", "Tipo de Componente", "Cantidad"}, 0);
+			    tableComponents = new JTable(tableModel);
+			    scrollPane.setViewportView(tableComponents);
 			}
 		}
 		{
-			JButton btnSearchComp = new JButton("Buscar");
-			btnSearchComp.setFont(new Font("Verdana", Font.PLAIN, 14));
-			btnSearchComp.setBounds(248, 126, 97, 25);
-			btnSearchComp.setBorder(new RoundedBorder(Color.BLACK,1,20));
-			contentPanel.add(btnSearchComp);
+		    JButton btnSearchComp = new JButton("Buscar");
+		    btnSearchComp.addActionListener(new ActionListener() {
+		        public void actionPerformed(ActionEvent e) {
+		            Catalogo catalogo = new Catalogo(Venta.this); // Pasar 'this' para implementar la interfaz
+		            catalogo.setModal(true);
+		            catalogo.setVisible(true);
+		            catalogo.setResizable(false);
+		        }
+		    });
+		    btnSearchComp.setFont(new Font("Verdana", Font.PLAIN, 14));
+		    btnSearchComp.setBounds(248, 126, 97, 25);
+		    btnSearchComp.setBorder(new RoundedBorder(Color.BLACK, 1, 20));
+		    contentPanel.add(btnSearchComp);
 		}
 		{
 			JButton btnSearchClient = new JButton("Buscar");
@@ -167,8 +186,16 @@ public class Venta extends JDialog implements onSelectedComp{
 
 	@Override
 	public void getSelectedComp(String ID) {
-		// TODO Auto-generated method stub
-		
+	    // Buscar el componente por ID
+	    Component comp = Administration.getInstance().searchComponentById(ID);
+	    
+	    if (comp != null) {
+	        String componentType = Catalogo.getComponentType(comp);
+	        int quantity = comp.getUnits();
+	        
+	        // Agregar una nueva fila a la tabla
+	        tableModel.addRow(new Object[]{ID, componentType, quantity});
+	    }
 	}
 
 }

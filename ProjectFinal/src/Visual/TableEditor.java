@@ -13,6 +13,8 @@ import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 
 //import Visual.Catalogo.DataWrapper;
@@ -30,6 +32,7 @@ public class TableEditor extends AbstractCellEditor implements TableCellEditor {
     private DataWrapper currentData;
 
     public TableEditor() {
+    	
         panel = new JPanel();
         panel.setLayout(new BorderLayout());
         panel.setPreferredSize(new Dimension(227, 194));
