@@ -68,51 +68,56 @@ public class RegUser extends JDialog {
 		setBounds(100, 100, 601, 401);
 		setLocationRelativeTo(null);
 		getContentPane().setLayout(new BorderLayout());
+		contentPanel.setBackground(new Color(70, 130, 180));
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(new BorderLayout(0, 0));
 		{
 			JPanel panel = new JPanel();
+			panel.setBorder(new RoundedBorder(Color.BLACK, 1, 20));
+			panel.setBackground(new Color(176, 196, 222));
 			contentPanel.add(panel, BorderLayout.CENTER);
 			panel.setLayout(null);
 			
 			JLabel lblRegUser = new JLabel("Informaci\u00F3n del usuario");
 			lblRegUser.setFont(new Font("Verdana", Font.BOLD, 14));
-			lblRegUser.setBounds(195, 33, 190, 16);
+			lblRegUser.setBounds(197, 33, 190, 16);
 			panel.add(lblRegUser);
 			
 			JLabel lblUserName = new JLabel("Usuario:");
-			lblUserName.setFont(new Font("Verdana", Font.PLAIN, 14));
-			lblUserName.setBounds(126, 71, 77, 16);
+			lblUserName.setFont(new Font("Verdana", Font.PLAIN, 15));
+			lblUserName.setBounds(124, 71, 63, 16);
 			panel.add(lblUserName);
 			
 			JLabel lblPassword = new JLabel("Contrase\u00F1a:");
-			lblPassword.setFont(new Font("Verdana", Font.PLAIN, 14));
-			lblPassword.setBounds(126, 181, 98, 16);
+			lblPassword.setFont(new Font("Verdana", Font.PLAIN, 15));
+			lblPassword.setBounds(109, 191, 93, 16);
 			panel.add(lblPassword);
 			
 			JLabel lblUserType = new JLabel("Posici\u00F3n: ");
-			lblUserType.setFont(new Font("Verdana", Font.PLAIN, 14));
-			lblUserType.setBounds(373, 71, 77, 16);
+			lblUserType.setFont(new Font("Verdana", Font.PLAIN, 15));
+			lblUserType.setBounds(370, 71, 72, 16);
 			panel.add(lblUserType);
 			
 			JLabel lblPasswrdConfirmation = new JLabel("Confirmar contrase\u00F1a:");
-			lblPasswrdConfirmation.setFont(new Font("Verdana", Font.PLAIN, 14));
-			lblPasswrdConfirmation.setBounds(326, 181, 178, 16);
+			lblPasswrdConfirmation.setFont(new Font("Verdana", Font.PLAIN, 15));
+			lblPasswrdConfirmation.setBounds(320, 191, 173, 16);
 			panel.add(lblPasswrdConfirmation);
 			
 			txt_Username = new JTextField();
-			txt_Username.setBounds(102, 115, 139, 22);
+			txt_Username.setBounds(86, 115, 139, 22);
 			panel.add(txt_Username);
 			txt_Username.setColumns(10);
 			
 			cbxUserType = new JComboBox<String>();
-			cbxUserType.setFont(new Font("Verdana", Font.PLAIN, 14));
+			cbxUserType.setFont(new Font("Verdana", Font.PLAIN, 15));
 			cbxUserType.setModel(new DefaultComboBoxModel<String>(new String[] {"<Seleci\u00F3n>", "Administrador", "Vendedor"}));
-			cbxUserType.setBounds(343, 115, 139, 22);
+			cbxUserType.setBounds(337, 115, 139, 22);
 			panel.add(cbxUserType);
 			
 			chckbxShowPassword = new JCheckBox("Mostrar contrase\u00F1a");
+			chckbxShowPassword.setFont(new Font("Verdana", Font.PLAIN, 14));
+			chckbxShowPassword.setBackground(new Color(176, 196, 222));
 			chckbxShowPassword.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					
@@ -130,23 +135,24 @@ public class RegUser extends JDialog {
                     }
 				}
 			});
-			chckbxShowPassword.setBounds(95, 250, 156, 25);
+			chckbxShowPassword.setBounds(73, 250, 165, 25);
 			panel.add(chckbxShowPassword);
 			
 			passwordField = new JPasswordField();
 			passwordField.setFont(new Font("Verdana", Font.PLAIN, 14));
-			passwordField.setBounds(343, 219, 139, 22);
+			passwordField.setBounds(315, 219, 182, 22);
 			panel.add(passwordField);
 			
 			lblWrongPassword = new JLabel("Las contrase\u00F1as no coinciden!");
 			lblWrongPassword.setForeground(Color.RED);
 			lblWrongPassword.setFont(new Font("Verdana", Font.BOLD, 12));
-			lblWrongPassword.setBounds(326, 254, 212, 16);
+			lblWrongPassword.setBounds(307, 254, 199, 16);
 			lblWrongPassword.setVisible(false);
 			panel.add(lblWrongPassword);
 			
 			passwordField_originalPassword = new JPasswordField();
-			passwordField_originalPassword.setBounds(102, 220, 139, 22);
+			passwordField_originalPassword.setFont(new Font("Verdana", Font.PLAIN, 15));
+			passwordField_originalPassword.setBounds(64, 220, 182, 22);
 			panel.add(passwordField_originalPassword);
 			
 			txtPassword = new JTextField();
@@ -157,36 +163,39 @@ public class RegUser extends JDialog {
 			lblUserEmptyWarning = new JLabel("El campo no puede estar vac\u00EDo!");
 			lblUserEmptyWarning.setForeground(Color.RED);
 			lblUserEmptyWarning.setFont(new Font("Verdana", Font.BOLD, 12));
-			lblUserEmptyWarning.setBounds(65, 150, 212, 16);
+			lblUserEmptyWarning.setBounds(49, 150, 212, 16);
 			lblUserEmptyWarning.setVisible(false);
 			panel.add(lblUserEmptyWarning);
 			
 			lblSelectionWarning = new JLabel("Debe seleccionar una opci\u00F3n!");
 			lblSelectionWarning.setForeground(Color.RED);
 			lblSelectionWarning.setFont(new Font("Verdana", Font.BOLD, 12));
-			lblSelectionWarning.setBounds(326, 150, 212, 16);
+			lblSelectionWarning.setBounds(307, 150, 199, 16);
 			lblSelectionWarning.setVisible(false);
 			panel.add(lblSelectionWarning);
 			
 			lblEmptyPassword = new JLabel("El campo no puede estar vac\u00EDo!");
 			lblEmptyPassword.setForeground(Color.RED);
 			lblEmptyPassword.setFont(new Font("Verdana", Font.BOLD, 12));
-			lblEmptyPassword.setBounds(65, 283, 212, 16);
+			lblEmptyPassword.setBounds(49, 283, 212, 16);
 			lblEmptyPassword.setVisible(false);
 			panel.add(lblEmptyPassword);
 			
 			lblPasswordConfirmationWarning = new JLabel("El campo no puede estar vac\u00EDo!");
 			lblPasswordConfirmationWarning.setForeground(Color.RED);
 			lblPasswordConfirmationWarning.setFont(new Font("Verdana", Font.BOLD, 12));
-			lblPasswordConfirmationWarning.setBounds(326, 283, 212, 16);
+			lblPasswordConfirmationWarning.setBounds(304, 283, 205, 16);
 			lblPasswordConfirmationWarning.setVisible(false);
 			panel.add(lblPasswordConfirmationWarning);
 		
 			JPanel buttonPane = new JPanel();
+			buttonPane.setBackground(new Color(70, 130, 180));
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton btn_regUser = new JButton("Registrar");
+				btn_regUser.setFont(new Font("Verdana", Font.PLAIN, 15));
+				btn_regUser.setBackground(new Color(230, 230, 250));
 				btn_regUser.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						
@@ -220,6 +229,8 @@ public class RegUser extends JDialog {
 			}
 			{
 				JButton cancelButton = new JButton("Cancelar");
+				cancelButton.setFont(new Font("Verdana", Font.PLAIN, 15));
+				cancelButton.setBackground(new Color(230, 230, 250));
 				cancelButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
 						dispose();

@@ -105,32 +105,38 @@ public class RegComps extends JDialog implements onSelectedComp{
 		setBounds(100, 100, 772, 552);
 		setLocationRelativeTo(null);
 		getContentPane().setLayout(new BorderLayout());
+		contentPanel.setBackground(new Color(176, 196, 222));
 		contentPanel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(new BorderLayout(0, 0));
 		{
 			tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+			tabbedPane.setBackground(new Color(70, 95, 115));
 			tabbedPane.setFont(new Font("Verdana", Font.PLAIN,15));
 			
 			contentPanel.add(tabbedPane, BorderLayout.CENTER);
 			{
 				pnlComponents = new JPanel();
+				pnlComponents.setBackground(new Color(70, 130, 180));
 				pnlComponents.setBorder(new RoundedBorder(Color.BLACK, 1, 5));
 				tabbedPane.addTab("Componente", null, pnlComponents, null);
 				pnlComponents.setLayout(null);
 				
 				JLabel lblNewLabel = new JLabel("Componente");
+				lblNewLabel.setForeground(new Color(255, 255, 255));
 				lblNewLabel.setFont(new Font("Verdana", Font.BOLD, 15));
 				lblNewLabel.setBounds(31, 27, 114, 16);
 				pnlComponents.add(lblNewLabel);
 				
 				JPanel pnlCompSelect = new JPanel();
+				pnlCompSelect.setBackground(new Color(230, 230, 250));
 				pnlCompSelect.setBounds(12, 50, 328, 99);
 				pnlComponents.add(pnlCompSelect);
 				pnlCompSelect.setBorder(new RoundedBorder(Color.BLACK,1,20));
 				pnlCompSelect.setLayout(null);
 				
 				rdbtnMotherBoard = new JRadioButton("Tarjeta Madre");
+				rdbtnMotherBoard.setBackground(new Color(230, 230, 250));
 				rdbtnMotherBoard.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						rdbtnMotherBoard.setSelected(true);
@@ -150,6 +156,7 @@ public class RegComps extends JDialog implements onSelectedComp{
 				pnlCompSelect.add(rdbtnMotherBoard);
 				
 				rdbtnMicro = new JRadioButton("Microprocesador");
+				rdbtnMicro.setBackground(new Color(230, 230, 250));
 				rdbtnMicro.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						rdbtnMotherBoard.setSelected(false);
@@ -168,6 +175,7 @@ public class RegComps extends JDialog implements onSelectedComp{
 				pnlCompSelect.add(rdbtnMicro);
 				
 				rdbtnRAM = new JRadioButton("Memoria RAM");
+				rdbtnRAM.setBackground(new Color(230, 230, 250));
 				rdbtnRAM.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						rdbtnMotherBoard.setSelected(false);
@@ -186,6 +194,7 @@ public class RegComps extends JDialog implements onSelectedComp{
 				pnlCompSelect.add(rdbtnRAM);
 				
 				rdbtnHardDisk = new JRadioButton("Disco Duro");
+				rdbtnHardDisk.setBackground(new Color(230, 230, 250));
 				rdbtnHardDisk.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						rdbtnMotherBoard.setSelected(false);
@@ -204,11 +213,13 @@ public class RegComps extends JDialog implements onSelectedComp{
 				pnlCompSelect.add(rdbtnHardDisk);
 				
 				JLabel lblDatos = new JLabel("Datos");
+				lblDatos.setForeground(new Color(255, 255, 255));
 				lblDatos.setFont(new Font("Verdana", Font.BOLD, 15));
 				lblDatos.setBounds(31, 175, 59, 16);
 				pnlComponents.add(lblDatos);
 				
 				JPanel infoPnl = new JPanel();
+				infoPnl.setBackground(new Color(230, 230, 250));
 				infoPnl.setBorder(new RoundedBorder(Color.BLACK,1,20));
 				infoPnl.setBounds(12, 200, 719, 215);
 				pnlComponents.add(infoPnl);
@@ -261,6 +272,7 @@ public class RegComps extends JDialog implements onSelectedComp{
 				infoPnl.add(spnUnits);
 				
 				pnlMB = new JPanel();
+				pnlMB.setBackground(new Color(230, 230, 250));
 				pnlMB.setBounds(255, 13, 452, 168);
 				infoPnl.add(pnlMB);
 				pnlMB.setLayout(null);
@@ -304,31 +316,37 @@ public class RegComps extends JDialog implements onSelectedComp{
 				pnlMB.add(lblConexionesDeDisco);
 				
 				JPanel panel_1 = new JPanel();
+				panel_1.setBackground(new Color(230, 230, 250));
 				panel_1.setBounds(218, 47, 222, 85);
 				pnlMB.add(panel_1);
 				panel_1.setLayout(null);
 				
 				chckbxIdeMB = new JCheckBox("IDE");
+				chckbxIdeMB.setBackground(new Color(230, 230, 250));
 				chckbxIdeMB.setFont(new Font("Verdana", Font.PLAIN, 15));
 				chckbxIdeMB.setBounds(8, 11, 74, 25);
 				panel_1.add(chckbxIdeMB);
 				
 				chckbxSataMB = new JCheckBox("SATA");
+				chckbxSataMB.setBackground(new Color(230, 230, 250));
 				chckbxSataMB.setFont(new Font("Verdana", Font.PLAIN, 15));
 				chckbxSataMB.setBounds(8, 47, 74, 25);
 				panel_1.add(chckbxSataMB);
 				
 				chckbxSata2MB = new JCheckBox("SATA-2");
+				chckbxSata2MB.setBackground(new Color(230, 230, 250));
 				chckbxSata2MB.setFont(new Font("Verdana", Font.PLAIN, 15));
 				chckbxSata2MB.setBounds(101, 11, 101, 25);
 				panel_1.add(chckbxSata2MB);
 				
 				chckbxSata3MB = new JCheckBox("SATA-3");
+				chckbxSata3MB.setBackground(new Color(230, 230, 250));
 				chckbxSata3MB.setFont(new Font("Verdana", Font.PLAIN, 15));
 				chckbxSata3MB.setBounds(101, 47, 101, 25);
 				panel_1.add(chckbxSata3MB);
 				
 				pnlRAM = new JPanel();
+				pnlRAM.setBackground(new Color(230, 230, 250));
 				pnlRAM.setBounds(255, 13, 452, 168);
 				pnlRAM.setVisible(false);
 				infoPnl.add(pnlRAM);
@@ -362,6 +380,7 @@ public class RegComps extends JDialog implements onSelectedComp{
 				txtTypeRAM.setColumns(10);
 				
 				pnlHardDisk = new JPanel();
+				pnlHardDisk.setBackground(new Color(230, 230, 250));
 				pnlHardDisk.setBounds(255, 13, 452, 168);
 				pnlHardDisk.setVisible(false);
 				infoPnl.add(pnlHardDisk);
@@ -402,6 +421,7 @@ public class RegComps extends JDialog implements onSelectedComp{
 				cbxConType = new JComboBox<String>();
 				cbxConType.setModel(new DefaultComboBoxModel<String>(new String[] {"<Seleccionar>", "IDE", "SATA", "SATA-2", "SATA-3"}));
 				cbxConType.setFont(new Font("Verdana", Font.PLAIN, 15));
+				cbxConType.setBackground(new Color(230,230,250));
 				cbxConType.setBounds(107, 120, 139, 22);
 				pnlHardDisk.add(cbxConType);
 				
@@ -417,6 +437,7 @@ public class RegComps extends JDialog implements onSelectedComp{
 				infoPnl.add(spnSerie);
 				
 				pnlMicroP = new JPanel();
+				pnlMicroP.setBackground(new Color(230, 230, 250));
 				pnlMicroP.setBounds(255, 13, 452, 168);
 				infoPnl.add(pnlMicroP);
 				pnlMicroP.setVisible(false);
@@ -461,7 +482,7 @@ public class RegComps extends JDialog implements onSelectedComp{
 				pnlMicroP.add(spnSpeedMicro);
 				
 				JPanel iconPane = new JPanel();
-				iconPane.setBackground(new Color(176, 224, 230));
+				iconPane.setBackground(new Color(230, 230, 250));
 				iconPane.setBorder(new RoundedBorder(Color.BLACK,1,20));
 				iconPane.setBounds(399, 27, 154, 160);
 				pnlComponents.add(iconPane);
@@ -473,6 +494,7 @@ public class RegComps extends JDialog implements onSelectedComp{
 				iconPane.add(lblIcon);
 				
 				JButton btnCancel = new JButton("Cancelar");
+				btnCancel.setBackground(new Color(230, 230, 250));
 				btnCancel.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
 						dispose();
@@ -485,6 +507,7 @@ public class RegComps extends JDialog implements onSelectedComp{
 				pnlComponents.add(btnCancel);
 				
 				JButton btnReg = new JButton("Registrar");
+				btnReg.setBackground(new Color(230, 230, 250));
 				btnReg.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
 						boolean empty = isFieldEmpty();
@@ -510,43 +533,51 @@ public class RegComps extends JDialog implements onSelectedComp{
 			}
 			{
 				pnlCombos = new JPanel();
+				pnlCombos.setBackground(new Color(70, 130, 180));
 				pnlCombos.setBorder(new RoundedBorder(Color.BLACK,1,5));
 				tabbedPane.addTab("Combo", null, pnlCombos, null);
 				pnlCombos.setLayout(null);
 				
 				JLabel lblNewLabel_1 = new JLabel("ID:");
-				lblNewLabel_1.setFont(new Font("Verdana", Font.PLAIN, 15));
-				lblNewLabel_1.setBounds(176, 51, 23, 16);
+				lblNewLabel_1.setForeground(new Color(255, 255, 255));
+				lblNewLabel_1.setFont(new Font("Verdana", Font.BOLD, 15));
+				lblNewLabel_1.setBounds(173, 51, 26, 16);
 				pnlCombos.add(lblNewLabel_1);
 				
 				JLabel lblNombre = new JLabel("Nombre:");
-				lblNombre.setFont(new Font("Verdana", Font.PLAIN, 15));
-				lblNombre.setBounds(132, 123, 67, 16);
+				lblNombre.setForeground(new Color(255, 255, 255));
+				lblNombre.setFont(new Font("Verdana", Font.BOLD, 15));
+				lblNombre.setBounds(126, 123, 73, 16);
 				pnlCombos.add(lblNombre);
 				
 				JLabel lblDescuento = new JLabel("Descuento:");
-				lblDescuento.setFont(new Font("Verdana", Font.PLAIN, 15));
-				lblDescuento.setBounds(113, 204, 86, 16);
+				lblDescuento.setForeground(new Color(255, 255, 255));
+				lblDescuento.setFont(new Font("Verdana", Font.BOLD, 15));
+				lblDescuento.setBounds(107, 204, 92, 16);
 				pnlCombos.add(lblDescuento);
 				
 				JLabel lblComponentes = new JLabel("Componentes:");
-				lblComponentes.setFont(new Font("Verdana", Font.PLAIN, 15));
-				lblComponentes.setBounds(87, 294, 112, 16);
+				lblComponentes.setForeground(new Color(255, 255, 255));
+				lblComponentes.setFont(new Font("Verdana", Font.BOLD, 15));
+				lblComponentes.setBounds(80, 294, 119, 16);
 				pnlCombos.add(lblComponentes);
 				
 				JPanel panel = new JPanel();
 				panel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-				panel.setBounds(87, 315, 373, 138);
+				panel.setBounds(80, 315, 373, 138);
 				pnlCombos.add(panel);
 				panel.setLayout(new BorderLayout(0, 0));
 				
 				JScrollPane scrollPane = new JScrollPane();
 				tableModel = new DefaultTableModel(new Object[]{"ID", "Tipo", "Modelo"}, 0);
 			    tableComponents = new JTable(tableModel);
+			    tableComponents.setBackground(new Color(230,230,250));
+			    tableComponents.setFont(new Font("Verdana", Font.PLAIN, 14));
 			    scrollPane.setViewportView(tableComponents);
 				panel.add(scrollPane, BorderLayout.CENTER);
 				
 				btnSearch = new JButton("Buscar");
+				btnSearch.setBackground(new Color(230, 230, 250));
 				btnSearch.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						Catalogo cat = new Catalogo(RegComps.this);
@@ -556,13 +587,13 @@ public class RegComps extends JDialog implements onSelectedComp{
 					}
 				});
 				btnSearch.setFont(new Font("Verdana", Font.PLAIN, 15));
-				btnSearch.setBounds(363, 285, 97, 25);
+				btnSearch.setBounds(356, 285, 97, 25);
 				btnSearch.setBorder(new RoundedBorder(Color.BLACK,1,25));
 				pnlCombos.add(btnSearch);
 				
 				txtIdCombo = new JTextField();
+				txtIdCombo.setEditable(false);
 				txtIdCombo.setFont(new Font("Verdana", Font.PLAIN, 15));
-				txtIdCombo.setEnabled(false);
 				txtIdCombo.setText(IdGenerator.generateId());
 				txtIdCombo.setBounds(215, 49, 116, 22);
 				pnlCombos.add(txtIdCombo);
@@ -571,7 +602,7 @@ public class RegComps extends JDialog implements onSelectedComp{
 				txtComboName = new JTextField();
 				txtComboName.setFont(new Font("Verdana", Font.PLAIN, 15));
 				txtComboName.setColumns(10);
-				txtComboName.setBounds(215, 121, 245, 22);
+				txtComboName.setBounds(215, 121, 238, 22);
 				pnlCombos.add(txtComboName);
 				
 				spnDiscount = new JSpinner();
@@ -586,6 +617,7 @@ public class RegComps extends JDialog implements onSelectedComp{
 				pnlCombos.add(lblNewLabel_3);
 				
 				JButton btnRegCombo = new JButton("Registrar");
+				btnRegCombo.setBackground(new Color(230, 230, 250));
 				btnRegCombo.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						boolean empty = isFieldEmpty();
@@ -602,6 +634,7 @@ public class RegComps extends JDialog implements onSelectedComp{
 				pnlCombos.add(btnRegCombo);
 				
 				JButton btnCancelCombo = new JButton("Cancelar");
+				btnCancelCombo.setBackground(new Color(230, 230, 250));
 				btnCancelCombo.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
 						dispose();
@@ -613,7 +646,7 @@ public class RegComps extends JDialog implements onSelectedComp{
 				pnlCombos.add(btnCancelCombo);
 				
 				JPanel pnlComboIcon = new JPanel();
-				pnlComboIcon.setBackground(new Color(176, 224, 230));
+				pnlComboIcon.setBackground(new Color(230, 230, 250));
 				pnlComboIcon.setBounds(498, 27, 216, 197);
 				pnlComboIcon.setBorder(new RoundedBorder(Color.BLACK,1,15));
 				pnlCombos.add(pnlComboIcon);
@@ -793,9 +826,18 @@ public class RegComps extends JDialog implements onSelectedComp{
 		    
 	    if (comp != null) {
 	        String componentType = Catalogo.getComponentType(comp);		        
-	        int quantity = comp.getUnits();        
+	        String model = "";
+	        if(comp instanceof MotherBoard) {
+	        	model = ((MotherBoard) comp).getModel();
+	        } else if(comp instanceof HardDisk) {
+	        	model = ((HardDisk) comp).getModel();
+	        } else if(comp instanceof MicroProcessor) {
+	        	model = ((MicroProcessor) comp).getModel();
+	        } else if(comp instanceof RAM) {
+	        	model = ((RAM) comp).getType();
+	        }
 		    // Agregar una nueva fila a la tabla
-		    tableModel.addRow(new Object[]{ID, componentType, quantity});
+		    tableModel.addRow(new Object[]{ID, componentType, model});
 	    }
 	}
 }

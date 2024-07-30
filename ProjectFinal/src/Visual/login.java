@@ -92,31 +92,37 @@ public class login extends JFrame {
 		setLocationRelativeTo(null);
 
 		contentPane = new JPanel();
+		contentPane.setBackground(new Color(51, 51, 51));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
 		
 		JPanel panel = new JPanel();
+		panel.setBackground(new Color(51, 51, 51));
 		contentPane.add(panel, BorderLayout.CENTER);
 		panel.setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("Bienvenido!");
+		lblNewLabel.setForeground(new Color(255, 255, 255));
 		lblNewLabel.setFont(new Font("Verdana", Font.PLAIN, 27));
 		lblNewLabel.setBounds(196, 173, 159, 29);
 		panel.add(lblNewLabel);
 		
 		JPanel panel_1 = new JPanel();
-		panel_1.setBorder(new RoundedBorder(Color.BLACK, 1, 15));
+		panel_1.setBackground(new Color(70, 90, 105));
+		panel_1.setBorder(new RoundedBorder(Color.WHITE, 1, 15));
 		panel_1.setBounds(71, 264, 409, 158);
 		panel.add(panel_1);
 		panel_1.setLayout(null);
 		
 		JLabel label = new JLabel("Usuario:");
+		label.setForeground(new Color(248, 248, 255));
 		label.setFont(new Font("Verdana", Font.PLAIN, 17));
 		label.setBounds(45, 42, 72, 16);
 		panel_1.add(label);
 		
 		JLabel label_1 = new JLabel("Contrase\u00F1a:");
+		label_1.setForeground(new Color(248, 248, 255));
 		label_1.setFont(new Font("Verdana", Font.PLAIN, 17));
 		label_1.setBounds(12, 100, 105, 16);
 		panel_1.add(label_1);
@@ -133,6 +139,8 @@ public class login extends JFrame {
 		panel_1.add(password);
 		
 		JButton btnLogin = new JButton("Login");
+		btnLogin.setForeground(new Color(248, 248, 255));
+		btnLogin.setBackground(new Color(70, 90, 105));
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				char[] passTemp = password.getPassword();
@@ -149,8 +157,8 @@ public class login extends JFrame {
 				}
 			}
 		});
-		btnLogin.setBorder(new RoundedBorder(Color.BLACK,1,25));
-		btnLogin.setFont(new Font("Verdana", Font.PLAIN, 15));
+		btnLogin.setBorder(new RoundedBorder(Color.WHITE,1,25));
+		btnLogin.setFont(new Font("Verdana", Font.PLAIN, 16));
 		btnLogin.setBounds(383, 447, 97, 25);
 		panel.add(btnLogin);
 	}
