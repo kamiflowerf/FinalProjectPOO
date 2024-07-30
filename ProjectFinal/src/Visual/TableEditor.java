@@ -11,10 +11,13 @@ import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
+
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
 
 
 //import Visual.Catalogo.DataWrapper;
@@ -26,10 +29,11 @@ public class TableEditor extends AbstractCellEditor implements TableCellEditor {
 	private static final long serialVersionUID = 1L;
 	private final JPanel panel;
     private final JLabel lblIcon;
-    private final JLabel lblName;
+    private final JLabel lblId;
     private final JRadioButton rdbtnNewRadioButton;
     private final JSpinner spinner;
     private DataWrapper currentData;
+    private JLabel lblName;
     
 
     public TableEditor() {
@@ -46,10 +50,10 @@ public class TableEditor extends AbstractCellEditor implements TableCellEditor {
         lblIcon.setBounds(70, 16, 79, 63);
         innerPanel.add(lblIcon);
 
-        lblName = new JLabel();
-        lblName.setFont(new Font("Verdana", Font.PLAIN, 15));
-        lblName.setBounds(41, 85, 146, 26);
-        innerPanel.add(lblName);
+        lblId = new JLabel();
+        lblId.setFont(new Font("Verdana", Font.PLAIN, 15));
+        lblId.setBounds(41, 128, 146, 26);
+        innerPanel.add(lblId);
 
         rdbtnNewRadioButton = new JRadioButton("");
         rdbtnNewRadioButton.addActionListener(new ActionListener() {
@@ -61,16 +65,28 @@ public class TableEditor extends AbstractCellEditor implements TableCellEditor {
         innerPanel.add(rdbtnNewRadioButton);
 
         spinner = new JSpinner();
+        spinner.addChangeListener(new ChangeListener() {
+        	public void stateChanged(ChangeEvent e) {
+        		currentData.setSpinnerValue((int)spinner.getValue());
+        		currentData.updateData();
+        	}
+        });
         spinner.setFont(new Font("Verdana", Font.PLAIN, 15));
-        spinner.setBounds(41, 126, 146, 26);
+        spinner.setBounds(41, 156, 146, 26);
         innerPanel.add(spinner);
 
         panel.add(innerPanel, BorderLayout.CENTER);
+        
+        lblName = new JLabel();
+        lblName.setFont(new Font("Verdana", Font.PLAIN, 15));
+        lblName.setBounds(41, 92, 146, 26);
+        innerPanel.add(lblName);
     }
 
     @Override
     public Object getCellEditorValue() {
-        currentData.setTextField(lblName.getText());
+        currentData.setTextField(lblId.getText());
+        currentData.setTxtName(lblName.getText());
         currentData.setSpinnerValue((Integer) spinner.getValue());
         currentData.setRadioButtonSelected(rdbtnNewRadioButton.isSelected());
         return currentData;
@@ -88,9 +104,10 @@ public class TableEditor extends AbstractCellEditor implements TableCellEditor {
         Image scaledImg = img.getScaledInstance(lblIcon.getWidth(), lblIcon.getHeight(), Image.SCALE_SMOOTH);
         ImageIcon icon = new ImageIcon(scaledImg);
         lblIcon.setIcon(icon);
-        lblName.setText(currentData.getTextField());
+        lblId.setText(currentData.getTextField());
+        lblName.setText(currentData.getTxtName());
         spinner.setValue(currentData.getSpinnerValue());
-
+        
         rdbtnNewRadioButton.setSelected(currentData.isRadioButtonSelected());
 
         panel.setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());

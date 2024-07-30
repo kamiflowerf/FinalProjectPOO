@@ -5,17 +5,15 @@ import java.awt.BorderLayout;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
 
-import logic.Administration;
-import logic.HardDisk;
-import logic.IdGenerator;
-import logic.MicroProcessor;
-import logic.MotherBoard;
-import logic.RAM;
+import logic.*;
+import Visual.Catalogo.onSelectedComp;
 
 import java.awt.Color;
 
 import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -36,7 +34,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JScrollPane;
 
-public class RegComps extends JDialog {
+public class RegComps extends JDialog implements onSelectedComp{
 
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
@@ -73,7 +71,15 @@ public class RegComps extends JDialog {
 	private JComboBox<String> cbxConType;
 	private JButton btnSearch;
 	private JTextField txtIdCombo;
-	private JTextField textField;
+	private JTextField txtComboName;
+	private JTable tableComponents;
+	private DefaultTableModel tableModel;
+	private JTabbedPane tabbedPane;
+	private JPanel pnlComponents;
+	private JPanel pnlCombos;
+	private JSpinner spnDiscount;
+	private JLabel lblComboIcon;
+	private JLabel lblComboWarning;
 
 	/**
 	 * Launch the application.
@@ -103,12 +109,12 @@ public class RegComps extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(new BorderLayout(0, 0));
 		{
-			JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+			tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 			tabbedPane.setFont(new Font("Verdana", Font.PLAIN,15));
 			
 			contentPanel.add(tabbedPane, BorderLayout.CENTER);
 			{
-				JPanel pnlComponents = new JPanel();
+				pnlComponents = new JPanel();
 				pnlComponents.setBorder(new RoundedBorder(Color.BLACK, 1, 5));
 				tabbedPane.addTab("Componente", null, pnlComponents, null);
 				pnlComponents.setLayout(null);
@@ -503,7 +509,7 @@ public class RegComps extends JDialog {
 				pnlComponents.add(lblWarning);
 			}
 			{
-				JPanel pnlCombos = new JPanel();
+				pnlCombos = new JPanel();
 				pnlCombos.setBorder(new RoundedBorder(Color.BLACK,1,5));
 				tabbedPane.addTab("Combo", null, pnlCombos, null);
 				pnlCombos.setLayout(null);
@@ -535,9 +541,20 @@ public class RegComps extends JDialog {
 				panel.setLayout(new BorderLayout(0, 0));
 				
 				JScrollPane scrollPane = new JScrollPane();
+				tableModel = new DefaultTableModel(new Object[]{"ID", "Tipo", "Modelo"}, 0);
+			    tableComponents = new JTable(tableModel);
+			    scrollPane.setViewportView(tableComponents);
 				panel.add(scrollPane, BorderLayout.CENTER);
 				
 				btnSearch = new JButton("Buscar");
+				btnSearch.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						Catalogo cat = new Catalogo(RegComps.this);
+						cat.setModal(true);
+						cat.setVisible(true);
+						cat.setResizable(false);
+					}
+				});
 				btnSearch.setFont(new Font("Verdana", Font.PLAIN, 15));
 				btnSearch.setBounds(363, 285, 97, 25);
 				btnSearch.setBorder(new RoundedBorder(Color.BLACK,1,25));
@@ -551,17 +568,17 @@ public class RegComps extends JDialog {
 				pnlCombos.add(txtIdCombo);
 				txtIdCombo.setColumns(10);
 				
-				textField = new JTextField();
-				textField.setFont(new Font("Verdana", Font.PLAIN, 15));
-				textField.setColumns(10);
-				textField.setBounds(215, 121, 245, 22);
-				pnlCombos.add(textField);
+				txtComboName = new JTextField();
+				txtComboName.setFont(new Font("Verdana", Font.PLAIN, 15));
+				txtComboName.setColumns(10);
+				txtComboName.setBounds(215, 121, 245, 22);
+				pnlCombos.add(txtComboName);
 				
-				JSpinner spinner = new JSpinner();
-				spinner.setModel(new SpinnerNumberModel(1, 1, 100, 1));
-				spinner.setFont(new Font("Verdana", Font.PLAIN, 15));
-				spinner.setBounds(215, 202, 73, 22);
-				pnlCombos.add(spinner);
+				spnDiscount = new JSpinner();
+				spnDiscount.setModel(new SpinnerNumberModel(1, 1, 100, 1));
+				spnDiscount.setFont(new Font("Verdana", Font.PLAIN, 15));
+				spnDiscount.setBounds(215, 202, 73, 22);
+				pnlCombos.add(spnDiscount);
 				
 				JLabel lblNewLabel_3 = new JLabel("%");
 				lblNewLabel_3.setFont(new Font("Verdana", Font.PLAIN, 15));
@@ -569,6 +586,16 @@ public class RegComps extends JDialog {
 				pnlCombos.add(lblNewLabel_3);
 				
 				JButton btnRegCombo = new JButton("Registrar");
+				btnRegCombo.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						boolean empty = isFieldEmpty();
+						if(empty) {
+							lblComboWarning.setVisible(true);
+						} else {
+							registerCombo();
+						}
+					}
+				});
 				btnRegCombo.setFont(new Font("Verdana", Font.PLAIN, 15));
 				btnRegCombo.setBorder(new RoundedBorder (Color.BLACK, 1, 25));
 				btnRegCombo.setBounds(527, 428, 97, 25);
@@ -592,18 +619,19 @@ public class RegComps extends JDialog {
 				pnlCombos.add(pnlComboIcon);
 				pnlComboIcon.setLayout(null);
 				
-				JLabel lblComboIcon = new JLabel("");
+				lblComboIcon = new JLabel("");
 				lblComboIcon.setBounds(12, 13, 192, 171);
 				pnlComboIcon.add(lblComboIcon);
 				Image icon = new ImageIcon(this.getClass().getResource("/Images/pc.png")).getImage();
 				Image scaledImg = icon.getScaledInstance(lblComboIcon.getWidth(), lblComboIcon.getHeight(), Image.SCALE_SMOOTH);
 				lblComboIcon.setIcon(new ImageIcon(scaledImg));
 				
-				JLabel lblNewLabel_4 = new JLabel("Por favor llene \r\ntodos los campos");
-				lblNewLabel_4.setForeground(Color.RED);
-				lblNewLabel_4.setFont(new Font("Verdana", Font.BOLD, 15));
-				lblNewLabel_4.setBounds(448, 224, 266, 55);
-				pnlCombos.add(lblNewLabel_4);
+				lblComboWarning = new JLabel("Por favor llene todos los campos");
+				lblComboWarning.setForeground(Color.RED);
+				lblComboWarning.setVisible(false);
+				lblComboWarning.setFont(new Font("Verdana", Font.BOLD, 15));
+				lblComboWarning.setBounds(448, 224, 266, 55);
+				pnlCombos.add(lblComboWarning);
 				
 			}
 		}
@@ -657,34 +685,61 @@ public class RegComps extends JDialog {
 		clean();
 	}
 	
+	private void registerCombo() {
+		String id = txtIdCombo.getText();
+		String name = txtComboName.getText();
+		int discount = (int)spnDiscount.getValue();
+		ArrayList<Component> comps = new ArrayList<Component>();
+		
+		for(int i = 0; i < tableModel.getRowCount(); i++) {
+			Component comp = Administration.getInstance().searchComponentById((String)tableModel.getValueAt(i,0));
+			comps.add(comp);
+		}
+		
+		if(comps != null) {
+			Combo combo = new Combo(id, name, discount, comps);
+			combo.setIcon((ImageIcon)lblComboIcon.getIcon());
+			Administration.getInstance().addCombo(combo);
+		}	
+		
+		JOptionPane.showMessageDialog(null, "Operación satisfactoria", "Registrar Combo", JOptionPane.INFORMATION_MESSAGE);
+		clean();
+	}
+	
 	private boolean isFieldEmpty() {
 		boolean empty = false;
-		
-		if (txtBrand.getText().trim().isEmpty() || spnPrice.getValue() == null ||
-		        spnUnits.getValue() == null || spnSerie.getValue() == null) {
-		        empty = true;
-		    }
+		if(tabbedPane.getSelectedComponent().equals(pnlComponents)) {
+			if (txtBrand.getText().trim().isEmpty() || spnPrice.getValue() == null ||
+			        spnUnits.getValue() == null || spnSerie.getValue() == null) {
+			        empty = true;
+			    }
 
-		    if (rdbtnMotherBoard.isSelected()) {
-		        empty = empty || txtModelMB.getText().trim().isEmpty() || 
-		                  txtSocketMB.getText().trim().isEmpty() || 
-		                  txtRamTypeMB.getText().trim().isEmpty() || 
-		                  (!chckbxIdeMB.isSelected() && !chckbxSataMB.isSelected() && 
-		                		  !chckbxSata2MB.isSelected() && !chckbxSata3MB.isSelected());
-		    } else if (rdbtnRAM.isSelected()) {
-		        empty = empty || txtTypeRAM.getText().trim().isEmpty();
-		    } else if (rdbtnMicro.isSelected()) {
-		        empty = empty || txtModelMicro.getText().trim().isEmpty() || 
-		                  txtSocketMicro.getText().trim().isEmpty();
-		    } else if (rdbtnHardDisk.isSelected()) {
-		        empty = empty || txtModelHD.getText().trim().isEmpty() || 
-		                  cbxConType.getSelectedIndex() == 0;
-		    }
+			    if (rdbtnMotherBoard.isSelected()) {
+			        empty = empty || txtModelMB.getText().trim().isEmpty() || 
+			                  txtSocketMB.getText().trim().isEmpty() || 
+			                  txtRamTypeMB.getText().trim().isEmpty() || 
+			                  (!chckbxIdeMB.isSelected() && !chckbxSataMB.isSelected() && 
+			                		  !chckbxSata2MB.isSelected() && !chckbxSata3MB.isSelected());
+			    } else if (rdbtnRAM.isSelected()) {
+			        empty = empty || txtTypeRAM.getText().trim().isEmpty();
+			    } else if (rdbtnMicro.isSelected()) {
+			        empty = empty || txtModelMicro.getText().trim().isEmpty() || 
+			                  txtSocketMicro.getText().trim().isEmpty();
+			    } else if (rdbtnHardDisk.isSelected()) {
+			        empty = empty || txtModelHD.getText().trim().isEmpty() || 
+			                  cbxConType.getSelectedIndex() == 0;
+			    }
+		} else {
+			if(txtComboName.getText().trim().isEmpty() || tableModel.getRowCount() == 0) {
+				empty = true;
+			}
+		}
 		
 		return empty;
 	}
 	
 	private void clean() {
+		//Clear components
 		txtId.setText(IdGenerator.generateId());
 		txtBrand.setText("");
 		spnPrice.setValue(0);
@@ -706,6 +761,12 @@ public class RegComps extends JDialog {
 		spnCapacityHD.setValue(500);
 		cbxConType.setSelectedIndex(0);
 		lblWarning.setVisible(false);
+		
+		//Clear Combos
+		txtIdCombo.setText(IdGenerator.generateId());
+		txtComboName.setText("");
+		spnDiscount.setValue(1);
+		tableModel.setRowCount(0);
 	}
 	
 	private void setIcon() {
@@ -723,6 +784,18 @@ public class RegComps extends JDialog {
 	        img = new ImageIcon(this.getClass().getResource(path)).getImage();
 	        Image scaledImg = img.getScaledInstance(lblIcon.getWidth(), lblIcon.getHeight(), Image.SCALE_SMOOTH);
 	        lblIcon.setIcon(new ImageIcon(scaledImg));
+	    }
+	}
+	
+	@Override
+	public void getSelectedComp(String ID) {
+		Component comp = Administration.getInstance().searchComponentById(ID);
+		    
+	    if (comp != null) {
+	        String componentType = Catalogo.getComponentType(comp);		        
+	        int quantity = comp.getUnits();        
+		    // Agregar una nueva fila a la tabla
+		    tableModel.addRow(new Object[]{ID, componentType, quantity});
 	    }
 	}
 }

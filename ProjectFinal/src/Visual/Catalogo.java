@@ -69,19 +69,6 @@ public class Catalogo extends JDialog {
         table = new JTable(tableModel);
         table.setRowHeight(200);
         table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION); // Allow multiple selection
-/*
-        table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent event) {
-                //getSelectedComps();
-             // TRY IT OUT NOW
-            	System.out.println("Seleccionados: ");
-            	for (int i = 0; i < selectedComps.size(); i++) {
-        			System.out.println(selectedComps.get(i).getId());
-        		}
-            }
-            // END
-        });
-*/
         table2 = new JTable(tableModel);
         table2.setRowHeight(200);
         table3 = new JTable(tableModel);
@@ -124,7 +111,7 @@ public class Catalogo extends JDialog {
 
             	if (!selectedComps.isEmpty()) {
                     for (Component comp : selectedComps) {
-                        System.out.println("Selected ID: " + comp.getId()); // Debugging line
+                        
                         if (compInterface != null) {
                             compInterface.getSelectedComp(comp.getId());
                         }
@@ -218,7 +205,17 @@ public class Catalogo extends JDialog {
                 ImageIcon icon = comp.getIcon();
                 String textField = comp.getId();
                 int spinnerValue = comp.getUnits();
-                data.add(new DataWrapper(icon, textField, spinnerValue, false));       
+                String name = "";
+                if(comp instanceof MotherBoard) {
+                	name = ((MotherBoard) comp).getModel();
+                } else if(comp instanceof HardDisk) {
+                	name = ((HardDisk) comp).getModel();
+                } else if(comp instanceof MicroProcessor) {
+                	name = ((MicroProcessor) comp).getModel();
+                } else if(comp instanceof RAM) {
+                	name = ((RAM) comp).getType();
+                }
+                data.add(new DataWrapper(icon, textField, name, spinnerValue, false));       
             }
         }
 
@@ -247,9 +244,11 @@ public class Catalogo extends JDialog {
         for (int row = 0; row < tableModel.getRowCount(); row++) {
             for (int column = 0; column < tableModel.getColumnCount(); column++) {
                 Object value = tableModel.getValueAt(row, column);
-                DataWrapper data = (DataWrapper) value;
-                if (data.isRadioButtonSelected()) {
-                    selectedItems.add(data);
+                if(value instanceof DataWrapper) {
+                	DataWrapper data = (DataWrapper) value;
+                    if (data.isRadioButtonSelected()) {
+                        selectedItems.add(data);
+                    }
                 }
             }
         }
@@ -264,40 +263,4 @@ public class Catalogo extends JDialog {
     			selectedComps.add(Administration.getInstance().searchComponentById(dw.getTextField()));
     	}
     }
-    /*
-    public List<Component> updateSelectedItems() {
-        int[] selectedRows = table.getSelectedRows();
-        List<DataWrapper> selectedItems = getSelectedRadioButtons();
-        selectedItems.clear();
-        
-        for (int row : selectedRows) {
-            DataWrapper dw = tableModel.getData().get(row);
-            if(dw.isRadioButtonSelected()) {
-            	selectedItems.add(dw);
-                System.out.println("Selected Item ID: " + dw.getTextField()); // Debugging line
-            }
-        }
-        
-        List<Component> selectedComponents = new ArrayList<>();
-        for (DataWrapper dw : selectedItems) {
-            Component comp = Administration.getInstance().searchComponentById(dw.getTextField());
-            if (comp != null) {
-                selectedComponents.add(comp);
-            }
-        }
-        
-        
-        System.out.println("Todos los elementos seleccionados: " + selectedComponents);
-        return selectedComponents;
-    }*/
-
-    /*
-    // Método para obtener los IDs de los componentes seleccionados
-    public List<String> getSelectedComponentIds() {
-        List<String> selectedComponentIds = new ArrayList<>();
-        for (DataWrapper dw : selectedItems) {
-            selectedComponentIds.add(dw.getTextField());
-        }
-        return selectedComponentIds;
-    }*/
 }

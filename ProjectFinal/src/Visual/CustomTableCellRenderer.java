@@ -20,10 +20,11 @@ public class CustomTableCellRenderer extends JPanel implements TableCellRenderer
 	 */
 	private static final long serialVersionUID = 1L;
 	private final JLabel lblIcon;
-    private final JLabel lblName;
+    private final JLabel lblId;
     private final JRadioButton rdbtnSelected;
     private final JSpinner spinner;
     private final JPanel innerPanel;
+    private JLabel lblName;
 
     public CustomTableCellRenderer() {
         setLayout(new BorderLayout());
@@ -35,10 +36,10 @@ public class CustomTableCellRenderer extends JPanel implements TableCellRenderer
         lblIcon.setBounds(70, 16, 79, 63);
         innerPanel.add(lblIcon);
 
-        lblName = new JLabel();
-        lblName.setFont(new Font("Verdana", Font.PLAIN, 15));
-        lblName.setBounds(41, 85, 146, 26);
-        innerPanel.add(lblName);
+        lblId = new JLabel();
+        lblId.setFont(new Font("Verdana", Font.PLAIN, 15));
+        lblId.setBounds(41, 128, 146, 26);
+        innerPanel.add(lblId);
 
         rdbtnSelected = new JRadioButton("");
         rdbtnSelected.setBounds(11, 153, 34, 29);
@@ -46,10 +47,15 @@ public class CustomTableCellRenderer extends JPanel implements TableCellRenderer
 
         spinner = new JSpinner();
         spinner.setFont(new Font("Verdana", Font.PLAIN, 15));
-        spinner.setBounds(41, 126, 146, 26);
+        spinner.setBounds(41, 156, 146, 26);
         innerPanel.add(spinner);
 
         add(innerPanel, BorderLayout.CENTER);
+        
+        lblName = new JLabel();
+        lblName.setFont(new Font("Verdana", Font.PLAIN, 15));
+        lblName.setBounds(41, 92, 146, 26);
+        innerPanel.add(lblName);
     }
 
     @Override
@@ -63,11 +69,13 @@ public class CustomTableCellRenderer extends JPanel implements TableCellRenderer
             lblIcon.setIcon(icon != null ? icon : new ImageIcon());
             
             if(data.getTextField() != null) {
-            	lblName.setText(data.getTextField());
+            	lblId.setText(data.getTextField());
+            	lblName.setText(data.getTxtName());
             	spinner.setValue(data.getSpinnerValue());
             	rdbtnSelected.setSelected(data.isRadioButtonSelected());
 
             }else {
+            	lblId.setVisible(false);
             	lblName.setVisible(false);
             	spinner.setVisible(false);
             	rdbtnSelected.setVisible(false);
@@ -75,6 +83,7 @@ public class CustomTableCellRenderer extends JPanel implements TableCellRenderer
 
         } else {
             lblIcon.setIcon(null);
+            lblId.setVisible(false);
             lblName.setVisible(false);
             spinner.setVisible(false);
             rdbtnSelected.setVisible(false);

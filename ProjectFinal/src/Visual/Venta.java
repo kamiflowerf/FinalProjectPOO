@@ -10,6 +10,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
 import Visual.Catalogo.onSelectedComp;
+import Visual.ClientList.onSelectedClient;
 
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -22,10 +23,11 @@ import logic.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class Venta extends JDialog implements onSelectedComp{
+public class Venta extends JDialog implements onSelectedComp, onSelectedClient{
 
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
+	private String idClient;
 	private JTextField txtIdClient;
 	private JTextField txtBillId;
 	private JTextField txtBillDate;
@@ -59,13 +61,13 @@ public class Venta extends JDialog implements onSelectedComp{
 	    contentPanel.setLayout(null);
 		{
 			JLabel lblNewLabel = new JLabel("ID Cliente");
-			lblNewLabel.setFont(new Font("Verdana", Font.BOLD, 14));
+			lblNewLabel.setFont(new Font("Verdana", Font.BOLD, 15));
 			lblNewLabel.setBounds(25, 33, 83, 16);
 			contentPanel.add(lblNewLabel);
 		}
 		{
 			txtIdClient = new JTextField();
-			txtIdClient.setFont(new Font("Verdana", Font.PLAIN, 14));
+			txtIdClient.setFont(new Font("Verdana", Font.PLAIN, 15));
 			txtIdClient.setEditable(false);
 			txtIdClient.setBounds(25, 62, 147, 22);
 			contentPanel.add(txtIdClient);
@@ -73,7 +75,7 @@ public class Venta extends JDialog implements onSelectedComp{
 		}
 		{
 			JLabel lblComponentes = new JLabel("Componentes");
-			lblComponentes.setFont(new Font("Verdana", Font.BOLD, 14));
+			lblComponentes.setFont(new Font("Verdana", Font.BOLD, 15));
 			lblComponentes.setBounds(25, 135, 119, 16);
 			contentPanel.add(lblComponentes);
 		}
@@ -96,20 +98,29 @@ public class Venta extends JDialog implements onSelectedComp{
 		    JButton btnSearchComp = new JButton("Buscar");
 		    btnSearchComp.addActionListener(new ActionListener() {
 		        public void actionPerformed(ActionEvent e) {
-		            Catalogo catalogo = new Catalogo(Venta.this); // Pasar 'this' para implementar la interfaz
+		            Catalogo catalogo = new Catalogo(Venta.this); 
 		            catalogo.setModal(true);
 		            catalogo.setVisible(true);
 		            catalogo.setResizable(false);
 		        }
 		    });
-		    btnSearchComp.setFont(new Font("Verdana", Font.PLAIN, 14));
+		    btnSearchComp.setFont(new Font("Verdana", Font.PLAIN, 15));
 		    btnSearchComp.setBounds(248, 126, 97, 25);
 		    btnSearchComp.setBorder(new RoundedBorder(Color.BLACK, 1, 20));
 		    contentPanel.add(btnSearchComp);
 		}
 		{
 			JButton btnSearchClient = new JButton("Buscar");
-			btnSearchClient.setFont(new Font("Verdana", Font.PLAIN, 14));
+			btnSearchClient.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					ClientList clist = new ClientList(Venta.this);
+					clist.setModal(true);
+					clist.setVisible(true);
+					clist.setResizable(true);
+					txtIdClient.setText(idClient);
+				}
+			});
+			btnSearchClient.setFont(new Font("Verdana", Font.PLAIN, 15));
 			btnSearchClient.setBounds(248, 61, 97, 25);
 			btnSearchClient.setBorder(new RoundedBorder(Color.BLACK,1,20));
 			contentPanel.add(btnSearchClient);
@@ -122,13 +133,13 @@ public class Venta extends JDialog implements onSelectedComp{
 			panel.setLayout(null);
 			{
 				JLabel lblIdFactura = new JLabel("ID Factura");
-				lblIdFactura.setFont(new Font("Verdana", Font.BOLD, 14));
+				lblIdFactura.setFont(new Font("Verdana", Font.BOLD, 15));
 				lblIdFactura.setBounds(12, 17, 90, 16);
 				panel.add(lblIdFactura);
 			}
 			{
 				txtBillId = new JTextField();
-				txtBillId.setFont(new Font("Verdana", Font.PLAIN, 14));
+				txtBillId.setFont(new Font("Verdana", Font.PLAIN, 15));
 				txtBillId.setEditable(false);
 				txtBillId.setColumns(10);
 				txtBillId.setBounds(12, 50, 147, 22);
@@ -136,13 +147,13 @@ public class Venta extends JDialog implements onSelectedComp{
 			}
 			{
 				JLabel lblFechaFacturacin = new JLabel("Fecha Facturaci\u00F3n");
-				lblFechaFacturacin.setFont(new Font("Verdana", Font.BOLD, 14));
+				lblFechaFacturacin.setFont(new Font("Verdana", Font.BOLD, 15));
 				lblFechaFacturacin.setBounds(12, 89, 147, 16);
 				panel.add(lblFechaFacturacin);
 			}
 			{
 				txtBillDate = new JTextField();
-				txtBillDate.setFont(new Font("Verdana", Font.PLAIN, 14));
+				txtBillDate.setFont(new Font("Verdana", Font.PLAIN, 15));
 				txtBillDate.setEditable(false);
 				txtBillDate.setColumns(10);
 				txtBillDate.setBounds(12, 122, 147, 22);
@@ -150,13 +161,13 @@ public class Venta extends JDialog implements onSelectedComp{
 			}
 			{
 				JLabel lblTotal = new JLabel("Total");
-				lblTotal.setFont(new Font("Verdana", Font.BOLD, 14));
+				lblTotal.setFont(new Font("Verdana", Font.BOLD, 15));
 				lblTotal.setBounds(12, 161, 147, 16);
 				panel.add(lblTotal);
 			}
 			{
 				txtTotal = new JTextField();
-				txtTotal.setFont(new Font("Verdana", Font.PLAIN, 14));
+				txtTotal.setFont(new Font("Verdana", Font.PLAIN, 15));
 				txtTotal.setEditable(false);
 				txtTotal.setColumns(10);
 				txtTotal.setBounds(12, 194, 147, 22);
@@ -165,7 +176,7 @@ public class Venta extends JDialog implements onSelectedComp{
 		}
 		{
 			JButton btnVender = new JButton("Vender");
-			btnVender.setFont(new Font("Verdana", Font.PLAIN, 14));
+			btnVender.setFont(new Font("Verdana", Font.PLAIN, 15));
 			btnVender.setBounds(357, 273, 97, 25);
 			btnVender.setBorder(new RoundedBorder(Color.BLACK,1,20));
 			contentPanel.add(btnVender);
@@ -177,7 +188,7 @@ public class Venta extends JDialog implements onSelectedComp{
 					dispose();
 				}
 			});
-			btnCancelar.setFont(new Font("Verdana", Font.PLAIN, 14));
+			btnCancelar.setFont(new Font("Verdana", Font.PLAIN, 15));
 			btnCancelar.setBounds(466, 273, 97, 25);
 			btnCancelar.setBorder(new RoundedBorder(Color.BLACK,1,20));
 			contentPanel.add(btnCancelar);
@@ -196,6 +207,11 @@ public class Venta extends JDialog implements onSelectedComp{
 	        // Agregar una nueva fila a la tabla
 	        tableModel.addRow(new Object[]{ID, componentType, quantity});
 	    }
+	}
+
+	@Override
+	public void getSelectedClient(String id) {
+		this.idClient = id;
 	}
 
 }

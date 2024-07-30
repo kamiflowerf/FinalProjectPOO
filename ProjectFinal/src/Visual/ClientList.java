@@ -13,7 +13,6 @@ import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -26,56 +25,55 @@ import javax.swing.table.JTableHeader;
 import logic.Administration;
 import logic.Client;
 
-public class ClientList extends JFrame implements MouseListener {
+public class ClientList extends JDialog implements MouseListener {
 
-	private static final long serialVersionUID = 1L;
-	private JPanel contentPane = new JPanel();
-	private static JScrollPane scrollPaneTable;
-	private static JTable ClientTable;
-	static ArrayList<Client> clients; //lista de las personas que voy a cargar a la tabla
-	static TableModel model; // modelo creado de la clase del modelo de la tabla
-	private static int rows;
-	private static int columns;
-	private JPanel bottonPanel;
-	private JButton btn_cancel;
-	private JButton btn_addNew;
-	private JButton btn_delete;
-	private JButton btn_update;
-	private JButton btn_select;
-	private String idClient = "";
-	public onSelectedClient clientInterface;
-	
-	public interface onSelectedClient
-	{
-		void getSelectedClient(String id);
-	}
-	
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		try {
-			ClientList dialog = new ClientList(null);
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Create the dialog.
-	 */
-	public ClientList(onSelectedClient clientInterface) {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(ClientList.class.getResource("/Images/nueva-cuenta (2).png")));
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setSize(800,551);
-		
-		startComponents();
-		setLocationRelativeTo(null);
-		buildTable();
-	}
+    private static final long serialVersionUID = 1L;
+    private JPanel contentPane = new JPanel();
+    private static JScrollPane scrollPaneTable;
+    private static JTable ClientTable;
+    static ArrayList<Client> clients; // lista de las personas que voy a cargar a la tabla
+    static TableModel model; // modelo creado de la clase del modelo de la tabla
+    private static int rows;
+    private static int columns;
+    private JPanel bottonPanel;
+    private JButton btn_cancel;
+    private static JButton btn_addNew;
+    private static JButton btn_delete;
+    private static JButton btn_update;
+    private static JButton btn_select;
+    private String idClient = "";
+    public onSelectedClient clientInterface;
+    
+    public interface onSelectedClient {
+        void getSelectedClient(String id);
+    }
+    
+    /**
+     * Launch the application.
+     */
+    public static void main(String[] args) {
+        try {
+            ClientList dialog = new ClientList(null);
+            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            dialog.setVisible(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    /**
+     * Create the dialog.
+     */
+    public ClientList(onSelectedClient clientInterface) {
+    	this.clientInterface = clientInterface;
+        setIconImage(Toolkit.getDefaultToolkit().getImage(ClientList.class.getResource("/Images/nueva-cuenta (2).png")));
+        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        setSize(800, 551);
+        
+        startComponents();
+        setLocationRelativeTo(null);
+        buildTable();
+    }
 	
 	/*
 	 * Metodo que construye la tabla, primero se crean las columnas y luego se
@@ -166,6 +164,10 @@ public class ClientList extends JFrame implements MouseListener {
 		
 		scrollPaneTable.setViewportView(ClientTable);
 		
+		btn_delete.setEnabled(false);
+		btn_update.setEnabled(false);
+		btn_select.setEnabled(false);
+		btn_addNew.setEnabled(true);
 	}
 
 	private static Object[][] getData(ArrayList<String> titles) {
@@ -229,14 +231,12 @@ public class ClientList extends JFrame implements MouseListener {
 				
 			}
 		});
-		btn_select.setEnabled(false);
 		btn_select.setPreferredSize(new Dimension(85, 30));
 		btn_select.setFont(new Font("Verdana", Font.BOLD, 12));
 		btn_select.setBorder(new RoundedBorder(Color.BLACK,1,25));
 		bottonPanel.add(btn_select);
 		
 		btn_update = new JButton("Actualizar");
-		btn_update.setEnabled(false);
 		btn_update.setPreferredSize(new Dimension(85, 30));
 		btn_update.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -275,7 +275,6 @@ public class ClientList extends JFrame implements MouseListener {
 				}
 			}
 		});
-		btn_delete.setEnabled(false);
 		btn_delete.setPreferredSize(new Dimension(85, 30));
 		btn_delete.setFont(new Font("Verdana", Font.BOLD, 12));
 		btn_delete.setBorder(new RoundedBorder(Color.BLACK,1,25));
@@ -339,8 +338,7 @@ public class ClientList extends JFrame implements MouseListener {
 	}
 
 	public static void updateTable() {
-		buildTable();
-		
+		buildTable();		
 	}
 
 	@Override
@@ -348,18 +346,14 @@ public class ClientList extends JFrame implements MouseListener {
 		
 		int i = ClientTable.getSelectedRow();
 		
-		if( i >= 0)
-		{
+		if( i >= 0) {
 			idClient = new String(ClientTable.getValueAt(i, 0).toString());
 			btn_addNew.setEnabled(false);
 			
-			if(clientInterface == null)
-			{
+			if(clientInterface == null){
 				btn_delete.setEnabled(true);
 				btn_update.setEnabled(true);
-			}
-			else
-			{
+			} else {
 				btn_select.setEnabled(true);
 			}
 			
