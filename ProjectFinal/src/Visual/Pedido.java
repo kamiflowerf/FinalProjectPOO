@@ -12,13 +12,28 @@ import javax.swing.JTextField;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
+
 import java.awt.Font;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
 
-public class Pedido extends JDialog {
+import Visual.Catalogo.onSelectedComp;
+import Visual.SupplierList.onSelectedSupplier;
+import logic.Administration;
+import logic.Component;
+import logic.HardDisk;
+import logic.MicroProcessor;
+import logic.MotherBoard;
+import logic.RAM;
+
+public class Pedido extends JDialog implements onSelectedSupplier, onSelectedComp{
 
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
+	private String idSup;
+	private JTable tableComponents;
+	private DefaultTableModel tableModel;
 	private JTextField txtIdSup;
 	private JTextField txtPedido;
 	private JTextField textField;
@@ -70,6 +85,11 @@ public class Pedido extends JDialog {
 			btnSearchSup.setBorder(new RoundedBorder(Color.BLACK,1,20));
 			btnSearchSup.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					SupplierList suplist = new SupplierList(Pedido.this);
+					suplist.setModal(true);
+					suplist.setVisible(true);
+					suplist.setResizable(false);
+					txtIdSup.setText(idSup);
 				}
 			});
 			btnSearchSup.setBounds(264, 83, 99, 29);
@@ -111,6 +131,14 @@ public class Pedido extends JDialog {
 			panel.add(lblComponentes);
 			
 			JButton btnSearchComp = new JButton("Buscar");
+			btnSearchComp.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					Catalogo cat = new Catalogo(Pedido.this);
+					cat.setModal(true);
+					cat.setVisible(true);
+					cat.setResizable(false);
+				}
+			});
 			btnSearchComp.setFont(new Font("Verdana", Font.PLAIN, 14));
 			btnSearchComp.setBounds(264, 166, 99, 29);
 			btnSearchComp.setBorder(new RoundedBorder(Color.BLACK,1,20));
@@ -124,6 +152,10 @@ public class Pedido extends JDialog {
 			
 			JScrollPane scrollPane = new JScrollPane();
 			pnlComponents.add(scrollPane, BorderLayout.CENTER);
+			tableModel = new DefaultTableModel(new Object[]{"ID", "Tipo", "Modelo"}, 0);
+			tableComponents = new JTable(tableModel);
+		    tableComponents.setFont(new Font("Verdana", Font.PLAIN, 13));
+		    scrollPane.setViewportView(tableComponents);
 			
 			
 			JButton btnCancelar = new JButton("Cancelar");
@@ -138,5 +170,31 @@ public class Pedido extends JDialog {
 			btnRealizarPedido.setBorder(new RoundedBorder(Color.BLACK,1,20));
 			panel.add(btnRealizarPedido);
 		}
+	}
+
+	@Override
+	public void getSelectedSupplier(String id) {
+		this.idSup = id;
+	}
+
+	@Override
+	public void getSelectedComp(String ID) {
+		 Component comp = Administration.getInstance().searchComponentById(ID);
+		    
+		    if (comp != null) {
+		        String componentType = Catalogo.getComponentType(comp);
+		        String name = "";
+		        if(comp instanceof MotherBoard) {
+		        	name = ((MotherBoard) comp).getModel();
+		        } else if (comp instanceof HardDisk) {
+		        	name = ((HardDisk) comp).getModel();
+		        } else if(comp instanceof MicroProcessor) {
+		        	name = ((MicroProcessor) comp).getModel();
+		        } else if(comp instanceof RAM) {
+		        	name = ((RAM) comp).getType();
+		        }
+		        
+		        tableModel.addRow(new Object[]{ID, componentType, name});
+		    }
 	}
 }

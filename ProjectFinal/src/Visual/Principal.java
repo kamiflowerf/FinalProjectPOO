@@ -528,7 +528,9 @@ public class Principal extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				SupplierList suppliList = new SupplierList(null);
+				suppliList.setModal(true);
 				suppliList.setVisible(true);
+				suppliList.setResizable(false);
 			}
 		});
 		lblListSup.setForeground(Color.WHITE);

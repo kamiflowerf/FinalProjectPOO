@@ -91,6 +91,7 @@ public class Venta extends JDialog implements onSelectedComp, onSelectedClient{
 			    
 			    tableModel = new DefaultTableModel(new Object[]{"ID", "Tipo de Componente", "Cantidad"}, 0);
 			    tableComponents = new JTable(tableModel);
+			    tableComponents.setFont(new Font("Verdana", Font.PLAIN, 13));
 			    scrollPane.setViewportView(tableComponents);
 			}
 		}
