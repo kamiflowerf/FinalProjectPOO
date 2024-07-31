@@ -1,7 +1,10 @@
 package Visual;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.text.NumberFormat;
 
 import javax.swing.JButton;
@@ -93,18 +96,74 @@ public class Graphs extends JDialog {
         getContentPane().add(buttonPane, BorderLayout.SOUTH);
         
         JButton okButton = new JButton("OK");
+        okButton.setFont(new Font("Verdana", Font.BOLD, 12));
         okButton.setActionCommand("OK");
+        okButton.setPreferredSize(new Dimension(85, 30));
+        okButton.setBorder(new RoundedBorder(Color.BLACK,1,25));
         okButton.addActionListener(e -> dispose());
-        buttonPane.add(okButton);
+         buttonPane.add(okButton);
         getRootPane().setDefaultButton(okButton);
-
-        JButton cancelButton = new JButton("Cancel");
-        cancelButton.setActionCommand("Cancel");
-        cancelButton.addActionListener(e -> dispose());
-        buttonPane.add(cancelButton);
+        
+        
+        JButton btn_refresh = new JButton("Actualizar gr\u00E1ficos");
+        btn_refresh.addActionListener(e -> updateCharts());
+        buttonPane.add(btn_refresh);
+        btn_refresh.setFont(new Font("Verdana", Font.BOLD, 12));
+        buttonPane.add(btn_refresh);
+        btn_refresh.setPreferredSize(new Dimension(155, 30));
+        btn_refresh.setBorder(new RoundedBorder(Color.BLACK,1,25));
+      
     }
 
-    private JFreeChart createLineChart() {
+    public void updateCharts() {
+        // Actualizar el gráfico de pastel
+        DefaultPieDataset pieData = new DefaultPieDataset();
+        pieData.setValue("Disco Duro", Administration.getAdministration().getHowManyHDs());
+        pieData.setValue("Microprocesador", Administration.getAdministration().getHowManyMPs());
+        pieData.setValue("Tarjeta Madre", Administration.getAdministration().getHowManyMBs());
+        pieData.setValue("RAM", Administration.getAdministration().getHowManyRAMs());
+
+        JFreeChart pieChart = ChartFactory.createPieChart(
+            "Inventario",
+            pieData,
+            true,
+            true,
+            false
+        );
+
+        // Actualizar el panel del gráfico de pastel
+        ChartPanel pieChartPanel = (ChartPanel) ((JPanel) ((JTabbedPane) contentPanel.getComponent(0)).getComponentAt(0)).getComponent(0);
+        pieChartPanel.setChart(pieChart);
+
+        // Actualizar el gráfico de línea
+        DefaultCategoryDataset lineDataset = new DefaultCategoryDataset();
+        double[] monthlyProfits = Administration.getAdministration().getMonthlyProfits();
+        String[] monthNames = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", 
+                               "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"};
+        
+        for (int i = 0; i < monthlyProfits.length; i++) {
+            lineDataset.addValue(monthlyProfits[i], "Ganancias", monthNames[i]);
+        }
+
+        JFreeChart lineChart = ChartFactory.createLineChart(
+            "Ganancias Mensuales",
+            "Meses",
+            "Ganancias",
+            lineDataset
+        );
+
+        // Configurar el formato de los números en el eje Y
+        NumberAxis yAxis = (NumberAxis) lineChart.getCategoryPlot().getRangeAxis();
+        NumberFormat numberFormat = NumberFormat.getCurrencyInstance();
+        yAxis.setNumberFormatOverride(numberFormat);
+
+        // Actualizar el panel del gráfico de línea
+        ChartPanel lineChartPanel = (ChartPanel) ((JPanel) ((JTabbedPane) contentPanel.getComponent(0)).getComponentAt(1)).getComponent(0);
+        lineChartPanel.setChart(lineChart);
+    }
+
+
+	private JFreeChart createLineChart() {
         double[] monthlyProfits = Administration.getAdministration().getMonthlyProfits(); // Este método devuelve un array de ganancias mensuales
 
         String[] monthNames = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", 
