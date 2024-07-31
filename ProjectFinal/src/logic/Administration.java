@@ -238,7 +238,7 @@ public class Administration implements Serializable{
 	public void deleteCombo(String codComb) {
 		Combo aux = searchComboById(codComb);
 		if(aux != null)
-			theCombos.add(aux);
+			theCombos.remove(aux);
 	}
 	
 	public void updateComponent(Component comp) {
@@ -259,34 +259,62 @@ public class Administration implements Serializable{
 			theCombos.set(index, com);
 	}
 	
-	public boolean makeSale(String idClient, Date saleDate, ArrayList<Component> componetsSale) {
-		Client cliente = searchClientById(idClient);
-		boolean allValid = false;
-		for (Component component : componetsSale) {
-			if(component.getUnits() > 0) {
-				allValid = true;
-			}
-		}
-		
-		if(cliente != null && allValid) {
-			return true;
-		}else 
-			return false;
+	public boolean makeSale(String idClient, Date saleDate, ArrayList<Component> componentsSale) {
+
+	    Client client = searchClientById(idClient);
+	    
+	    boolean allValid = true; 
+	    for (Component component : componentsSale) {
+	        Component storedComponent = Administration.getInstance().searchComponentById(component.getId());
+	        if (storedComponent == null || storedComponent.getUnits() < component.getUnits()) {
+	            allValid = false;
+	            break;
+	        }
+	    }
+	    
+	    if (client != null && allValid) {
+	        for (Component component : componentsSale) {
+	            Component storedComponent = Administration.getInstance().searchComponentById(component.getId());
+	            if (storedComponent != null) {
+	                int newUnits = storedComponent.getUnits() - component.getUnits();
+	                storedComponent.setUnits(newUnits);
+	                Administration.getInstance().updateComponent(storedComponent); 
+	            }
+	        }
+	        
+
+	        return true;
+	    } else {
+	        return false;
+	    }
 	}
 
-	public boolean inventoryRefill() {
-		int threshold = 3;
-		int countComponentRefill = 0;
 
-		for (Component component : theComponents) {
-			if (component.getUnits() < threshold) {
-				countComponentRefill++;
-				if (countComponentRefill >= threshold) 
-					return true;	
-			}
-		}
-		return false;
+	public boolean inventoryRefill(ArrayList<Component> componentsToOrder) {
+	    boolean allComponentsUpdated = true; // Asumimos que todo está bien inicialmente
+
+	    for (Component orderComponent : componentsToOrder) {
+	        boolean componentFound = false;
+
+	        for (Component inventoryComponent : theComponents) {
+	            if (inventoryComponent.getId().equals(orderComponent.getId())) {
+	                componentFound = true; // Encontramos el componente en el inventario
+	                int newUnits = inventoryComponent.getUnits() + orderComponent.getUnits();
+	                inventoryComponent.setUnits(newUnits);
+	                break; // No es necesario seguir buscando en el inventario
+	            }
+	        }
+
+	        if (!componentFound) {
+	            // Si no encontramos el componente en el inventario
+	            allComponentsUpdated = false;
+	            break; // No es necesario seguir con los demás componentes
+	        }
+	    }
+
+	    return allComponentsUpdated; // Retornamos true solo si todos los componentes fueron actualizados
 	}
+
 
 	public boolean confirmLogin(String username, String pass) {
 		boolean login = false;
@@ -362,16 +390,29 @@ public class Administration implements Serializable{
 	}
 
 	public double[] getMonthlyProfits() {
-	    double[] monthlyProfits = new double[12]; // Array para almacenar las ganancias de cada mes
+	    double[] monthlyProfits = new double[12]; 
 
 	    for (Bill bill : theBills) {
 	        Calendar cal = Calendar.getInstance();
 	        cal.setTime(bill.getSold());
-	        int month = cal.get(Calendar.MONTH); // Obtiene el mes de la factura (0 = Enero, 11 = Diciembre)
+	        int month = cal.get(Calendar.MONTH); 
 	        monthlyProfits[month] += bill.getTotal();
 	    }
 
 	    return monthlyProfits;
 	}
+	
+	public ArrayList<Component> getComponentsBySupplier(String supplierId) {
+	    ArrayList<Supplier> suppliers = getTheSuppliers();
+	    
+	    for (Supplier supplier : suppliers) {
+	        if (supplier.getId().equalsIgnoreCase(supplierId)) {
+	            return supplier.getMyComponents();
+	        }
+	    }
+	    
+	    return new ArrayList<>();
+	}
+
 	
 }

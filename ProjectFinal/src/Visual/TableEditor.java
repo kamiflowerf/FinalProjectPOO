@@ -18,6 +18,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
+import javax.swing.SpinnerNumberModel;
 
 
 //import Visual.Catalogo.DataWrapper;
@@ -34,7 +35,7 @@ public class TableEditor extends AbstractCellEditor implements TableCellEditor {
     private final JSpinner spinner;
     private DataWrapper currentData;
     private JLabel lblName;
-    
+    private Integer tempSpinnerValue;
 
     public TableEditor() {
     	
@@ -65,10 +66,10 @@ public class TableEditor extends AbstractCellEditor implements TableCellEditor {
         innerPanel.add(rdbtnNewRadioButton);
 
         spinner = new JSpinner();
+        spinner.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), null, new Integer(1)));
         spinner.addChangeListener(new ChangeListener() {
         	public void stateChanged(ChangeEvent e) {
-        		currentData.setSpinnerValue((int)spinner.getValue());
-        		currentData.updateData();
+        		 tempSpinnerValue = (Integer) spinner.getValue();
         	}
         });
         spinner.setFont(new Font("Verdana", Font.PLAIN, 15));
@@ -82,15 +83,20 @@ public class TableEditor extends AbstractCellEditor implements TableCellEditor {
         lblName.setBounds(41, 92, 146, 26);
         innerPanel.add(lblName);
     }
+    
+    public int getTempSpinnerValue() {
+    	return (Integer) spinner.getValue(); 
+    }
 
     @Override
     public Object getCellEditorValue() {
+        currentData.setSpinnerValue(getTempSpinnerValue());
         currentData.setTextField(lblId.getText());
         currentData.setTxtName(lblName.getText());
-        currentData.setSpinnerValue((Integer) spinner.getValue());
         currentData.setRadioButtonSelected(rdbtnNewRadioButton.isSelected());
         return currentData;
     }
+
     
     public boolean getradbutton() {
         return rdbtnNewRadioButton.isSelected();
@@ -107,6 +113,8 @@ public class TableEditor extends AbstractCellEditor implements TableCellEditor {
         lblId.setText(currentData.getTextField());
         lblName.setText(currentData.getTxtName());
         spinner.setValue(currentData.getSpinnerValue());
+        
+        tempSpinnerValue = currentData.getSpinnerValue();
         
         rdbtnNewRadioButton.setSelected(currentData.isRadioButtonSelected());
 

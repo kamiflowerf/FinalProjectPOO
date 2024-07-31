@@ -87,23 +87,6 @@ public class Catalogo extends JDialog {
         JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         buttonPane.add(buttonsPanel, BorderLayout.CENTER);
 
-        JComboBox<String> comboBox = new JComboBox<>();
-        comboBox.setFont(new Font("Verdana", Font.PLAIN, 15));
-        comboBox.addItem("Todos");
-        comboBox.addItem("Tarjeta Madre");
-        comboBox.addItem("Disco Duro");
-        comboBox.addItem("Ram");
-        comboBox.addItem("Microprocesador");
-
-        comboBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String selectedType = (String) comboBox.getSelectedItem();
-                filterComponents(selectedType);
-            }
-        });
-        buttonsPanel.add(comboBox);
-
         selectBtn = new JButton("Seleccionar");
         selectBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -189,12 +172,6 @@ public class Catalogo extends JDialog {
         }
     }
 
-    public void filterComponents(String componentType) {
-        CustomTableModel newTableModel = new CustomTableModel();
-        loadComponents(newTableModel, componentType);
-        table.setModel(newTableModel);
-        initializeColumns();
-    }
 
     public static void loadComponents(CustomTableModel tableModel, String componentType) {
         ArrayList<Component> aux = Administration.getInstance().getTheComponents();
