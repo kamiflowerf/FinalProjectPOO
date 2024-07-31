@@ -160,6 +160,7 @@ public class login extends JFrame {
 		btnLogin.setBorder(new RoundedBorder(Color.WHITE,1,25));
 		btnLogin.setFont(new Font("Verdana", Font.PLAIN, 16));
 		btnLogin.setBounds(383, 447, 97, 25);
+		getRootPane().setDefaultButton(btnLogin);
 		panel.add(btnLogin);
 	}
 }

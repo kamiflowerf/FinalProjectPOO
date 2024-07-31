@@ -1,10 +1,12 @@
 package Visual;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
@@ -26,7 +28,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 
 import logic.Administration;
@@ -66,6 +71,9 @@ public class Principal extends JFrame {
 	private JLabel lblMore;
 	private JPanel morePnl;
 	private JLabel lblRespaldo;
+	private JPanel picPanel;
+	private JScrollPane scrollPane;
+	private JLabel picLbl;
 
 	/**
 	 * Launch the application.
@@ -88,6 +96,7 @@ public class Principal extends JFrame {
 	 * Create the frame.
 	 */
 	public Principal(User user) {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Principal.class.getResource("/Images/logo.png")));
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
@@ -114,11 +123,10 @@ public class Principal extends JFrame {
 		setSize(dim.width, dim.height-50);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
+		contentPane.setBackground(new Color(102, 204, 255));
 		contentPane.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
-		
 		
 		JPanel panel = new JPanel();
 		panel.setBackground(background);
@@ -145,12 +153,25 @@ public class Principal extends JFrame {
 			}
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				pnlCompMenu.setVisible(true);
-				pnlCliMenu.setVisible(false);
-				pnlSup.setVisible(false);
-				pnlAdmin.setVisible(false);
-				pnlUser.setVisible(false);
-				morePnl.setVisible(false);
+				if(user.getType().equals("Vendedor"))
+				{
+					pnlCompMenu.setVisible(false);
+					pnlCliMenu.setVisible(false);
+					pnlSup.setVisible(false);
+					pnlAdmin.setVisible(false);
+					pnlUser.setVisible(false);
+					morePnl.setVisible(false);
+					JOptionPane.showMessageDialog(null, "No posee acceso a esta sección", "Inventario", JOptionPane.INFORMATION_MESSAGE);
+				}
+				else
+				{
+					pnlCompMenu.setVisible(true);
+					pnlCliMenu.setVisible(false);
+					pnlSup.setVisible(false);
+					pnlAdmin.setVisible(false);
+					pnlUser.setVisible(false);
+					morePnl.setVisible(false);
+				}
 			}
 		});
 		txtComponents.setForeground(new Color(255, 255, 255));
@@ -174,12 +195,25 @@ public class Principal extends JFrame {
 			}
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				pnlCompMenu.setVisible(false);
-				pnlCliMenu.setVisible(true);
-				pnlSup.setVisible(false);
-				pnlAdmin.setVisible(false);
-				pnlUser.setVisible(false);
-				morePnl.setVisible(false);
+				if(user.getType().equals("Vendedor"))
+				{
+					pnlCompMenu.setVisible(false);
+					pnlCliMenu.setVisible(false);
+					pnlSup.setVisible(false);
+					pnlAdmin.setVisible(false);
+					pnlUser.setVisible(false);
+					morePnl.setVisible(false);
+					JOptionPane.showMessageDialog(null, "No posee acceso a esta sección", "Clientes", JOptionPane.INFORMATION_MESSAGE);
+				}
+				else
+				{
+					pnlCompMenu.setVisible(false);
+					pnlCliMenu.setVisible(true);
+					pnlSup.setVisible(false);
+					pnlAdmin.setVisible(false);
+					pnlUser.setVisible(false);
+					morePnl.setVisible(false);
+				}
 			}
 		});
 		txtClients.setText("               Clientes");
@@ -484,6 +518,7 @@ public class Principal extends JFrame {
 		lblListClient.setBounds(0, 55, 335, 55);
 		pnlCliMenu.add(lblListClient);
 		
+		
 		pnlSup = new JPanel();
 		pnlSup.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		pnlSup.setLayout(null);
@@ -645,6 +680,26 @@ public class Principal extends JFrame {
 		lblRegUser.setBounds(0, 15, 335, 55);
 		pnlUser.add(lblRegUser);
 		
+		picPanel = new JPanel();
+		picPanel.setBackground(new Color(102, 204, 255));
+		picPanel.setBounds(292, 0, 1610, 983);
+		contentPane.add(picPanel);
+		picPanel.setLayout(new BorderLayout(0, 0));
+		
+		scrollPane = new JScrollPane();
+		scrollPane.setBackground(Color.blue);
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		picPanel.add(scrollPane, BorderLayout.CENTER);
+		
+		picLbl = new JLabel("");
+		picLbl.setBackground(new Color(102, 204, 255));
+		picLbl.setIcon(new ImageIcon(Principal.class.getResource("/Images/mision vision y valores.png")));
+		picLbl.setHorizontalAlignment(SwingConstants.CENTER);
+		picLbl.setVerticalAlignment(SwingConstants.CENTER);
+		scrollPane.setViewportView(picLbl);
+		
+		
 		if(user != null && user.getType().equals("Vendedor")) {
 			restrictSellerFunctions();
 		}
@@ -666,9 +721,6 @@ public class Principal extends JFrame {
         }
         if (lblListSup != null) {
         	lblListSup.setVisible(false);
-        }
-        if (lblSaleManage != null) {
-            lblSaleManage.setVisible(false);
         }
     }
 }
