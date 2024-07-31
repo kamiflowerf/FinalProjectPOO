@@ -70,6 +70,7 @@ public class Venta extends JDialog implements onSelectedComp, onSelectedClient, 
         setBounds(100, 100, 668, 369);
         setLocationRelativeTo(null);
         getContentPane().setLayout(new BorderLayout());
+        contentPanel.setBackground(new Color(70, 130, 180));
         contentPanel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
         getContentPane().add(contentPanel, BorderLayout.CENTER);
         contentPanel.setLayout(null);
@@ -111,6 +112,7 @@ public class Venta extends JDialog implements onSelectedComp, onSelectedClient, 
         }
         {
             JButton btnSearchComp = new JButton("Buscar Componente");
+            btnSearchComp.setBackground(new Color(230, 230, 250));
             btnSearchComp.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     Catalogo catalogo = new Catalogo(Venta.this);
@@ -127,6 +129,7 @@ public class Venta extends JDialog implements onSelectedComp, onSelectedClient, 
         }
         {
             JButton btnSearchClient = new JButton("Buscar");
+            btnSearchClient.setBackground(new Color(230, 230, 250));
             btnSearchClient.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent arg0) {
                     ClientList clist = new ClientList(Venta.this);
@@ -143,6 +146,7 @@ public class Venta extends JDialog implements onSelectedComp, onSelectedClient, 
         }
         {
             JPanel panel = new JPanel();
+            panel.setBackground(new Color(230, 230, 250));
             panel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
             panel.setBounds(357, 13, 281, 233);
             contentPanel.add(panel);
@@ -195,6 +199,7 @@ public class Venta extends JDialog implements onSelectedComp, onSelectedClient, 
         }
         {
         	JButton btnVender = new JButton("Vender");
+        	btnVender.setBackground(new Color(230, 230, 250));
             btnVender.setFont(new Font("Verdana", Font.PLAIN, 15));
             btnVender.setBounds(357, 273, 97, 25);
             btnVender.setBorder(new RoundedBorder(Color.BLACK, 1, 20));
@@ -243,6 +248,7 @@ public class Venta extends JDialog implements onSelectedComp, onSelectedClient, 
         }
         {
             JButton btnCancelar = new JButton("Cancelar");
+            btnCancelar.setBackground(new Color(230, 230, 250));
             btnCancelar.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     dispose();
@@ -255,6 +261,7 @@ public class Venta extends JDialog implements onSelectedComp, onSelectedClient, 
         }
         {
             JButton btnComb = new JButton("Buscar Combo");
+            btnComb.setBackground(new Color(230, 230, 250));
             btnComb.setFont(new Font("Verdana", Font.PLAIN, 15));
             btnComb.setBorder(new RoundedBorder(Color.BLACK, 1, 20));
             btnComb.setBounds(211, 90, 134, 25);

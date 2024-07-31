@@ -63,6 +63,7 @@ public class Pedido extends JDialog implements onSelectedSupplier, onSelectedCom
         contentPanel.setLayout(new BorderLayout(0, 0));
 
         JPanel panel = new JPanel();
+        panel.setBackground(new Color(70, 130, 180));
         contentPanel.add(panel, BorderLayout.CENTER);
         panel.setLayout(null);
 
@@ -79,6 +80,7 @@ public class Pedido extends JDialog implements onSelectedSupplier, onSelectedCom
         txtIdSup.setColumns(10);
 
         JButton btnSearchSup = new JButton("Buscar");
+        btnSearchSup.setBackground(new Color(230, 230, 250));
         btnSearchSup.setFont(new Font("Verdana", Font.PLAIN, 14));
         btnSearchSup.setBorder(new RoundedBorder(Color.BLACK, 1, 20));
         btnSearchSup.addActionListener(new ActionListener() {
@@ -94,6 +96,7 @@ public class Pedido extends JDialog implements onSelectedSupplier, onSelectedCom
         panel.add(btnSearchSup);
 
         JPanel pnlRefillInfo = new JPanel();
+        pnlRefillInfo.setBackground(new Color(230, 230, 250));
         pnlRefillInfo.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
         pnlRefillInfo.setBounds(388, 23, 264, 210);
         panel.add(pnlRefillInfo);
@@ -131,6 +134,7 @@ public class Pedido extends JDialog implements onSelectedSupplier, onSelectedCom
         panel.add(lblComponentes);
 
         btnSearchComp = new JButton("Buscar");
+        btnSearchComp.setBackground(new Color(230, 230, 250));
         btnSearchComp.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 if (!isSupplierSelected) {
@@ -164,6 +168,7 @@ public class Pedido extends JDialog implements onSelectedSupplier, onSelectedCom
         scrollPane.setViewportView(tableComponents);
 
         JButton btnCancelar = new JButton("Cancelar");
+        btnCancelar.setBackground(new Color(230, 230, 250));
         btnCancelar.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		dispose();
@@ -175,6 +180,7 @@ public class Pedido extends JDialog implements onSelectedSupplier, onSelectedCom
         panel.add(btnCancelar);
 
         JButton btnRealizarPedido = new JButton("Pedir");
+        btnRealizarPedido.setBackground(new Color(230, 230, 250));
         btnRealizarPedido.setFont(new Font("Verdana", Font.PLAIN, 14));
         btnRealizarPedido.setBounds(388, 339, 115, 29);
         btnRealizarPedido.setBorder(new RoundedBorder(Color.BLACK, 1, 20));

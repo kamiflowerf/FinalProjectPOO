@@ -101,7 +101,7 @@ public class ClientRegistry extends JDialog {
 			
 			JLabel lbl_clientName = new JLabel("Nombre:");
 			lbl_clientName.setFont(new Font("Verdana", Font.BOLD, 12));
-			lbl_clientName.setBounds(12, 111, 56, 16);
+			lbl_clientName.setBounds(12, 111, 70, 16);
 			panel_1.add(lbl_clientName);
 			
 			JLabel lbl_clientAddress = new JLabel("Direcci\u00F3n:");

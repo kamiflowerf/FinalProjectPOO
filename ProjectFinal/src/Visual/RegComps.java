@@ -807,7 +807,7 @@ public class RegComps extends JDialog implements onSelectedComp{
 	    if (rdbtnMotherBoard.isSelected()) {
 	        path = "/Images/tarjeta-madre.png";
 	    } else if (rdbtnMicro.isSelected()) {
-	        path = "/Images/procesador (1).png";
+	        path = "/Images/chip (1).png";
 	    } else if (rdbtnHardDisk.isSelected()) {
 	        path = "/Images/disco-duro.png";
 	    } else if (rdbtnRAM.isSelected()) {
