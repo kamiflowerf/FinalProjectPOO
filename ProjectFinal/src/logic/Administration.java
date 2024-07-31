@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import logic.*;
 
 public class Administration implements Serializable{
 	/**
@@ -260,34 +261,45 @@ public class Administration implements Serializable{
 	}
 	
 	public boolean makeSale(String idClient, Date saleDate, ArrayList<Component> componentsSale) {
-
+	    // Buscar al cliente por ID
 	    Client client = searchClientById(idClient);
 	    
 	    boolean allValid = true; 
+	    double totalSale = 0.0;
+	    
+	    // Verificar que todos los componentes estén disponibles y calcular el total
 	    for (Component component : componentsSale) {
-	        Component storedComponent = Administration.getInstance().searchComponentById(component.getId());
+	        Component storedComponent = searchComponentById(component.getId());
 	        if (storedComponent == null || storedComponent.getUnits() < component.getUnits()) {
 	            allValid = false;
 	            break;
+	        } else {
+	            // Asumir que cada componente tiene un método getPrice() para obtener el precio
+	            totalSale += storedComponent.getPrice() * component.getUnits();
 	        }
 	    }
 	    
 	    if (client != null && allValid) {
+	        // Actualizar las unidades de los componentes en el inventario
 	        for (Component component : componentsSale) {
-	            Component storedComponent = Administration.getInstance().searchComponentById(component.getId());
+	            Component storedComponent = searchComponentById(component.getId());
 	            if (storedComponent != null) {
-	                int newUnits = storedComponent.getUnits() - component.getUnits();
+	                int newUnits = storedComponent.getUnits() - 1;
 	                storedComponent.setUnits(newUnits);
-	                Administration.getInstance().updateComponent(storedComponent); 
+	                updateComponent(storedComponent);
 	            }
 	        }
 	        
-
+	        // Crear una nueva factura y agregarla al array de facturas
+	        Bill newBill = new Bill(componentsSale, client, totalSale, saleDate); 
+	        addBill(newBill);
+	        
 	        return true;
 	    } else {
 	        return false;
 	    }
 	}
+
 
 
 	public boolean inventoryRefill(ArrayList<Component> componentsToOrder) {

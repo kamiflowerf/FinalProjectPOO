@@ -1,8 +1,9 @@
 package logic;
 
 import java.io.Serializable;
-import java.sql.Date;
+
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Bill implements Serializable{
 	/**
