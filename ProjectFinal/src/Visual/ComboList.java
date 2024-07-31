@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -26,6 +25,10 @@ import javax.swing.table.JTableHeader;
 import logic.Administration;
 import logic.Combo;
 import logic.Component;
+import logic.HardDisk;
+import logic.MicroProcessor;
+import logic.MotherBoard;
+import logic.RAM;
 
 public class ComboList extends JDialog implements MouseListener {
 
@@ -39,10 +42,9 @@ public class ComboList extends JDialog implements MouseListener {
     private static int columns;
     private JPanel panelBotton;
     private JButton btn_cancel;
-    private JButton btn_update;
-    private JButton btn_select;
-    private JButton btn_addNew;
-    private JButton btn_delete;
+    private static JButton btn_select;
+    private static JButton btn_addNew;
+    private static JButton btn_delete;
     private String idCombo = "";
     public onSelectedCombo comboInterface;
     
@@ -122,6 +124,9 @@ public class ComboList extends JDialog implements MouseListener {
         comboTable.setTableHeader(tableHeader);
         
         scrollPaneTable.setViewportView(comboTable);
+        btn_delete.setEnabled(false);
+        btn_select.setEnabled(false);
+        btn_addNew.setEnabled(true);
     }
 
     private static Object[][] getData(ArrayList<String> headers) {
@@ -137,7 +142,14 @@ public class ComboList extends JDialog implements MouseListener {
             StringBuilder componentsString = new StringBuilder();
             if (components != null) {
                 for (Component component : components) {
-                    componentsString.append(component.getId()).append(", ");
+                    if(component instanceof MotherBoard)
+                    	componentsString.append(((MotherBoard) component).getModel()).append(", ");
+                    else if(component instanceof HardDisk)
+                    	componentsString.append(((HardDisk) component).getModel()).append(", ");
+                    else if(component instanceof MicroProcessor)
+                    	componentsString.append(((MicroProcessor) component).getModel()).append(", ");
+                    else if(component instanceof RAM)
+                    	componentsString.append(((RAM) component).getType()).append(", ");
                 }
                 if (componentsString.length() > 0) {
                     componentsString.setLength(componentsString.length() - 2);
@@ -187,28 +199,7 @@ public class ComboList extends JDialog implements MouseListener {
         });
         btn_select.setPreferredSize(new Dimension(85, 30));
         btn_select.setBorder(new RoundedBorder(Color.BLACK, 1, 25));
-        btn_select.setEnabled(false);
         panelBotton.add(btn_select);
-        
-        btn_update = new JButton("Actualizar");
-        btn_update.setFont(new Font("Verdana", Font.BOLD, 12));
-        btn_update.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (!idCombo.isEmpty()) {
-                    Combo combo = Administration.getInstance().searchComboById(idCombo);
-                    
-                    if (combo != null) {
-                        RegComps updateCombo = new RegComps();
-                        updateCombo.setModal(true);
-                        updateCombo.setVisible(true);
-                    }
-                }
-            }
-        });
-        btn_update.setPreferredSize(new Dimension(85, 30));
-        btn_update.setBorder(new RoundedBorder(Color.BLACK, 1, 25));
-        btn_update.setEnabled(false);
-        panelBotton.add(btn_update);
         
         btn_delete = new JButton("Eliminar");
         btn_delete.setFont(new Font("Verdana", Font.BOLD, 12));
@@ -226,7 +217,6 @@ public class ComboList extends JDialog implements MouseListener {
         });
         btn_delete.setPreferredSize(new Dimension(85, 30));
         btn_delete.setBorder(new RoundedBorder(Color.BLACK, 1, 25));
-        btn_delete.setEnabled(false);
         panelBotton.add(btn_delete);
         
         btn_addNew = new JButton("Agregar");
@@ -283,7 +273,6 @@ public class ComboList extends JDialog implements MouseListener {
             
             if (comboInterface == null) {
                 btn_delete.setEnabled(true);
-                btn_update.setEnabled(true);
             } else {
                 btn_select.setEnabled(true);
             }

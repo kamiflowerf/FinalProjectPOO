@@ -74,6 +74,8 @@ public class Principal extends JFrame {
 	private JPanel picPanel;
 	private JScrollPane scrollPane;
 	private JLabel picLbl;
+	private JLabel lblLogo;
+	private JLabel lblFacturas;
 
 	/**
 	 * Launch the application.
@@ -346,6 +348,11 @@ public class Principal extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				morePnl.setVisible(true);
+				pnlAdmin.setVisible(false);
+				pnlCliMenu.setVisible(false);
+				pnlCompMenu.setVisible(false);
+				pnlSup.setVisible(false);
+				pnlUser.setVisible(false);
 			}
 		});
 		lblMore.setBounds(12, 948, 53, 53);
@@ -411,6 +418,15 @@ public class Principal extends JFrame {
 		lblRespaldo.setFont(new Font("Verdana", Font.PLAIN, 18));
 		lblRespaldo.setBounds(0, 18, 242, 55);
 		morePnl.add(lblRespaldo);
+		
+		lblLogo = new JLabel("");
+		lblLogo.setBounds(23, 35, 269, 244);
+		
+		Image imgLog = new ImageIcon(this.getClass().getResource("/Images/logo.png")).getImage();
+		Image scaledImgLog = imgLog.getScaledInstance(lblLogo.getWidth(), lblLogo.getHeight(), Image.SCALE_SMOOTH);
+		lblLogo.setIcon(new ImageIcon(scaledImgLog));
+		
+		panel.add(lblLogo);
 		
 		pnlCompMenu = new JPanel();
 		pnlCompMenu.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -577,7 +593,7 @@ public class Principal extends JFrame {
 		pnlAdmin.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		pnlAdmin.setLayout(null);
 		pnlAdmin.setBackground(new Color(51, 51, 51));
-		pnlAdmin.setBounds(292, 630, 335, 179);
+		pnlAdmin.setBounds(292, 630, 335, 222);
 		pnlAdmin.setVisible(false);
 		contentPane.add(pnlAdmin);
 		
@@ -642,12 +658,35 @@ public class Principal extends JFrame {
 				// Se crea el dialog con los graficos
 				Graphs inventory = new Graphs();
 				inventory.setVisible(true);
+				inventory.setResizable(false);
 			}
 		});
 		lblSaleManage.setForeground(Color.WHITE);
 		lblSaleManage.setFont(new Font("Verdana", Font.PLAIN, 16));
 		lblSaleManage.setBounds(0, 111, 335, 55);
 		pnlAdmin.add(lblSaleManage);
+		
+		lblFacturas = new JLabel("      Facturas");
+		lblFacturas.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				lblFacturas.setForeground(selected);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				lblFacturas.setForeground(Color.WHITE);
+			}
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				BillList bills = new BillList(null);
+				bills.setVisible(true);
+				bills.setResizable(false);
+			}
+		});
+		lblFacturas.setForeground(Color.WHITE);
+		lblFacturas.setFont(new Font("Verdana", Font.PLAIN, 16));
+		lblFacturas.setBounds(0, 167, 335, 55);
+		pnlAdmin.add(lblFacturas);
 		
 		pnlUser = new JPanel();
 		pnlUser.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));

@@ -39,7 +39,6 @@ public class BillList extends JFrame implements MouseListener {
 	private static int rows;
 	private static int columns;
 	private JPanel panelButton;
-	private JButton btn_select;
 	private JButton btn_delete;
 	private JButton btn_cancel;
 	private String idBill = "";
@@ -171,22 +170,6 @@ public class BillList extends JFrame implements MouseListener {
 
 		panelButton = new JPanel();
 		contentPanel.add(panelButton, BorderLayout.SOUTH);
-		
-		btn_select = new JButton("Seleccionar");
-		btn_select.setFont(new Font("Verdana",Font.BOLD,12));
-		btn_select.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				if(idBill != "") {
-					billInterface.getSelectedBill(idBill);
-					dispose();
-				}
-			}
-		});
-		btn_select.setPreferredSize(new Dimension(85,30));
-		btn_select.setBorder(new RoundedBorder(Color.BLACK,1,25));
-		btn_select.setEnabled(false);
-		panelButton.add(btn_select);
 		
 		btn_delete = new JButton("Eliminar");
 		btn_delete.setFont(new Font("Verdana",Font.BOLD,12));

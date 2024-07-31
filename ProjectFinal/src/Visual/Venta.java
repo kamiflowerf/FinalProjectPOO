@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat;
 
 import Visual.Catalogo.onSelectedComp;
 import Visual.ClientList.onSelectedClient;
+import Visual.ComboList.onSelectedCombo;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -32,15 +33,15 @@ import javax.swing.JTable;
 import logic.*;
 
 import java.awt.event.ActionListener;
-import java.text.SimpleDateFormat;
 import java.awt.event.ActionEvent;
-import javax.swing.JComboBox;
 
-public class Venta extends JDialog implements onSelectedComp, onSelectedClient {
+public class Venta extends JDialog implements onSelectedComp, onSelectedClient, onSelectedCombo {
 
     private static final long serialVersionUID = 1L;
     private final JPanel contentPanel = new JPanel();
     private String idClient;
+    private double price = 0.0;
+    ArrayList<Component> comps = new ArrayList<>();
     private JTextField txtIdClient;
     private JTextField txtBillId;
     private JTextField txtBillDate;
@@ -102,24 +103,25 @@ public class Venta extends JDialog implements onSelectedComp, onSelectedClient {
                 JScrollPane scrollPane = new JScrollPane();
                 pnlComponents.add(scrollPane, BorderLayout.CENTER);
 
-                tableModel = new DefaultTableModel(new Object[]{"ID", "Tipo de Componente", "Cantidad", "Precio"}, 0);
+                tableModel = new DefaultTableModel(new Object[]{"ID", "Tipo de Componente", "Modelo", "Precio"}, 0);
                 tableComponents = new JTable(tableModel);
                 tableComponents.setFont(new Font("Verdana", Font.PLAIN, 13));
                 scrollPane.setViewportView(tableComponents);
             }
         }
         {
-            JButton btnSearchComp = new JButton("Buscar");
+            JButton btnSearchComp = new JButton("Buscar Componente");
             btnSearchComp.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     Catalogo catalogo = new Catalogo(Venta.this);
                     catalogo.setModal(true);
                     catalogo.setVisible(true);
                     catalogo.setResizable(false);
+                    updateTotal();
                 }
             });
             btnSearchComp.setFont(new Font("Verdana", Font.PLAIN, 15));
-            btnSearchComp.setBounds(248, 126, 97, 25);
+            btnSearchComp.setBounds(174, 126, 171, 25);
             btnSearchComp.setBorder(new RoundedBorder(Color.BLACK, 1, 20));
             contentPanel.add(btnSearchComp);
         }
@@ -252,37 +254,44 @@ public class Venta extends JDialog implements onSelectedComp, onSelectedClient {
             contentPanel.add(btnCancelar);
         }
         {
-            JButton btnComb = new JButton("Buscar");
+            JButton btnComb = new JButton("Buscar Combo");
             btnComb.setFont(new Font("Verdana", Font.PLAIN, 15));
             btnComb.setBorder(new RoundedBorder(Color.BLACK, 1, 20));
-            btnComb.setBounds(248, 90, 97, 25);
+            btnComb.setBounds(211, 90, 134, 25);
             btnComb.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    // Crear una instancia de CatalogoCombo
-                    ComboList catalogoCombo = new ComboList(null);
-                    catalogoCombo.setModal(true); // Hacerlo modal para que el usuario tenga que interactuar con él
-                    catalogoCombo.setVisible(true); // Mostrar el diálogo
-                    catalogoCombo.setResizable(true); // Ajustar el tamaño según sea necesario
+                    ComboList catalogoCombo = new ComboList(Venta.this);
+                    catalogoCombo.setModal(true); 
+                    catalogoCombo.setVisible(true); 
+                    catalogoCombo.setResizable(true); 
+                    updateTotal();
                 }
             });
             contentPanel.add(btnComb);
         }
-
-        
 
     }
 																		
     @Override
     public void getSelectedComp(String ID) {
         Component comp = Administration.getInstance().searchComponentById(ID);
-
+    	
         if (comp != null) {
-            String componentType = Catalogo.getComponentType(comp);
-            int quantity = comp.getUnits(); 
-            double price = comp.getPrice();
-
-            // Verificar si el componente ya está en la tabla
-            boolean exists = false;
+	        String componentType = Catalogo.getComponentType(comp);		        
+	        String model = "";
+	        if(comp instanceof MotherBoard) {
+	        	model = ((MotherBoard) comp).getModel();
+	        } else if(comp instanceof HardDisk) {
+	        	model = ((HardDisk) comp).getModel();
+	        } else if(comp instanceof MicroProcessor) {
+	        	model = ((MicroProcessor) comp).getModel();
+	        } else if(comp instanceof RAM) {
+	        	model = ((RAM) comp).getType();
+	        }
+		    price += comp.getPrice();
+	        double localPrice = comp.getPrice();
+	        
+		    boolean exists = false;
             for (int i = 0; i < tableModel.getRowCount(); i++) {
                 String id = (String) tableModel.getValueAt(i, 0);
                 if (id.equals(ID)) {
@@ -292,29 +301,18 @@ public class Venta extends JDialog implements onSelectedComp, onSelectedClient {
             }
 
             if (!exists) {
-                tableModel.addRow(new Object[]{ID, componentType, quantity, price});
+            	tableModel.addRow(new Object[]{ID, componentType, model,localPrice});
+            	comps.add(comp);
             } else {
                 JOptionPane.showMessageDialog(this, "El componente ya está en la tabla.", "Info", JOptionPane.INFORMATION_MESSAGE);
             }
-
-            updateTotal();
-        } else {
-            // Si el ID no es un componente, podría ser un combo
-            Combo combo = Administration.getInstance().searchComboById(ID);
-            if (combo != null) {
-                addComboToTable(combo);
-            }
-        }
+		    
+	    }
+        updateTotal();
     }
 
     private void updateTotal() {
-        double total = 0.0;
-        for (int i = 0; i < tableModel.getRowCount(); i++) {
-            int quantity = (int) tableModel.getValueAt(i, 2);
-            double price = (double) tableModel.getValueAt(i, 3);
-            total += quantity * price;
-        }
-        txtTotal.setText(String.format("%.2f $RD", total));
+        txtTotal.setText(String.format("%.2f $RD", price));
     }
 
     @Override
@@ -322,21 +320,22 @@ public class Venta extends JDialog implements onSelectedComp, onSelectedClient {
         this.idClient = id;
     }
     
-    public void updateComponentQuantity(String componentId, int newQuantity) {
-        for (int i = 0; i < tableModel.getRowCount(); i++) {
-            String id = (String) tableModel.getValueAt(i, 0);
-            if (id.equals(componentId)) {
-                tableModel.setValueAt(newQuantity, i, 2); 
-                updateTotal();
-                break;
-            }
-        }
-    }
     private void addComboToTable(Combo combo) {
         for (Component comp : combo.getComboComp()) {
-            String componentType = "Combo";
-            int quantity = 1; 
-            double price =+ comp.getPrice();
+            String componentType = Catalogo.getComponentType(comp);
+            String model = "";
+            if(comp instanceof MotherBoard) {
+	        	model = ((MotherBoard) comp).getModel();
+	        } else if(comp instanceof HardDisk) {
+	        	model = ((HardDisk) comp).getModel();
+	        } else if(comp instanceof MicroProcessor) {
+	        	model = ((MicroProcessor) comp).getModel();
+	        } else if(comp instanceof RAM) {
+	        	model = ((RAM) comp).getType();
+	        }
+            double discount = combo.getDiscount() / 100.0;
+            double localPrice = comp.getPrice() * (1 - discount);
+            price += localPrice;
             
             boolean exists = false;
             for (int i = 0; i < tableModel.getRowCount(); i++) {
@@ -346,14 +345,21 @@ public class Venta extends JDialog implements onSelectedComp, onSelectedClient {
                     break;
                 }
             }
-
+            
             if (!exists) {
-                tableModel.addRow(new Object[]{comp.getId(), componentType, quantity, price});
+                tableModel.addRow(new Object[]{comp.getId(), componentType, model,localPrice});
+                comps.add(comp);
             } else {
                 JOptionPane.showMessageDialog(this, "El componente del combo ya está en la tabla.", "Info", JOptionPane.INFORMATION_MESSAGE);
             }
         }
         updateTotal();
     }
+
+	@Override
+	public void getSelectedCombo(String id) {
+		Combo combo = Administration.getInstance().searchComboById(id);
+		addComboToTable(combo);
+	}
 
 }

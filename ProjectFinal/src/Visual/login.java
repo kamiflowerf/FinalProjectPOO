@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileInputStream;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -105,7 +107,7 @@ public class login extends JFrame {
 		JLabel lblNewLabel = new JLabel("Bienvenido!");
 		lblNewLabel.setForeground(new Color(255, 255, 255));
 		lblNewLabel.setFont(new Font("Verdana", Font.PLAIN, 27));
-		lblNewLabel.setBounds(196, 173, 159, 29);
+		lblNewLabel.setBounds(196, 222, 159, 29);
 		panel.add(lblNewLabel);
 		
 		JPanel panel_1 = new JPanel();
@@ -162,5 +164,14 @@ public class login extends JFrame {
 		btnLogin.setBounds(383, 447, 97, 25);
 		getRootPane().setDefaultButton(btnLogin);
 		panel.add(btnLogin);
+		
+		JLabel lblLogo = new JLabel("");
+		lblLogo.setBounds(153, 25, 246, 194);
+		
+		Image img = new ImageIcon(this.getClass().getResource("/Images/logo.png")).getImage();
+		Image scaledImg = img.getScaledInstance(lblLogo.getWidth(), lblLogo.getHeight(), Image.SCALE_SMOOTH);
+		lblLogo.setIcon(new ImageIcon(scaledImg));
+		
+		panel.add(lblLogo);
 	}
 }

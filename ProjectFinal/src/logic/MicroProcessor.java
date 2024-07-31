@@ -10,9 +10,9 @@ public class MicroProcessor extends Component implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private String model;
 	private String socket;
-	private float processingSpeed;
+	private int processingSpeed;
 	
-	public MicroProcessor(String id, String brand, double price, int units, int serie, String model, String socket, float processingSpeed) {
+	public MicroProcessor(String id, String brand, double price, int units, int serie, String model, String socket, int processingSpeed) {
 		super(id, brand, price, units, serie);
 		this.model = model;
 		this.socket = socket;
@@ -39,7 +39,7 @@ public class MicroProcessor extends Component implements Serializable{
 		return processingSpeed;
 	}
 
-	public void setProcessingSpeed(float processingSpeed) {
+	public void setProcessingSpeed(int processingSpeed) {
 		this.processingSpeed = processingSpeed;
 	}
 

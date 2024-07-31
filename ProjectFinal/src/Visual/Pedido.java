@@ -28,11 +28,7 @@ import Visual.Catalogo.onSelectedComp;
 import Visual.SupplierList.onSelectedSupplier;
 import logic.Administration;
 import logic.Component;
-import logic.HardDisk;
 import logic.IdGenerator;
-import logic.MicroProcessor;
-import logic.MotherBoard;
-import logic.RAM;
 
 public class Pedido extends JDialog implements onSelectedSupplier, onSelectedComp {
 
@@ -198,7 +194,6 @@ public class Pedido extends JDialog implements onSelectedSupplier, onSelectedCom
                     return;
                 }
 
-                
                 ArrayList<Component> componentsOrder = new ArrayList<>();
                 for (int i = 0; i < tableModel.getRowCount(); i++) {
                     String id = (String) tableModel.getValueAt(i, 0);
@@ -210,7 +205,6 @@ public class Pedido extends JDialog implements onSelectedSupplier, onSelectedCom
                     }
                 }
 
-               
                 boolean refillSuccessful = Administration.getInstance().inventoryRefill(componentsOrder);
                 if (refillSuccessful) {
                     JOptionPane.showMessageDialog(Pedido.this, "Reabastecimiento de inventario realizado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
@@ -218,6 +212,7 @@ public class Pedido extends JDialog implements onSelectedSupplier, onSelectedCom
                     txtPedido.setText(IdGenerator.generateId());
                     textField.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
                     tableModel.setRowCount(0);
+                   
                 } else {
                     JOptionPane.showMessageDialog(Pedido.this, "Error al reabastecer el inventario. Verifique los datos e intente nuevamente.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
@@ -261,7 +256,7 @@ public class Pedido extends JDialog implements onSelectedSupplier, onSelectedCom
     }
     
     private void autoRefill() {
-        // Obtener componentes seleccionados
+        
         ArrayList<Component> componentsOrder = new ArrayList<>();
         for (int i = 0; i < tableModel.getRowCount(); i++) {
             String id = (String) tableModel.getValueAt(i, 0);
@@ -272,8 +267,6 @@ public class Pedido extends JDialog implements onSelectedSupplier, onSelectedCom
                 componentsOrder.add(comp);
             }
         }
-
-        // Actualizar el inventario con los componentes ordenados
         Administration.getInstance().inventoryRefill(componentsOrder);
     }
 }

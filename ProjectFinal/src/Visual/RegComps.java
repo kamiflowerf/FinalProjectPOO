@@ -476,7 +476,7 @@ public class RegComps extends JDialog implements onSelectedComp{
 				pnlMicroP.add(lblMeasureMicro);
 				
 				spnSpeedMicro = new JSpinner();
-				spnSpeedMicro.setModel(new SpinnerNumberModel(new Float(1), new Float(1), null, new Float(1)));
+				spnSpeedMicro.setModel(new SpinnerNumberModel(new Integer(1), new Integer(1), null, new Integer(1)));
 				spnSpeedMicro.setFont(new Font("Verdana", Font.PLAIN, 15));
 				spnSpeedMicro.setBounds(105, 120, 116, 22);
 				pnlMicroP.add(spnSpeedMicro);
@@ -702,7 +702,7 @@ public class RegComps extends JDialog implements onSelectedComp{
 		} else if(rdbtnMicro.isSelected()) {
 			String model = txtModelMicro.getText();
 			String socket = txtSocketMicro.getText();
-			float speed = (float)spnSpeedMicro.getValue();
+			int speed = (int)spnSpeedMicro.getValue();
 			MicroProcessor micro = new MicroProcessor(id, brand, price, units, serie, model, socket, speed);
 			micro.setIcon((ImageIcon)lblIcon.getIcon());
 			Administration.getInstance().addComponent(micro);
