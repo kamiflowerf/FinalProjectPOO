@@ -148,14 +148,15 @@ public class SupplierList extends JDialog implements MouseListener {
             info[i][5] = suppliers.get(i).getPhone();
             info[i][6] = deliveryTime;
             
+            // Verificar si los componentes están correctamente asignados
             List<Component> components = suppliers.get(i).getMyComponents();
             StringBuilder componentsString = new StringBuilder();
-            if (components != null) {
+            if (components != null && !components.isEmpty()) {
                 for (Component component : components) {
                     componentsString.append(component.getId()).append(", ");
                 }
                 if (componentsString.length() > 0) {
-                    componentsString.setLength(componentsString.length() - 2);
+                    componentsString.setLength(componentsString.length() - 2); // Eliminar la última coma
                 }
             } else {
                 componentsString.append("No componentes");

@@ -11,25 +11,28 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.BevelBorder;
-import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 
 import logic.Administration;
 import logic.Component;
+import logic.HardDisk;
 import logic.IdGenerator;
+import logic.MicroProcessor;
+import logic.MotherBoard;
+import logic.RAM;
 import logic.Supplier;
 
 public class SupplierRegistry extends JDialog {
@@ -49,10 +52,10 @@ public class SupplierRegistry extends JDialog {
 	private JLabel lbl_warningComponentsProv;
 	private JLabel lbl_warningNi;
 	private JSpinner spn_deliveryTime;
-	private JList<String> providedProducts;
-	private DefaultListModel<String> model;
 	private JButton btn_reg;
 	private JButton cancelButton;
+	private JTable tableComponents;
+	private DefaultTableModel tableModel;
 	
 
 	/**
@@ -202,26 +205,18 @@ public class SupplierRegistry extends JDialog {
 			lbl_warningPhone.setVisible(false);
 			
 			JPanel panel_2 = new JPanel();
-			panel_2.setBounds(22, 70, 264, 187);
+			panel_2.setBounds(22, 69, 264, 187);
 			panel.add(panel_2);
 			panel_2.setLayout(new BorderLayout(0, 0));
 			
-			JScrollPane scrollPane = new JScrollPane();
-			panel_2.add(scrollPane, BorderLayout.CENTER);
+			String headers[] = {"Id", "Tipo", "Modelo"};
+			tableModel = new DefaultTableModel(new Object[][]{},headers);
+			populateComponentsTable(Administration.getInstance().getTheComponents());
 			
-			model = new DefaultListModel<>();
-			ArrayList<Component> componentsForSale = Administration.getInstance().getTheComponents();
-			if(componentsForSale != null) {
-				
-				for(Component c : componentsForSale) {
+			tableComponents = new JTable(tableModel);
+			JScrollPane scroll = new JScrollPane (tableComponents);
+			panel_2.add(scroll,BorderLayout.CENTER);
 					
-					model.addElement(c.getId());
-				}
-			}
-			providedProducts = new JList<>(model);
-			providedProducts.setBorder(new CompoundBorder());
-			scrollPane.setViewportView(providedProducts);
-			
 			JLabel lbl_suppliDeliveryTime = new JLabel("Tiempo de entrega:");
 			lbl_suppliDeliveryTime.setFont(new Font("Verdana", Font.BOLD, 12));
 			lbl_suppliDeliveryTime.setBounds(22, 13, 185, 16);
@@ -281,127 +276,51 @@ public class SupplierRegistry extends JDialog {
 				btn_reg.setPreferredSize(new Dimension(85, 30));
 				btn_reg.setBorder(new RoundedBorder(Color.BLACK,1,25));
 				btn_reg.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent arg0) {
-						
-						try {
-						Supplier sup;
-						String id = txt_suppliId.getText();
-						String name = txt_suppliName.getText();
-						String personalDoc = txt_suppliNi.getText();
-						String email = txt_suppliEmail.getText();
-						String address = txt_suppliAddress.getText();
-						String phone = txt_suppliPhone.getText();
-						int deliTime = (int) spn_deliveryTime.getValue();
-						ArrayList<Component> componentsProvided = new ArrayList<>();
-						componentsProvided = getSelectedComponents();
-						boolean ready = true;
-						
-						if(name.isEmpty()){
-							lbl_warningName.setVisible(true);
-							ready = false;
-						}
-						else
-							lbl_warningName.setVisible(false);
-						
-						if(personalDoc.isEmpty()){
-							lbl_warningNi.setVisible(true);
-							ready = false;
-						}
-						else
-							lbl_warningNi.setVisible(false);
-						
-						if(email.isEmpty()) {
-							lbl_warningEmail.setVisible(true);
-							ready = false;
-						}
-						else
-							lbl_warningEmail.setVisible(false);
-						
-						if(address.isEmpty()){
-							lbl_warningAddress.setVisible(true);
-							ready = false;
-						} else {
-							lbl_warningAddress.setVisible(false);
-						}
-						
-						if(phone.isEmpty()) {
-							lbl_warningPhone.setVisible(true);
-							ready = false;
-						} else {
-							lbl_warningPhone.setVisible(false);
-						}
-						
-						if(providedProducts.getSelectedIndex() == -1){
-							lbl_warningComponentsProv.setVisible(true);
-							ready = false;
-						}
-						else
-							lbl_warningComponentsProv.setVisible(false); 
-						
-						
-						if(ready) 
-						{
-							if(suppli == null) 
-							{
-								
-								if(componentsProvided.isEmpty())
-								{
-									sup = new Supplier(personalDoc, name, phone, address, email, id, deliTime, null);
-								}
-								
-								else 
-								{
-									sup = new Supplier(personalDoc, name, phone, address, email, id, deliTime, componentsProvided);
-								}
-									
-								Administration.getInstance().addPerson(sup);
-								JOptionPane.showMessageDialog(null, "Operación satisfactoriamente completada.", "Registro Proveedor", JOptionPane.INFORMATION_MESSAGE);
-								clean();
-							}
-						
-						
-							else 
-							{
-							
-								suppli.setName(name);
-								suppli.setNi(personalDoc);
-								suppli.setEmail(email);
-								suppli.setAddress(address);
-								suppli.setPhone(phone);
-								suppli.setDeliveryTime(deliTime);
-								suppli.setMyComponents(componentsProvided);
-								Administration.getInstance().updatePerson(suppli);
-								SupplierList.updateTable();
-								dispose();
-							}
-							
-						}
+				    public void actionPerformed(ActionEvent arg0) {
+				        String id = txt_suppliId.getText();
+				        String name = txt_suppliName.getText();
+				        String personalDoc = txt_suppliNi.getText();
+				        String email = txt_suppliEmail.getText();
+				        String address = txt_suppliAddress.getText();
+				        String phone = txt_suppliPhone.getText();
+				        int deliTime = (int) spn_deliveryTime.getValue();
+				        ArrayList<Component> componentsProvided = getSelectedComponents();
+				        boolean valid = validateFields();
 
-						} 
-						catch (Exception e)
-						{
-							e.printStackTrace();
-						}
-					}
+				        // Manejo de proveedores
+				        if (valid) {
+				            Supplier sup;
+				            if (componentsProvided.isEmpty()) {
+				                sup = new Supplier(personalDoc, name, phone, address, email, id, deliTime, null);
+				            } else {
+				                sup = new Supplier(personalDoc, name, phone, address, email, id, deliTime, componentsProvided);
+				            }
 
-					private ArrayList<Component> getSelectedComponents() {
-						
-						ArrayList<Component> selection = new ArrayList<>();
-						
-						for(String componentId : providedProducts.getSelectedValuesList())
-						{
-							for(Component c : Administration.getInstance().getTheComponents())
-							{
-								if(c.getId().equalsIgnoreCase(componentId))
-								{
-									selection.add(c);
-								}
-							}	
-						}
-						return selection;
-					}
-					
+				            if (suppli == null) {
+				                // Crear nuevo proveedor
+				                Administration.getInstance().addPerson(sup);
+				                JOptionPane.showMessageDialog(null, "Proveedor registrado satisfactoriamente.", "Registro Proveedor", JOptionPane.INFORMATION_MESSAGE);
+				                clean();
+				            } else {
+				                // Actualizar proveedor existente
+				                suppli.setName(name);
+				                suppli.setNi(personalDoc);
+				                suppli.setEmail(email);
+				                suppli.setAddress(address);
+				                suppli.setPhone(phone);
+				                suppli.setDeliveryTime(deliTime);
+				                suppli.setMyComponents(componentsProvided);
+				                Administration.getInstance().updatePerson(suppli);
+				                SupplierList.updateTable();
+				                JOptionPane.showMessageDialog(null, "Proveedor actualizado satisfactoriamente.", "Actualizar Proveedor", JOptionPane.INFORMATION_MESSAGE);
+				                dispose();
+				            }
+				        } else {
+				            lbl_warningComponentsProv.setVisible(true);
+				        }
+				    }
 				});
+
 				btn_reg.setActionCommand("OK");
 				buttonPane.add(btn_reg);
 				getRootPane().setDefaultButton(btn_reg);
@@ -424,6 +343,23 @@ public class SupplierRegistry extends JDialog {
 		loadSupplier(suppli);
 	}
 
+	private void populateComponentsTable(ArrayList<Component> theComponents) {
+		
+		tableModel.setRowCount(0);
+		String type = "";
+		
+		for(Component c: theComponents)
+		{
+			if(c instanceof  HardDisk) type = "Disco duro";
+			else if (c instanceof  MicroProcessor) type = "Microprocesador";
+			else if (c instanceof  MotherBoard) type = "Tarjeta madre";
+			else if (c instanceof  RAM) type = "RAM";
+			
+			tableModel.addRow(new Object[] {c.getId(),type,c.getSerie()});
+		}
+		
+	}
+
 	private void loadSupplier(Supplier suppli) {
 	    if (suppli != null) 
 	    {
@@ -436,6 +372,8 @@ public class SupplierRegistry extends JDialog {
 		        txt_suppliAddress.setText(suppli.getAddress());
 		        txt_suppliPhone.setText(suppli.getPhone());
 		        spn_deliveryTime.setValue(suppli.getDeliveryTime());
+		        
+		        
 	    	} 
 	    	catch(Exception e)
 	    	{
@@ -454,10 +392,85 @@ public class SupplierRegistry extends JDialog {
 			txt_suppliAddress.setText("");
 			txt_suppliPhone.setText("");
 	        spn_deliveryTime.setValue(1);
+	  
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
 	}
+	
+	private ArrayList<Component> getSelectedComponents() {
+	    
+		ArrayList<Component> selectedComponents = new ArrayList<>();
+	    int[] selectedRows = tableComponents.getSelectedRows();
+	    
+	    if (selectedRows.length == 0) 
+	    {
+	        return selectedComponents;
+	    }
+	    
+	    for (int row : selectedRows) 
+	    {
+	        Object idObject = tableModel.getValueAt(row, 0);
+	        if (idObject != null) 
+	        {
+	            String id = idObject.toString();
+	            Component component = Administration.getInstance().searchComponentById(id);
+	            if (component != null) 
+	            {
+	                selectedComponents.add(component);
+	            }
+	        }
+	    }
+	    return selectedComponents;
+	}
+	
+	private boolean validateFields() {
+        boolean isValid = true;
+
+        if (txt_suppliName.getText().trim().isEmpty()) {
+            lbl_warningName.setVisible(true);
+            isValid = false;
+        } else {
+            lbl_warningName.setVisible(false);
+        }
+
+        if (txt_suppliNi.getText().trim().isEmpty()) {
+            lbl_warningNi.setVisible(true);
+            isValid = false;
+        } else {
+            lbl_warningNi.setVisible(false);
+        }
+
+        if (txt_suppliEmail.getText().trim().isEmpty()) {
+            lbl_warningEmail.setVisible(true);
+            isValid = false;
+        } else {
+            lbl_warningEmail.setVisible(false);
+        }
+
+        if (txt_suppliAddress.getText().trim().isEmpty()) {
+            lbl_warningAddress.setVisible(true);
+            isValid = false;
+        } else {
+            lbl_warningAddress.setVisible(false);
+        }
+
+        if (txt_suppliPhone.getText().trim().isEmpty()) {
+            lbl_warningPhone.setVisible(true);
+            isValid = false;
+        } else {
+            lbl_warningPhone.setVisible(false);
+        }
+
+        if (getSelectedComponents().isEmpty()) {
+            lbl_warningComponentsProv.setVisible(true);
+            isValid = false;
+        } else {
+            lbl_warningComponentsProv.setVisible(false);
+        }
+
+        return isValid;
+    }
 }
